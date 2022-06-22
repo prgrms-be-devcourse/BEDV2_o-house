@@ -4,26 +4,27 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 public class BaseEntity {
 
-    @Column(updatable = false)
-    private LocalDateTime created_at;
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
 
-    private LocalDateTime updated_at;
+	private LocalDateTime updatedAt;
 
-    @PrePersist
-    public void preSet() {
-        LocalDateTime now = LocalDateTime.now();
-        created_at = now;
-        updated_at = now;
-    }
+	@PrePersist
+	public void preSet() {
+		LocalDateTime now = LocalDateTime.now();
+		createdAt = now;
+		updatedAt = now;
+	}
 
-    @PreUpdate
-    public void update(){
-        updated_at = LocalDateTime.now();
-    }
+	@PreUpdate
+	public void update() {
+		updatedAt = LocalDateTime.now();
+	}
 
 }

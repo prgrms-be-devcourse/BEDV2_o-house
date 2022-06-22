@@ -8,11 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -25,13 +25,13 @@ public class JwtTokenProvider {
 	private final TokenProvideService tokenProvideService;
 	private final String secretKey;
 	private final String headerName;
-	private static final long expiryMilliSeconds = 60 * 60 * 1000L;
+	private static final long EXPIRY_MILLI_SECONDS = 60 * 60 * 1000L;
 
 	public JwtTokenProvider(TokenProvideService tokenProvideService,
 		@Value("${jwt.secretKey}") String secretKey,
 		@Value("${jwt.headerName}") String headerName) {
 		this.tokenProvideService = tokenProvideService;
-		this.secretKey = secretKey;
+		this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 		this.headerName = headerName;
 	}
 
@@ -42,14 +42,15 @@ public class JwtTokenProvider {
 		return Jwts.builder()
 			.setClaims(claims)
 			.setIssuedAt(now)
-			.setExpiration(new Date(now.getTime() + expiryMilliSeconds))
+			.setExpiration(new Date(now.getTime() + EXPIRY_MILLI_SECONDS))
 			.signWith(SignatureAlgorithm.HS256, secretKey)
 			.compact();
 	}
 
 	public Authentication getAuthentication(String token) {
 		User user = (User)tokenProvideService.loadUserByUsername(parseToken(token));
-		JwtAuthenticationToken authenticatedToken =  new JwtAuthenticationToken(new JwtAuthentication(token, user.getUsername()),
+		JwtAuthenticationToken authenticatedToken = new JwtAuthenticationToken(
+			new JwtAuthentication(token, user.getUsername()),
 			null, user.getAuthorities());
 		authenticatedToken.setDetails(user);
 		return authenticatedToken;
