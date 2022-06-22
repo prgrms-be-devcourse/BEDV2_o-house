@@ -29,7 +29,7 @@ public class User extends BaseEntity implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
-	@Column(name = "nickname", nullable = false, length =10)
+	@Column(name = "nickname", nullable = false, length = 10)
 	private String nickname;
 
 	@Column(name = "email", nullable = false, unique = true, length = 300)
@@ -44,8 +44,8 @@ public class User extends BaseEntity implements UserDetails {
 	@Column(name = "follower_count")
 	private int followerCount = 0;
 
-	@Column(name = "default_address")
-	private String defaultAddress;
+	@Embedded
+	private transient Address defaultAddress;
 
 	public void checkPassword(PasswordEncoder passwordEncoder, String password) {
 		checkArgument(passwordEncoder.matches(password, this.password), "Bad credential. Login failed.");
@@ -53,8 +53,7 @@ public class User extends BaseEntity implements UserDetails {
 
 	@Builder
 	public User(String nickname, String email, String password, int followingCount, int followerCount,
-		String defaultAddress) {
-		//TODO validation add
+		Address defaultAddress) {
 		setNickname(nickname);
 		setEmail(email);
 		setPassword(password);
@@ -64,12 +63,12 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	private void setFollowerCount(int followerCount) {
-		checkArgument(followerCount>=0, "Follower count can't be negative.");
-		this.followerCount=followerCount;
+		checkArgument(followerCount >= 0, "Follower count can't be negative.");
+		this.followerCount = followerCount;
 	}
 
 	private void setFollowingCount(int followingCount) {
-		checkArgument(followingCount>=0, "Following count can't be negative.");
+		checkArgument(followingCount >= 0, "Following count can't be negative.");
 		this.followingCount = followingCount;
 	}
 
