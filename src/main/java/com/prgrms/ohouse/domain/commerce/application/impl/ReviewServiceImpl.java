@@ -1,10 +1,11 @@
-package com.prgrms.ohouse.domain.commerce.application;
+package com.prgrms.ohouse.domain.commerce.application.impl;
 
 import java.io.IOException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.ohouse.domain.commerce.application.ReviewService;
 import com.prgrms.ohouse.domain.commerce.application.commands.ReviewRegisterCommand;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRegisterFailException;

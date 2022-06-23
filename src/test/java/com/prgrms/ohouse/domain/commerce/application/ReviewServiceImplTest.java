@@ -11,7 +11,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.commerce.application.commands.ReviewRegisterCommand;
@@ -23,9 +22,7 @@ import com.prgrms.ohouse.infrastructure.file.LocalFileUploader;
 @SpringBootTest(properties = "spring.profiles.active:test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
-@Sql({"classpath:data.sql"})
 class ReviewServiceImplTest {
-
 	@Autowired
 	ReviewRepository reviewRepository;
 	@Autowired
@@ -41,7 +38,6 @@ class ReviewServiceImplTest {
 	@DisplayName("일반 리뷰 생성 테스트")
 	@Test
 	void testReviewCreate() {
-
 		String contents = "review contents with suitable contents length over 20";
 		int reviewPoint = 4;
 
@@ -58,7 +54,6 @@ class ReviewServiceImplTest {
 	@DisplayName("사진 리뷰 생성 테스트")
 	@Test
 	void testPhotoReviewCreate() {
-
 		String contents = "review contents with suitable contents length over 20";
 		int reviewPoint = 4;
 		MockMultipartFile file = new MockMultipartFile(
