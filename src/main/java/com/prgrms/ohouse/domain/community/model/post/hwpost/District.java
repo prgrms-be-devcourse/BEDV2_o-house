@@ -8,22 +8,22 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 // 데이터베이스에서 보관하는 것은 code
 // 약속된 mapper를 통해 치환
-// 배열로 다루면 어떨까?
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class District {
-	// 광역 자체 단체 : rlgmap
 
-	private static final List<String> RLGMap = List.of(
+	private static final List<String> RLGList = List.of(
 		"서울특별시", "부산광역시", "대구광역시", "인천광역시", "광주광역시", "대전광역시", "울산광역시", "강원도", "경기도", "경상남도"
 		, "경상북도", "전라남도", "전라북도", "충청남도", "충청북도"
 	);
 
-	private static final List<List<String>> BLGMap = List.of(
+	private static final List<List<String>> BLGList = List.of(
 		List.of("강남구", "강동구", "강북구",
 			"강서구", "관악구", "광진구", "구로구", "금천구",
 			"노원구", "도봉구", "동대문구", "동작구", "마포구",
@@ -82,8 +82,8 @@ public class District {
 
 	@Override
 	public String toString() {
-		var rlgStr = RLGMap.get(RLG);
-		var blgStr = BLG == null ? "" : " " + BLGMap.get(RLG).get(BLG);
+		var rlgStr = RLGList.get(RLG);
+		var blgStr = BLG == null ? "" : " " + BLGList.get(RLG).get(BLG);
 		var description = districtDescription == null ? "" : " " + districtDescription;
 		return rlgStr + blgStr + description;
 	}

@@ -33,10 +33,10 @@ public class HousewarmingPost {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Column(name = "title")
+	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "content")
+	@Column(name = "content", nullable = false)
 	private String content;
 
 	@Column(name = "visit_count")
@@ -50,40 +50,27 @@ public class HousewarmingPost {
 	@Column(nullable = false)
 	private HousingType housingType;
 
-	@Column(name = "housing_description")
+	@Column(name = "housing_desc")
 	private String housingDescription;
 
-	// 평수 : 단층, 2층 단독/협소 주택, 3층 이상 단독/협소 주택 => 층 별 통합해서 저장하고 출력하는 것 같다.
-	// TODO: 층까지 저장하는 값 타이 고려해보기
+	// 평수 : 층수와 상관 없이 연면적을 기준으로 통계를 매기는 것 같다.
 	@Column(nullable = false)
 	private Long area;
 
 	// 예산(공사/시공 +  홈스타일링 =  총 예산)
-	// 사이트에서는 저장과 출력을 합산으로 계산하는데 따로 저장해야 하는가?
 	@Embedded
 	private Budget budget;
 
 	@Embedded
 	private Family family;
 
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private Worker worker;
-
-	@Column(name = "worker_desc")
-	private String workerDescription;
-
-	@Column(name = "work_detail")
-	@Enumerated(EnumType.STRING)
-	private WorkDetail workDetail;
-
 	@Column(name = "company")
 	private String company;
 
 	@Embedded
-	private WorkDuration workDuration;
+	private WorkMetadata workMetadata;
 
-	private String copyright;
+	private String copyrightHolder;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
 	private List<Link> links = new ArrayList<>();

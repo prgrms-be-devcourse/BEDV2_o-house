@@ -9,7 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Getter;
+
 @Entity
+@Getter
 public class Link {
 
 	@Id
@@ -18,8 +21,9 @@ public class Link {
 
 	@Column(length = 2000)
 	private String url;
-	
-	private String presentation;
+
+	@Column(name = "url_detail")
+	private String urlDetail;
 
 	@ManyToOne
 	@JoinColumn(name = "post_id")
