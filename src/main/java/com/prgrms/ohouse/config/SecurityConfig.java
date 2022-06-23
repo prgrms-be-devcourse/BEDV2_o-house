@@ -12,6 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
+import com.prgrms.ohouse.domain.common.security.JwtAuthenticationFilter;
+import com.prgrms.ohouse.domain.common.security.JwtTokenProvider;
+import com.prgrms.ohouse.domain.common.security.TokenProvideService;
+
 @Slf4j
 @EnableWebSecurity
 @RequiredArgsConstructor

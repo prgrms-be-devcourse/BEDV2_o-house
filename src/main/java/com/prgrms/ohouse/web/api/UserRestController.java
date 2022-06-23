@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prgrms.ohouse.config.JwtAuthentication;
-import com.prgrms.ohouse.config.JwtAuthenticationProvider;
-import com.prgrms.ohouse.config.JwtAuthenticationToken;
+import com.prgrms.ohouse.domain.common.security.JwtAuthentication;
+import com.prgrms.ohouse.domain.common.security.JwtAuthenticationProvider;
+import com.prgrms.ohouse.domain.common.security.JwtAuthenticationToken;
 import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.web.requests.UserCreateRequest;
 import com.prgrms.ohouse.web.requests.UserLoginRequest;

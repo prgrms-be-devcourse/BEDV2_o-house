@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.config;
+package com.prgrms.ohouse.domain.common.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
