@@ -19,7 +19,6 @@ import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
 
 @SpringBootTest
-@ActiveProfiles("test")
 class UserServiceImplTest {
 
 	@Autowired

@@ -17,7 +17,7 @@ import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
 import com.prgrms.ohouse.web.requests.UserLoginRequest;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, properties = "spring.profiles.active:test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 class JwtAuthenticationFilterTest {
 
@@ -38,7 +38,7 @@ class JwtAuthenticationFilterTest {
 
 		String body = objectMapper.writeValueAsString(
 			new UserLoginRequest(createCommand.getEmail(), createCommand.getPassword()));
-		mockMvc.perform(post("/api/user/login")
+		mockMvc.perform(post("/api/v0/user/login")
 				.content(body)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
