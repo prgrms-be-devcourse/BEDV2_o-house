@@ -18,8 +18,7 @@ import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
 import com.prgrms.ohouse.web.requests.UserLoginRequest;
 
-@ActiveProfiles("test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, properties = "spring.profiles.active:test")
 @AutoConfigureMockMvc
 class JwtAuthenticationFilterTest {
 
