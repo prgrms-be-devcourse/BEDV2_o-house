@@ -1,26 +1,24 @@
 spring:
-  sql:
-    init:
-      mode: never
   datasource:
+    url: jdbc:h2:mem:ohouse
+    username: sa
+    password:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test
-    name: sa
   jpa:
+    show-sql: true
     generate-ddl: true
-    properties:
-      hibernate:
-        jdbc:
-          batch_size: 20
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
     hibernate:
       ddl-auto: create-drop
-    database: h2
-    open-in-view: false
-
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+jwt:
+  headerName: Authorization
+  secretKey: ohouseTokenvalidate
 file:
   dir: src/test/resources/static/
 app:
