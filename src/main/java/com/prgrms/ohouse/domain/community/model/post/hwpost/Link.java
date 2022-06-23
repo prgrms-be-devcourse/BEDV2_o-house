@@ -11,14 +11,17 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Link {
+
 	@Id
 	@GeneratedValue(strategy = AUTO)
 	private Long id;
+
 	@Column(length = 2000)
 	private String url;
+	
 	private String presentation;
 
 	@ManyToOne
-	@JoinColumn(name="post_id")
+	@JoinColumn(name = "post_id")
 	private HousewarmingPost post;
 }

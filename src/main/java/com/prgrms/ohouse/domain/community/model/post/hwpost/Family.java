@@ -14,12 +14,14 @@ public class Family {
 	@Column(name = "family_type", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Type type;
+
 	@Column(name = "family_description") // description으로 검색하는 경우가 있을까? depth를 더 파기보다는 하나로 퉁치자.
 	private String description;
+
 	@Column(name = "family_count")
 	private Integer memberCount;
 
 	enum Type {
-		SINGLE, MARRIED,CHILDREN, PARENTS,ROOMMATES
+		SINGLE, MARRIED, CHILDREN, PARENTS, ROOMMATES
 	}
 }

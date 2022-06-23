@@ -25,7 +25,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HousewarmingPost {
 
-	//  bigint id PK
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -34,16 +33,16 @@ public class HousewarmingPost {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Column(name="title")
+	@Column(name = "title")
 	private String title;
 
-	@Column(name="content")
+	@Column(name = "content")
 	private String content;
 
-	@Column(name="visit_count")
+	@Column(name = "visit_count")
 	private int visitCount;
 
-	@Column(name="scrap_count")
+	@Column(name = "scrap_count")
 	private int scrapCount;
 
 	// 주거 형태
@@ -51,7 +50,7 @@ public class HousewarmingPost {
 	@Column(nullable = false)
 	private HousingType housingType;
 
-	@Column(name="housing_description")
+	@Column(name = "housing_description")
 	private String housingDescription;
 
 	// 평수 : 단층, 2층 단독/협소 주택, 3층 이상 단독/협소 주택 => 층 별 통합해서 저장하고 출력하는 것 같다.
@@ -71,14 +70,14 @@ public class HousewarmingPost {
 	@Column(nullable = false)
 	private Worker worker;
 
-	@Column(name="worker_desc")
+	@Column(name = "worker_desc")
 	private String workerDescription;
 
-	@Column(name="work_detail")
+	@Column(name = "work_detail")
 	@Enumerated(EnumType.STRING)
 	private WorkDetail workDetail;
 
-	@Column(name="company")
+	@Column(name = "company")
 	private String company;
 
 	@Embedded
@@ -89,32 +88,7 @@ public class HousewarmingPost {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
 	private List<Link> links = new ArrayList<>();
 
-
 	@Embedded
 	private District district;
-	// 작업 분야
-
-	//
-	//  bigint user_id FK
-	//
-	//  varchar title
-	//  varchar content
-	//
-	//  int visit_count
-	//  int scrap_count
-	//
-	//  bigint writer
-	//  bigint residence
-	//  bigint area
-	//  bigint budget
-	//  bigint family
-	//  bigint style
-	//  bigint color_main
-	//  bigint color_wall
-	//  bigint color_floor
-	//  bigint construction
-	//  bigint expertise
-	//  bigint agent
-
 }
 

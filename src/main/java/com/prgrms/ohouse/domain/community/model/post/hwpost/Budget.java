@@ -19,13 +19,16 @@ public class Budget {
 
 	@Column(nullable = false)
 	private long constructionFee;
+
 	@Column(nullable = false)
 	private long stylingFee;
+
 	@Column(nullable = false)
 	private long total;
+
 	public Budget(long constructionFee, long stylingFee) {
 		checkArgument(constructionFee >= 0, "건축 비용은 0 이상이어야 합니다.");
-		checkArgument( stylingFee >= 0, "홈 스타일링 비용은 0 이상이어야 합니다.");
+		checkArgument(stylingFee >= 0, "홈 스타일링 비용은 0 이상이어야 합니다.");
 		this.constructionFee = constructionFee;
 		this.stylingFee = stylingFee;
 		this.total = constructionFee + stylingFee;
