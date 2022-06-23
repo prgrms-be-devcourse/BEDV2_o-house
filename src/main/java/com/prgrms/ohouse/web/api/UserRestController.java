@@ -16,9 +16,6 @@ import com.prgrms.ohouse.config.JwtAuthenticationToken;
 import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.web.requests.UserCreateRequest;
 import com.prgrms.ohouse.web.requests.UserLoginRequest;
-import com.prgrms.ohouse.web.results.ApiResult;
-import com.prgrms.ohouse.web.results.UserCreateResult;
-import com.prgrms.ohouse.web.results.UserLoginResult;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,22 +28,25 @@ public class UserRestController {
 	private final JwtAuthenticationProvider authenticationProvider;
 
 	@PostMapping("/signUp")
-	public ResponseEntity<ApiResult> signUp(@RequestBody @Valid UserCreateRequest request, Errors errors) {
+	public ResponseEntity<String> signUp(@RequestBody @Valid UserCreateRequest request, Errors errors) {
 		if (errors.hasErrors()) {
 			throw new IllegalArgumentException();
 		}
 		userService.signUp(request.toCommand());
-		return UserCreateResult.build();
+		return ResponseEntity.ok().body("User Create Success");
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<ApiResult> login(@RequestBody @Valid UserLoginRequest request, Errors errors) {
+	public ResponseEntity<String> login(@RequestBody @Valid UserLoginRequest request, Errors errors) {
 		if (errors.hasErrors()) {
 			throw new IllegalArgumentException();
 		}
 		JwtAuthenticationToken authToken = new JwtAuthenticationToken(request.getEmail(), request.getPassword());
 		Authentication auth = authenticationProvider.authenticate(authToken);
 		JwtAuthentication jwtAuthentication = (JwtAuthentication)auth.getPrincipal();
-		return UserLoginResult.build(jwtAuthentication.token);
+
+		return ResponseEntity.ok()
+			.header("Authorization", jwtAuthentication.token)
+			.body("Login succeed.");
 	}
 }

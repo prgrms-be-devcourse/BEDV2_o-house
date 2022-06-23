@@ -4,6 +4,7 @@ import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserLoginCommand;
 import com.prgrms.ohouse.domain.user.model.DuplicateEmailException;
+import com.prgrms.ohouse.domain.user.model.FailedLoginException;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
 
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	public User login(UserLoginCommand command) {
 		User user = userRepository.findByEmail(command.getEmail())
-			.orElseThrow(() -> new IllegalArgumentException("User not found. Login failed."));
+			.orElseThrow(() -> new FailedLoginException("User not found. Login failed."));
 		user.checkPassword(passwordEncoder, command.getPassword());
 		return user;
 	}
