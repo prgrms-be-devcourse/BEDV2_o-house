@@ -8,7 +8,7 @@ import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public class BaseEntity {
+public abstract class BaseEntity {
 
 	@Column(updatable = false)
 	private LocalDateTime createdAt;
