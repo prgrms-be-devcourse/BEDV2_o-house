@@ -17,6 +17,7 @@ import javax.persistence.*;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 @Getter
 @Setter(value = AccessLevel.PRIVATE)
@@ -38,6 +39,22 @@ public class User extends BaseEntity implements UserDetails {
 	@Column(name = "password", nullable = false, length = 60)
 	private String password;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "gender", length = 2)
+	private GenderType gender;
+
+	@Column(name = "personal_url", length = 500)
+	private String personalUrl;
+
+	@Column(name = "birth")
+	private Date birth;
+
+	@Column(name = "user_image_url", length = 500)
+	private String userImageUrl;
+
+	@Column(name = "introductions")
+	private String introductions;
+
 	@Column(name = "following_count")
 	private int followingCount = 0;
 
@@ -52,14 +69,35 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	@Builder
-	public User(String nickname, String email, String password, int followingCount, int followerCount,
+	public User(String nickname, String email, String password,
+		GenderType gender, String personalUrl, Date birth, String userImageUrl, String introductions,
+		int followingCount, int followerCount,
 		Address defaultAddress) {
 		setNickname(nickname);
 		setEmail(email);
 		setPassword(password);
+
+		setGender(gender);
+		setPersonalUrl(personalUrl);
+		setBirth(birth);
+		setUserImageUrl(userImageUrl);
+		setIntroductions(introductions);
+
 		setFollowerCount(followerCount);
 		setFollowingCount(followingCount);
 		setDefaultAddress(defaultAddress);
+	}
+
+	public User update(String nickname, GenderType gender, String personalUrl, Date birth, String userImageUrl,
+		String introductions) {
+
+		setNickname(nickname);
+		setGender(gender);
+		setPersonalUrl(personalUrl);
+		setBirth(birth);
+		setUserImageUrl(userImageUrl);
+		setIntroductions(introductions);
+		return this;
 	}
 
 	private void setFollowerCount(int followerCount) {
