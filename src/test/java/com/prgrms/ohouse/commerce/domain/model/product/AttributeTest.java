@@ -3,9 +3,10 @@ package com.prgrms.ohouse.commerce.domain.model.product;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.prgrms.ohouse.commerce.domain.model.product.enums.Color;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.Shipping;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.Size;
+import com.prgrms.ohouse.domain.commerce.model.product.Attribute;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Color;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 
 class AttributeTest {
 

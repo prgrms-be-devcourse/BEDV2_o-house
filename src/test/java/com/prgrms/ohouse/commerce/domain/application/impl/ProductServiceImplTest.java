@@ -10,22 +10,22 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.ohouse.commerce.domain.application.ProductService;
-import com.prgrms.ohouse.commerce.domain.application.command.ProductViewMainPageCommand;
-import com.prgrms.ohouse.commerce.domain.application.command.SliceCommand;
-import com.prgrms.ohouse.commerce.domain.model.product.Attribute;
-import com.prgrms.ohouse.commerce.domain.model.product.AttributeRepository;
-import com.prgrms.ohouse.commerce.domain.model.product.Category;
-import com.prgrms.ohouse.commerce.domain.model.product.CategoryRepository;
-import com.prgrms.ohouse.commerce.domain.model.product.Product;
-import com.prgrms.ohouse.commerce.domain.model.product.ProductRepository;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.Color;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.FourthCategory;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.RootCategory;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.SecondCategory;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.Shipping;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.Size;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.ThirdCategory;
+import com.prgrms.ohouse.domain.commerce.application.ProductService;
+import com.prgrms.ohouse.domain.commerce.application.command.ProductViewMainPageCommand;
+import com.prgrms.ohouse.domain.commerce.application.command.SliceCommand;
+import com.prgrms.ohouse.domain.commerce.model.product.Attribute;
+import com.prgrms.ohouse.domain.commerce.model.product.AttributeRepository;
+import com.prgrms.ohouse.domain.commerce.model.product.Category;
+import com.prgrms.ohouse.domain.commerce.model.product.CategoryRepository;
+import com.prgrms.ohouse.domain.commerce.model.product.Product;
+import com.prgrms.ohouse.domain.commerce.model.product.ProductRepository;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Color;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.FourthCategory;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.RootCategory;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.SecondCategory;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
 
 @SpringBootTest
 @Transactional
