@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class RestProductController {
 	private final ProductService productService;
 
-	@GetMapping("/api/v0/products/{attribute}")
+	@GetMapping("/api/v0/products")
 	public SliceCommand<ProductViewMainPageCommand> viewProductsByAttribute(@RequestParam String attribute,
 		Pageable pageable) {
 		return productService.findMainPageOrderByCreatedAtDesc(pageable, attribute);

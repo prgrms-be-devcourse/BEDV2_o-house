@@ -1,5 +1,6 @@
 package com.prgrms.ohouse.commerce.web.api;
 
+import static com.prgrms.ohouse.commerce.ApiDocumentUtils.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.ohouse.commerce.domain.application.ProductService;
@@ -40,7 +42,7 @@ import com.prgrms.ohouse.commerce.enums.ThirdCategory;
 
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(RestProductController.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "docs.api.com")
 class RestProductControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
@@ -65,17 +67,24 @@ class RestProductControllerTest {
 			new SliceCommand<ProductViewMainPageCommand>(
 				new SliceImpl<ProductViewMainPageCommand>(arrays, pageable, false)));
 		//when
-		this.mockMvc.perform(get("/api/v0/products").param("attribute", "asd").contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
+		ResultActions result = this.mockMvc.perform(
+			get("/api/v0/products").param("attribute", "asd").accept(MediaType.APPLICATION_JSON));
+		//then
+		result.andExpect(status().isOk())
 			.andDo(document("product-view",
+				getDocumentRequest(),
+				getDocumentResponse(),
 				requestParameters(
 					parameterWithName("attribute").description("속성")
 				),
 				responseFields(
-					fieldWithPath("content").type(JsonFieldType.STRING).description("물건 내용"),
+					fieldWithPath("contents[].name").type(JsonFieldType.STRING).description("상품 이름"),
+					fieldWithPath("contents[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+					fieldWithPath("contents[].shipping").type(JsonFieldType.STRING).description("상품 배송 종류"),
+					fieldWithPath("contents[].brand").type(JsonFieldType.STRING).description("브랜드 이름"),
 					fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
-					fieldWithPath("isLastPage").type(JsonFieldType.BOOLEAN).description("마지막 페이지인지 확인"),
-					fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지가 있는지 확인")
+					fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지가 있는지 확인"),
+					fieldWithPath("lastPage").type(JsonFieldType.BOOLEAN).description("마지막 페이지인지 확인")
 				)
 			));
 	}
