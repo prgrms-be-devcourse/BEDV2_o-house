@@ -5,34 +5,59 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.IOException;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.commerce.application.commands.ReviewRegisterCommand;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
+import com.prgrms.ohouse.domain.commerce.model.review.dummy.ProductRepository;
+import com.prgrms.ohouse.domain.commerce.model.review.dummy.Products;
+import com.prgrms.ohouse.domain.commerce.model.review.dummy.User;
+import com.prgrms.ohouse.domain.commerce.model.review.dummy.UserRepository;
+import com.prgrms.ohouse.infrastructure.TestDataProvider;
 import com.prgrms.ohouse.infrastructure.file.LocalFileUploader;
 
 @SpringBootTest(properties = "spring.profiles.active:test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
+@Rollback(value = false)
 class ReviewServiceImplTest {
 	@Autowired
 	ReviewRepository reviewRepository;
 	@Autowired
+	UserRepository userRepository;
+	@Autowired
+	ProductRepository productRepository;
+	@Autowired
 	LocalFileUploader fileUploader;
 	@Autowired
 	private ReviewService reviewService;
+	@Autowired
+	private TestDataProvider dataProvider;
+	private Long userId;
+	private Long productId;
+
+	@BeforeAll
+	void initData(){
+		// productId = dataProvider.insertProduct();
+		productId = productRepository.save(new Products()).getId();
+		// userId = dataProvider.insertUser();
+		userId = userRepository.save(new User()).getId();
+	}
 
 	@AfterAll
 	void deleteAllFile() throws IOException {
 		fileUploader.deleteAllFile();
+		dataProvider.deleteAllData();
 	}
 
 	@DisplayName("일반 리뷰 생성 테스트")
@@ -41,7 +66,7 @@ class ReviewServiceImplTest {
 		String contents = "review contents with suitable contents length over 20";
 		int reviewPoint = 4;
 
-		ReviewRegisterCommand command = new ReviewRegisterCommand(1L, 1L, reviewPoint, contents, null);
+		ReviewRegisterCommand command = new ReviewRegisterCommand(productId, userId, reviewPoint, contents, null);
 
 		Long reviewId = reviewService.registerReview(command);
 		Review found = reviewRepository.findById(reviewId).orElseThrow();
@@ -62,7 +87,7 @@ class ReviewServiceImplTest {
 			"image/png",
 			"<<png data>>".getBytes());
 
-		ReviewRegisterCommand command = new ReviewRegisterCommand(1L, 1L, reviewPoint, contents, file);
+		ReviewRegisterCommand command = new ReviewRegisterCommand(productId, userId, reviewPoint, contents, file);
 
 		Long reviewId = reviewService.registerReview(command);
 		Review found = reviewRepository.findById(reviewId).orElseThrow();
