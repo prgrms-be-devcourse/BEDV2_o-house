@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.commerce.enums;
+package com.prgrms.ohouse.commerce.domain.model.product.enums;
 
 import java.util.function.Function;
 

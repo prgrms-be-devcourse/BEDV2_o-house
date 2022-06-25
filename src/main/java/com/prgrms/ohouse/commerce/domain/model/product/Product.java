@@ -1,6 +1,6 @@
 package com.prgrms.ohouse.commerce.domain.model.product;
 
-import static com.prgrms.ohouse.commerce.enums.PriceRange.*;
+import static com.prgrms.ohouse.commerce.domain.model.product.enums.PriceRange.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

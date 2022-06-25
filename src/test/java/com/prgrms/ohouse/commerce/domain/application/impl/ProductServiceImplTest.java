@@ -19,13 +19,13 @@ import com.prgrms.ohouse.commerce.domain.model.product.Category;
 import com.prgrms.ohouse.commerce.domain.model.product.CategoryRepository;
 import com.prgrms.ohouse.commerce.domain.model.product.Product;
 import com.prgrms.ohouse.commerce.domain.model.product.ProductRepository;
-import com.prgrms.ohouse.commerce.enums.Color;
-import com.prgrms.ohouse.commerce.enums.FourthCategory;
-import com.prgrms.ohouse.commerce.enums.RootCategory;
-import com.prgrms.ohouse.commerce.enums.SecondCategory;
-import com.prgrms.ohouse.commerce.enums.Shipping;
-import com.prgrms.ohouse.commerce.enums.Size;
-import com.prgrms.ohouse.commerce.enums.ThirdCategory;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.Color;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.FourthCategory;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.RootCategory;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.SecondCategory;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.Shipping;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.Size;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.ThirdCategory;
 
 @SpringBootTest
 @Transactional

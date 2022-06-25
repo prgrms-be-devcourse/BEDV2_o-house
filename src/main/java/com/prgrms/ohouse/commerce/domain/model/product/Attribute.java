@@ -11,9 +11,9 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.prgrms.ohouse.commerce.enums.Color;
-import com.prgrms.ohouse.commerce.enums.Shipping;
-import com.prgrms.ohouse.commerce.enums.Size;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.Color;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.Shipping;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.Size;
 
 import lombok.AccessLevel;
 import lombok.Getter;
