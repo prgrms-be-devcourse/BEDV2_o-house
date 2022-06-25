@@ -1,11 +1,13 @@
 package com.prgrms.ohouse;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-// @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication
 public class OhouseApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(OhouseApplication.class, args);
-    }
+
+	public static void main(String[] args) {
+		SpringApplication.run(OhouseApplication.class, args);
+	}
 
 }
