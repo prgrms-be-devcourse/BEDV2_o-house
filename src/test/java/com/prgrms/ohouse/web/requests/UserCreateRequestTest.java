@@ -25,7 +25,7 @@ class UserCreateRequestTest {
 	}
 
 	@Test
-	void emailValidationTest() {
+	void emailValidationFailedTest() {
 		UserCreateRequest request = new UserCreateRequest("user", "awwwfdojf.com", "testPassword12");
 
 		Set<ConstraintViolation<UserCreateRequest>> violations = validator.validate(request);
@@ -33,7 +33,7 @@ class UserCreateRequestTest {
 	}
 
 	@Test
-	void passwordValidationTest() {
+	void passwordValidationFailedTest() {
 		UserCreateRequest request = new UserCreateRequest("user", "test@gmail.com", "pppasss");
 		Set<ConstraintViolation<UserCreateRequest>> violations = validator.validate(request);
 		assertThat(violations, hasSize(1));

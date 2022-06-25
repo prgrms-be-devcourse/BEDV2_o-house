@@ -1,14 +1,16 @@
 package com.prgrms.ohouse.domain.user.application.commands;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Getter
-@RequiredArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserCreateCommand {
 
 	@NotBlank(message = "닉네임을 비워둘 수 없습니다.")
