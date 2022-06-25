@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-@Component
 public class LocalFileStore implements FileStore {
-	@Value("${file.dir}" )
+	@Value("${file.dir}")
 	private String FILE_DIRECTORY;
 
 	@Override
