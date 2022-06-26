@@ -1,4 +1,4 @@
 package com.prgrms.ohouse.domain.community.application;
 
-public class dummy {
+public class CreateHousewarmingPostCommand {
 }

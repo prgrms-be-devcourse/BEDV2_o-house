@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -77,5 +78,23 @@ public class HousewarmingPost {
 
 	@Embedded
 	private District district;
+
+	@Builder
+	public HousewarmingPost(User user, String title, String content, HousingType housingType, String housingDescription,
+		Long area, Budget budget, Family family, String company, WorkMetadata workMetadata, String copyrightHolder,
+		District district) {
+		this.user = user;
+		this.title = title;
+		this.content = content;
+		this.housingType = housingType;
+		this.housingDescription = housingDescription;
+		this.area = area;
+		this.budget = budget;
+		this.family = family;
+		this.company = company;
+		this.workMetadata = workMetadata;
+		this.copyrightHolder = copyrightHolder;
+		this.district = district;
+	}
 }
 

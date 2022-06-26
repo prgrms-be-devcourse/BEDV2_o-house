@@ -16,7 +16,7 @@ public class Family {
 	private String description;
 
 	@Column(name = "family_count")
-	private Integer memberCount;
+	private Integer familyCount;
 
 	enum Type {
 		SINGLE, MARRIED, CHILDREN, PARENTS, ROOMMATES
