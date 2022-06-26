@@ -11,9 +11,8 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import com.prgrms.ohouse.domain.commerce.application.command.ProductViewMainPageCommand;
-import com.prgrms.ohouse.domain.commerce.model.product.Product;
-
 import com.prgrms.ohouse.domain.commerce.infrastructure.repository.custom.JpaProductRepositoryCustom;
+import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
