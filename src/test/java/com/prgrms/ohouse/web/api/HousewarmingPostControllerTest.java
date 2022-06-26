@@ -38,8 +38,8 @@ class HousewarmingPostControllerTest {
 			"area", 2,
 			"constructionFee", 200,
 			"stylingFee", "200",
-			"familyType", "large",
-			"workerType", "self"
+			"familyType", "SINGLE",
+			"workerType", "SELF"
 
 		));
 		// Given
@@ -56,12 +56,13 @@ class HousewarmingPostControllerTest {
 		var multipartRequest = multipart("/api/v0/hwpost");
 		images.forEach(multipartRequest::file);
 		multipartRequest.file(payloadPart);
-		mockMvc.perform(multipartRequest)
-			.andDo(print())
-			.andExpect(status().is2xxSuccessful());
 		// When
+		var result = mockMvc.perform(multipartRequest);
 
 		// Then
+		result
+			.andDo(print())
+			.andExpect(status().is2xxSuccessful());
 
 	}
 

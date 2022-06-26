@@ -31,7 +31,9 @@ public class HousewarmingPostController {
 	@PostMapping
 	public Map<String, String> handleCreatePostRequest(
 		@RequestPart("payload") @Valid HousewarmingPostCreateRequest payload,
-		@RequestPart("image") List<MultipartFile> files) {
+		@RequestPart("image") List<MultipartFile> images) {
+
+		postService.createPost(payload.toCommand(), images);
 
 		return Map.of("ok", payload.getTitle());
 	}

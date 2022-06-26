@@ -1,12 +1,23 @@
 package com.prgrms.ohouse.web.requests;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.model.post.hwpost.Budget;
+import com.prgrms.ohouse.domain.community.model.post.hwpost.District;
+import com.prgrms.ohouse.domain.community.model.post.hwpost.Family;
+import com.prgrms.ohouse.domain.community.model.post.hwpost.HousingType;
+import com.prgrms.ohouse.domain.community.model.post.hwpost.Link;
+import com.prgrms.ohouse.domain.community.model.post.hwpost.WorkMetadata;
+import com.prgrms.ohouse.domain.community.model.post.hwpost.WorkTarget;
+import com.prgrms.ohouse.domain.community.model.post.hwpost.WorkerType;
 
 import lombok.Getter;
 
@@ -40,7 +51,7 @@ public class HousewarmingPostCreateRequest {
 
 	private String familyDescription;
 
-	private String familyCount;
+	private Integer familyCount;
 
 	private String company;
 
@@ -58,9 +69,47 @@ public class HousewarmingPostCreateRequest {
 	private String copyrightHolder;
 
 	private List<LinkPayload> linkPayloads;
-	private Integer RLG;
-	private Integer BLG;
+	private String districtCode;
 	private String districtDescription;
+
+	public CreateHousewarmingPostCommand toCommand() {
+		HousingType housingType = HousingType.from(housingTypeCode);
+		Budget budget = new Budget(constructionFee, stylingFee);
+		Family family = new Family(familyType, familyDescription, familyCount);
+		District district = new District(districtCode, districtDescription);
+		WorkMetadata workMetadata = WorkMetadata.builder()
+			.unit(mapToEnumOrNull(WorkMetadata.Unit.class, workUnit))
+			.duration(workDuration)
+			.workerDescription(workerDescription)
+			.workTarget(mapToEnumOrNull(WorkTarget.class, workTarget))
+			.workerType(WorkerType.valueOf(workerType))
+			.build();
+		List<Link> links = linkPayloads == null
+			? null
+			: linkPayloads.stream()
+			.map(linkPayload -> new Link(linkPayload.url, linkPayload.urlDesc))
+			.collect(
+				Collectors.toUnmodifiableList());
+
+		return CreateHousewarmingPostCommand.builder()
+			.title(title)
+			.content(content)
+			.housingType(housingType)
+			.housingDescription(housingDescription)
+			.area(area)
+			.budget(budget)
+			.family(family)
+			.company(company)
+			.workMetadata(workMetadata)
+			.copyrightHolder(copyrightHolder)
+			.links(links)
+			.district(district)
+			.build();
+	}
+
+	private <T extends Enum<T>> T mapToEnumOrNull(Class<T> enumType, String name) {
+		return name == null ? null : Enum.valueOf(enumType, name);
+	}
 
 	static class LinkPayload {
 		@Length(min = 2000)
