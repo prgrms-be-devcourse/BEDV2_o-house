@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class RestReviewController {
 	private final ReviewService reviewService;
 
-	@PostMapping("/api/v1/reviews")
+	@PostMapping("/api/v0/reviews")
 	public ResponseEntity<String> createNewReview(@RequestBody ReviewCreateRequest request) {
 		Long newReviewId = reviewService.registerReview(request.toCommand());
 		URI location = URI.create("http://localhost:8080/api/v1/reviews/" + newReviewId);
