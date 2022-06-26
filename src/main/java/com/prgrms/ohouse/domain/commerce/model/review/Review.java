@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.*;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -38,6 +40,7 @@ public class Review {
     private int helpPoint = 0;
     private String reviewImageUrl;
     private LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
     private ReviewType reviewType;
 
     public static Review createPhotoReview(Product product, User user, int reviewPoint, String contents,
