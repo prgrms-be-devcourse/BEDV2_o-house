@@ -15,12 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.commerce.application.command.ReviewRegisterCommand;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
-import com.prgrms.ohouse.domain.commerce.model.product.ProductRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
 import com.prgrms.ohouse.domain.user.model.User;
-import com.prgrms.ohouse.domain.user.model.UserRepository;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 import com.prgrms.ohouse.infrastructure.file.LocalFileUploader;
 
@@ -30,10 +28,6 @@ import com.prgrms.ohouse.infrastructure.file.LocalFileUploader;
 class ReviewServiceImplTest {
 	@Autowired
 	ReviewRepository reviewRepository;
-	@Autowired
-	UserRepository userRepository;
-	@Autowired
-	ProductRepository productRepository;
 	@Autowired
 	LocalFileUploader fileUploader;
 	@Autowired
