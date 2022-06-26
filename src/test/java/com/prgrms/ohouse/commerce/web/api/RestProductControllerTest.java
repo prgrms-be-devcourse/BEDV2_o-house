@@ -26,19 +26,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.ohouse.commerce.domain.application.ProductService;
-import com.prgrms.ohouse.commerce.domain.application.command.ProductViewMainPageCommand;
-import com.prgrms.ohouse.commerce.domain.application.command.SliceCommand;
-import com.prgrms.ohouse.commerce.domain.model.product.Attribute;
-import com.prgrms.ohouse.commerce.domain.model.product.Category;
-import com.prgrms.ohouse.commerce.domain.model.product.Product;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.Color;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.FourthCategory;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.RootCategory;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.SecondCategory;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.Shipping;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.Size;
-import com.prgrms.ohouse.commerce.domain.model.product.enums.ThirdCategory;
+import com.prgrms.ohouse.domain.commerce.domain.application.ProductService;
+import com.prgrms.ohouse.domain.commerce.domain.application.command.ProductViewMainPageCommand;
+import com.prgrms.ohouse.domain.commerce.domain.application.command.SliceCommand;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.Attribute;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.Category;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.Product;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.Color;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.FourthCategory;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.RootCategory;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.SecondCategory;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.Shipping;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.Size;
+import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.ThirdCategory;
+import com.prgrms.ohouse.domain.commerce.web.api.RestProductController;
 
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(RestProductController.class)
