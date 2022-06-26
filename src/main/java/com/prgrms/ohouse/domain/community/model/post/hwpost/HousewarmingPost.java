@@ -16,7 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.prgrms.ohouse.user.domain.User;
+import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
