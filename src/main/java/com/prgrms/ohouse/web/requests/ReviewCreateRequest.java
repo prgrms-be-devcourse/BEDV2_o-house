@@ -2,7 +2,7 @@ package com.prgrms.ohouse.web.requests;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.ohouse.domain.commerce.application.commands.ReviewRegisterCommand;
+import com.prgrms.ohouse.domain.commerce.application.command.ReviewRegisterCommand;
 
 import lombok.Getter;
 

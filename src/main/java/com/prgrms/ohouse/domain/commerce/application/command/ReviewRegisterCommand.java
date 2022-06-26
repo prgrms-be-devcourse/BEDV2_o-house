@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.application.commands;
+package com.prgrms.ohouse.domain.commerce.application.command;
 
 import static com.google.common.base.Preconditions.*;
 

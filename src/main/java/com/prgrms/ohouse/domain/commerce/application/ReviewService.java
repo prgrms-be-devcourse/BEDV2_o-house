@@ -1,6 +1,6 @@
 package com.prgrms.ohouse.domain.commerce.application;
 
-import com.prgrms.ohouse.domain.commerce.application.commands.ReviewRegisterCommand;
+import com.prgrms.ohouse.domain.commerce.application.command.ReviewRegisterCommand;
 
 public interface ReviewService {
 

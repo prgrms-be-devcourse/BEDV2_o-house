@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.commerce.application.ReviewService;
-import com.prgrms.ohouse.domain.commerce.application.commands.ReviewRegisterCommand;
+import com.prgrms.ohouse.domain.commerce.application.command.ReviewRegisterCommand;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.prgrms.ohouse.domain.commerce.model.product.ProductRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
