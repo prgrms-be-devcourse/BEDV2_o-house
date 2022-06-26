@@ -3,11 +3,10 @@ package com.prgrms.ohouse.commerce.domain.model.product;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import com.prgrms.ohouse.domain.commerce.model.product.Category;
-import com.prgrms.ohouse.domain.commerce.model.product.enums.FourthCategory;
-import com.prgrms.ohouse.domain.commerce.model.product.enums.RootCategory;
-import com.prgrms.ohouse.domain.commerce.model.product.enums.SecondCategory;
-import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.FourthCategory;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.RootCategory;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.SecondCategory;
+import com.prgrms.ohouse.commerce.domain.model.product.enums.ThirdCategory;
 
 class CategoryTest {
 
