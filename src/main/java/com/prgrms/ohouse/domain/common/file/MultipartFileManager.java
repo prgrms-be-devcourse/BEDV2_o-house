@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.common.ImageAttachable;
-import com.prgrms.ohouse.infrastructure.file.FileRepositoryDelegator;
-import com.prgrms.ohouse.infrastructure.file.FileStore;
 
 import lombok.RequiredArgsConstructor;
 

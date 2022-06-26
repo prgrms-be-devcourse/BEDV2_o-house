@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.community.model.post.question.command.QuestionPostRegisterCommand;
-import com.prgrms.ohouse.infrastructure.repository.QuestionPostRepository;
 
 import lombok.RequiredArgsConstructor;
 

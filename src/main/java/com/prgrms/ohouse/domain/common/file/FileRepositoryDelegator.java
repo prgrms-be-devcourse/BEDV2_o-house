@@ -1,12 +1,9 @@
-package com.prgrms.ohouse.infrastructure.file;
+package com.prgrms.ohouse.domain.common.file;
 
 import org.springframework.stereotype.Component;
 
 import com.prgrms.ohouse.domain.common.ImageAttachable;
-import com.prgrms.ohouse.domain.common.file.QuestionPostImage;
-import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.community.model.post.question.QuestionPost;
-import com.prgrms.ohouse.infrastructure.repository.FileRepository;
 
 import lombok.RequiredArgsConstructor;
 

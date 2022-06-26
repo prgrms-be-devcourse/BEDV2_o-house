@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.infrastructure.file;
+package com.prgrms.ohouse.domain.common.file;
 
 public class FileIOException extends RuntimeException {
 	public FileIOException(String message, Throwable cause) {

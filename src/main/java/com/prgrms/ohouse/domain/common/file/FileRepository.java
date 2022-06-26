@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.infrastructure.repository;
+package com.prgrms.ohouse.domain.common.file;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.infrastructure.repository;
+package com.prgrms.ohouse.domain.community.model.post.question;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
