@@ -68,14 +68,15 @@ public class District {
 	private String districtDescription;
 
 	public District(String code, String districtDescription) {
-		checkNotNull(code);
-		checkArgument(code.matches("^\\d{1,2}(_\\d{1,2})?$"));
-		var codes = code.split("_");
-		if (codes.length == 1) {
-			this.RLG = Integer.parseInt(codes[0]);
-		} else if (codes.length == 2) {
-			this.RLG = Integer.parseInt(codes[0]);
-			this.BLG = Integer.parseInt(codes[1]);
+		if (code != null) {
+			checkArgument(code.matches("^\\d{1,2}(_\\d{1,2})?$"));
+			var codes = code.split("_");
+			if (codes.length == 1) {
+				this.RLG = Integer.parseInt(codes[0]);
+			} else if (codes.length == 2) {
+				this.RLG = Integer.parseInt(codes[0]);
+				this.BLG = Integer.parseInt(codes[1]);
+			}
 		}
 		this.districtDescription = districtDescription;
 	}
