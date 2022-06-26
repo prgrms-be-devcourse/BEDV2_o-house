@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.prgrms.ohouse.domain.commerce.model.review.dummy.Products;
-import com.prgrms.ohouse.domain.commerce.model.review.dummy.User;
+import com.prgrms.ohouse.domain.commerce.model.product.Product;
+import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,7 +29,7 @@ public class Review {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Products product;
+    private Product product;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -40,7 +40,7 @@ public class Review {
     private LocalDateTime createdAt;
     private ReviewType reviewType;
 
-    public static Review createPhotoReview(Products product, User user, int reviewPoint, String contents,
+    public static Review createPhotoReview(Product product, User user, int reviewPoint, String contents,
         String reviewImageUrl) {
         Review instance = new Review();
         instance.setProduct(product);
@@ -53,7 +53,7 @@ public class Review {
         return instance;
     }
 
-    public static Review createNormalReview(Products product, User user, int reviewPoint, String contents) {
+    public static Review createNormalReview(Product product, User user, int reviewPoint, String contents) {
         Review instance = new Review();
         instance.setProduct(product);
         instance.setUser(user);

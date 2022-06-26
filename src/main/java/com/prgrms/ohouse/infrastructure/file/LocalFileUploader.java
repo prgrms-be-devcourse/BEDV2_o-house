@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@PropertySource("classpath:/application-${spring.profiles.active}.yml")
+@PropertySource("classpath:/application-test.yml")
 @Getter
 public class LocalFileUploader implements FileUploader {
 	@Value("${file.dir}")

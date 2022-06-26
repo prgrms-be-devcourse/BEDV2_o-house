@@ -7,15 +7,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.commerce.application.ReviewService;
 import com.prgrms.ohouse.domain.commerce.application.commands.ReviewRegisterCommand;
+import com.prgrms.ohouse.domain.commerce.model.product.Product;
+import com.prgrms.ohouse.domain.commerce.model.product.ProductRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRegisterFailException;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
-import com.prgrms.ohouse.domain.commerce.model.review.dummy.ProductRepository;
-import com.prgrms.ohouse.domain.commerce.model.review.dummy.Products;
-import com.prgrms.ohouse.domain.commerce.model.review.dummy.User;
-import com.prgrms.ohouse.domain.commerce.model.review.dummy.UserRepository;
 import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.common.file.UploadFile;
+import com.prgrms.ohouse.domain.user.model.User;
+import com.prgrms.ohouse.domain.user.model.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +33,9 @@ public class ReviewServiceImpl implements ReviewService {
 	@Transactional
 	@Override
 	public Long registerReview(ReviewRegisterCommand command) {
-		Products product = productRepository.findById(command.getProductId())
+		Product product = productRepository.findById(command.getProductId())
 			.orElseThrow(() -> new ReviewRegisterFailException("invalid product id"));
-		User user = userRepository.findById(command.getProductId())
+		User user = userRepository.findById(command.getUserId())
 			.orElseThrow(() -> new ReviewRegisterFailException("invalid user id"));
 		Review review;
 		if (command.isPhotoReview()) {

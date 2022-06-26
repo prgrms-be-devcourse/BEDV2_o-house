@@ -12,12 +12,12 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -40,8 +40,8 @@ import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
 
-@MockBean(JpaMetamodelMappingContext.class)
-@WebMvcTest(RestProductController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "docs.api.com")
 class RestProductControllerTest {
 	@Autowired
