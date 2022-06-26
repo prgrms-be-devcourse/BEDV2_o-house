@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.commerce.domain.model.product;
+package com.prgrms.ohouse.domain.commerce.model.product;
 
 import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;

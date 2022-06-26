@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.commerce;
+package com.prgrms.ohouse.domain.commerce;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 

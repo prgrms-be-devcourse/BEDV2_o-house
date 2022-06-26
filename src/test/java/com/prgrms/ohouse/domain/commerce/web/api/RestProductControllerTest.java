@@ -1,8 +1,6 @@
-package com.prgrms.ohouse.commerce.web.api;
+package com.prgrms.ohouse.domain.commerce.web.api;
 
-import static com.prgrms.ohouse.commerce.ApiDocumentUtils.*;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -21,11 +19,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.ohouse.domain.commerce.ApiDocumentUtils;
 import com.prgrms.ohouse.domain.commerce.application.ProductService;
 import com.prgrms.ohouse.domain.commerce.application.command.ProductViewMainPageCommand;
 import com.prgrms.ohouse.domain.commerce.application.command.SliceCommand;
@@ -39,7 +39,6 @@ import com.prgrms.ohouse.domain.commerce.model.product.enums.SecondCategory;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
-import com.prgrms.ohouse.domain.commerce.web.api.RestProductController;
 
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(RestProductController.class)
@@ -72,9 +71,9 @@ class RestProductControllerTest {
 			get("/api/v0/products").param("attribute", "asd").accept(MediaType.APPLICATION_JSON));
 		//then
 		result.andExpect(status().isOk())
-			.andDo(document("product-view",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(MockMvcRestDocumentation.document("product-view",
+				ApiDocumentUtils.getDocumentRequest(),
+				ApiDocumentUtils.getDocumentResponse(),
 				requestParameters(
 					parameterWithName("attribute").description("속성")
 				),

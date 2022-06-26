@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.commerce.domain.application.impl;
+package com.prgrms.ohouse.domain.commerce.application.impl;
 
 import static org.assertj.core.api.Assertions.*;
 
