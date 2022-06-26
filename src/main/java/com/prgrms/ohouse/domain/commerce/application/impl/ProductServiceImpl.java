@@ -1,13 +1,13 @@
-package com.prgrms.ohouse.domain.commerce.domain.application.impl;
+package com.prgrms.ohouse.domain.commerce.application.impl;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.ohouse.domain.commerce.domain.application.ProductService;
-import com.prgrms.ohouse.domain.commerce.domain.application.command.ProductViewMainPageCommand;
-import com.prgrms.ohouse.domain.commerce.domain.application.command.SliceCommand;
-import com.prgrms.ohouse.domain.commerce.domain.model.product.ProductRepository;
+import com.prgrms.ohouse.domain.commerce.application.ProductService;
+import com.prgrms.ohouse.domain.commerce.application.command.ProductViewMainPageCommand;
+import com.prgrms.ohouse.domain.commerce.application.command.SliceCommand;
+import com.prgrms.ohouse.domain.commerce.model.product.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
 

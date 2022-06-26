@@ -1,7 +1,7 @@
-package com.prgrms.ohouse.domain.commerce.domain.application.command;
+package com.prgrms.ohouse.domain.commerce.application.command;
 
-import com.prgrms.ohouse.domain.commerce.domain.model.product.Product;
-import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.Shipping;
+import com.prgrms.ohouse.domain.commerce.model.product.Product;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
 
 import lombok.Getter;
 

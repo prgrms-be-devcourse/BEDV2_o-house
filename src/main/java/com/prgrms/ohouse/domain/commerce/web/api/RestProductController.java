@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prgrms.ohouse.domain.commerce.domain.application.ProductService;
-import com.prgrms.ohouse.domain.commerce.domain.application.command.ProductViewMainPageCommand;
-import com.prgrms.ohouse.domain.commerce.domain.application.command.SliceCommand;
+import com.prgrms.ohouse.domain.commerce.application.ProductService;
+import com.prgrms.ohouse.domain.commerce.application.command.ProductViewMainPageCommand;
+import com.prgrms.ohouse.domain.commerce.application.command.SliceCommand;
 
 import lombok.RequiredArgsConstructor;
 

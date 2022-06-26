@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.domain.model.product;
+package com.prgrms.ohouse.domain.commerce.model.product;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.PriceRange;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.PriceRange;
 
 import lombok.AccessLevel;
 import lombok.Getter;

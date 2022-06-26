@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.domain.model.product;
+package com.prgrms.ohouse.domain.commerce.model.product;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.Color;
-import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.Shipping;
-import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.Size;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Color;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 
 import lombok.AccessLevel;
 import lombok.Getter;

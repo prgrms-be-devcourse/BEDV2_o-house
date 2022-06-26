@@ -1,6 +1,6 @@
 package com.prgrms.ohouse.domain.commerce.infrastructure.repository.impl;
 
-import static com.prgrms.ohouse.commerce.domain.model.product.QProduct.*;
+import static com.prgrms.ohouse.domain.commerce.model.product.QProduct.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
-import com.prgrms.ohouse.domain.commerce.domain.application.command.ProductViewMainPageCommand;
-import com.prgrms.ohouse.domain.commerce.domain.model.product.Product;
+import com.prgrms.ohouse.domain.commerce.application.command.ProductViewMainPageCommand;
+import com.prgrms.ohouse.domain.commerce.model.product.Product;
 
 import com.prgrms.ohouse.domain.commerce.infrastructure.repository.custom.JpaProductRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.domain.model.product;
+package com.prgrms.ohouse.domain.commerce.model.product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.FourthCategory;
-import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.RootCategory;
-import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.SecondCategory;
-import com.prgrms.ohouse.domain.commerce.domain.model.product.enums.ThirdCategory;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.FourthCategory;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.RootCategory;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.SecondCategory;
+import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
 
 import lombok.AccessLevel;
 import lombok.Getter;

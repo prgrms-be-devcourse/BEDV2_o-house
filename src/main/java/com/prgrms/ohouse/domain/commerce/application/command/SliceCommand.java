@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.domain.application.command;
+package com.prgrms.ohouse.domain.commerce.application.command;
 
 import java.util.List;
 
