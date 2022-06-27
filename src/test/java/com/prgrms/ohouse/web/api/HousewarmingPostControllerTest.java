@@ -43,7 +43,7 @@ class HousewarmingPostControllerTest {
 		var payload = json.writeValueAsBytes(Map.of(
 			"title", "baka",
 			"content", "content",
-			"housingTypeCode", "2",
+			"housingTypeCode", "PRIVATE_ROOM",
 			"area", 2,
 			"constructionFee", 200,
 			"stylingFee", "200",
@@ -53,7 +53,7 @@ class HousewarmingPostControllerTest {
 		// Given
 		var payloadPart = new MockMultipartFile(
 			"payload",
-			null,
+			"asdf",
 			"application/json",
 			payload);
 		var images =

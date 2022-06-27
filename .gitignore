@@ -38,3 +38,4 @@ out/
 
 ### app only ###
 spy.log
+application-aws.yml

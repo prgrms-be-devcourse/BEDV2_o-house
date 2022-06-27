@@ -11,6 +11,7 @@ import com.prgrms.ohouse.domain.community.model.post.hwpost.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.post.hwpost.HousewarmingPostRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class HousewarmingPostService {
 
 	private final HousewarmingPostRepository housewarmingPostRepository;
