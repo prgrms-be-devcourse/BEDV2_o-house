@@ -3,7 +3,6 @@ package com.prgrms.ohouse.domain.user.application.impl;
 import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserLoginCommand;
-import com.prgrms.ohouse.domain.user.application.commands.UserUpdateCommand;
 import com.prgrms.ohouse.domain.user.model.DuplicateEmailException;
 import com.prgrms.ohouse.domain.user.model.FailedLoginException;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -43,18 +42,5 @@ public class UserServiceImpl implements UserService {
 			.orElseThrow(() -> new FailedLoginException("User not found. Login failed."));
 		user.checkPassword(passwordEncoder, command.getPassword());
 		return user;
-	}
-
-	@Transactional
-	public User updateUser(User user, UserUpdateCommand command) {
-		//TODO token -> User failed exception
-		User updatedUser = userRepository.findByEmail(user.getEmail())
-	 		.orElseThrow(() -> new FailedLoginException("User not found. Try Again."));
-		//TODO fileManager 추가
-
-		// updatedUser.update(command.getNickname(), command.getGender(), command.getPersonalUrl(),
-		// 	command.getBirth(), fileManager.save(command.getImage()), command.getIntroductions());
-
-		return updatedUser;
 	}
 }
