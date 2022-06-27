@@ -87,6 +87,6 @@ class ReviewServiceImplTest {
 		assertThat(found.getContents()).isEqualTo(contents);
 		assertThat(found.getReviewPoint()).isEqualTo(reviewPoint);
 		assertThat(found.getReviewType()).isEqualTo(ReviewType.PHOTO);
-		assertThat(found.getReviewImageUrl()).isNotNull();
+		assertThat(found.getReviewImage()).isNotNull();
 	}
 }

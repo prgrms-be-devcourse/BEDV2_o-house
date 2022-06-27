@@ -39,7 +39,7 @@ class ReviewTest {
 		String contents = "reviewreviewreviewreviewreviewreviewreviewreviewreviewreviewreview";
 
 		Assertions.assertThrows(IllegalArgumentException.class,
-			() -> Review.createNormalReview(product, user, reviewPoint, contents));
+			() -> Review.createReview(product, user, reviewPoint, contents));
 	}
 
 	@DisplayName("리뷰 내용의 길이가 20자 미만이면 IllegalArgumentException 발생")
@@ -60,6 +60,6 @@ class ReviewTest {
 		String contents = "short review";
 
 		Assertions.assertThrows(IllegalArgumentException.class,
-			() -> Review.createNormalReview(product, user, 3, contents));
+			() -> Review.createReview(product, user, 3, contents));
 	}
 }
