@@ -11,6 +11,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.prgrms.ohouse.domain.common.file.FileIOException;
+import com.prgrms.ohouse.domain.common.file.FileStore;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,5 +41,14 @@ public class S3FileStore implements FileStore {
 		} catch (IOException e) {
 			throw new FileIOException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public void delete(String fileUrl) {
+		amazonS3Client.deleteObject(bucketName, fileUrlToStoredFileName(fileUrl));
+	}
+
+	private String fileUrlToStoredFileName(String fileUrl) {
+		return fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
 	}
 }
