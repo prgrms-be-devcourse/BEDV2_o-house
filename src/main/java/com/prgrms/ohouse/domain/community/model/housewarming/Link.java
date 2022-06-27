@@ -36,4 +36,8 @@ public class Link {
 		this.url = url;
 		this.urlDetail = urlDetail;
 	}
+
+	public void assignPost(HousewarmingPost housewarmingPost) {
+		this.post = housewarmingPost;
+	}
 }
