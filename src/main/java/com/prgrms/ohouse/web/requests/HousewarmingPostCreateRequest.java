@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -33,7 +32,7 @@ public class HousewarmingPostCreateRequest {
 	@NotBlank(message = "내용을 반드시 작성해야 합니다.")
 	private String content;
 
-	@Pattern(regexp = "^[1-9]\\d*$")
+	@NotNull
 	private String housingTypeCode;
 
 	private String housingDescription;
