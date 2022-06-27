@@ -5,6 +5,7 @@ import java.util.List;
 import com.prgrms.ohouse.domain.community.model.post.hwpost.Budget;
 import com.prgrms.ohouse.domain.community.model.post.hwpost.District;
 import com.prgrms.ohouse.domain.community.model.post.hwpost.Family;
+import com.prgrms.ohouse.domain.community.model.post.hwpost.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.post.hwpost.HousingType;
 import com.prgrms.ohouse.domain.community.model.post.hwpost.Link;
 import com.prgrms.ohouse.domain.community.model.post.hwpost.WorkMetadata;
@@ -31,4 +32,20 @@ public class CreateHousewarmingPostCommand {
 	private List<Link> links;
 	private District district;
 
+	public HousewarmingPost toPost() {
+		return HousewarmingPost.builder()
+			.title(title)
+			.content(content)
+			.housingType(housingType)
+			.housingDescription(housingDescription)
+			.area(area)
+			.budget(budget)
+			.family(family)
+			.company(company)
+			.workMetadata(workMetadata)
+			.copyrightHolder(copyrightHolder)
+			.district(district)
+			.links(links)
+			.build();
+	}
 }

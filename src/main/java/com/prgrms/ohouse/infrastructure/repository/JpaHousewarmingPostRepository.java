@@ -9,4 +9,5 @@ import com.prgrms.ohouse.domain.community.model.post.hwpost.HousewarmingPostRepo
 @Repository
 public interface JpaHousewarmingPostRepository extends JpaRepository<HousewarmingPost, Long>,
 	HousewarmingPostRepository {
+	
 }

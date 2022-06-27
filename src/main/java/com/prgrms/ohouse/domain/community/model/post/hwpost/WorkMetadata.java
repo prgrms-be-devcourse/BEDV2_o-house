@@ -37,7 +37,7 @@ public class WorkMetadata {
 	@Builder
 	public WorkMetadata(Integer duration, Unit unit, WorkTarget workTarget, WorkerType workerType,
 		String workerDescription) {
-		checkArgument((duration != null) == (unit != null), "두 값이 전부 유효하거나, 전부 유효하지 않아야 합니다.");
+		checkArgument((duration != null) == (unit != null), "두 값(duration, unit)이 전부 유효하거나, 전부 유효하지 않아야 합니다.");
 		this.duration = duration;
 		this.unit = unit;
 		this.workTarget = workTarget;

@@ -1,5 +1,6 @@
 package com.prgrms.ohouse.web.requests;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,7 +70,9 @@ public class HousewarmingPostCreateRequest {
 	private String copyrightHolder;
 
 	private List<LinkPayload> linkPayloads;
+
 	private String districtCode;
+
 	private String districtDescription;
 
 	public CreateHousewarmingPostCommand toCommand() {
@@ -84,12 +87,7 @@ public class HousewarmingPostCreateRequest {
 			.workTarget(mapToEnumOrNull(WorkTarget.class, workTarget))
 			.workerType(WorkerType.valueOf(workerType))
 			.build();
-		List<Link> links = linkPayloads == null
-			? null
-			: linkPayloads.stream()
-			.map(linkPayload -> new Link(linkPayload.url, linkPayload.urlDesc))
-			.collect(
-				Collectors.toUnmodifiableList());
+		List<Link> links = convertToLinks();
 
 		return CreateHousewarmingPostCommand.builder()
 			.title(title)
@@ -105,6 +103,15 @@ public class HousewarmingPostCreateRequest {
 			.links(links)
 			.district(district)
 			.build();
+	}
+
+	private List<Link> convertToLinks() {
+		return linkPayloads == null
+			? Collections.emptyList()
+			: linkPayloads.stream()
+			.map(linkPayload -> new Link(linkPayload.url, linkPayload.urlDesc))
+			.collect(
+				Collectors.toUnmodifiableList());
 	}
 
 	private <T extends Enum<T>> T mapToEnumOrNull(Class<T> enumType, String name) {

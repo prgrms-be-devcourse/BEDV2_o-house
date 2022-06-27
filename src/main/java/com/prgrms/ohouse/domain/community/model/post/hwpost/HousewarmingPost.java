@@ -20,10 +20,12 @@ import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class HousewarmingPost {
 
 	@Id
@@ -82,7 +84,7 @@ public class HousewarmingPost {
 	@Builder
 	public HousewarmingPost(User user, String title, String content, HousingType housingType, String housingDescription,
 		Long area, Budget budget, Family family, String company, WorkMetadata workMetadata, String copyrightHolder,
-		District district) {
+		List<Link> links, District district) {
 		this.user = user;
 		this.title = title;
 		this.content = content;
@@ -95,6 +97,10 @@ public class HousewarmingPost {
 		this.workMetadata = workMetadata;
 		this.copyrightHolder = copyrightHolder;
 		this.district = district;
+		for (Link link : links) {
+			link.assignPost(this);
+		}
+		this.links = links;
 	}
 }
 
