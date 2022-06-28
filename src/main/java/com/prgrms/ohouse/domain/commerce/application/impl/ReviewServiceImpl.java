@@ -36,19 +36,10 @@ public class ReviewServiceImpl implements ReviewService {
 			.orElseThrow(() -> new ReviewRegisterFailException("invalid product id"));
 		User user = userRepository.findById(command.getUserId())
 			.orElseThrow(() -> new ReviewRegisterFailException("invalid user id"));
-		Review review;
-		if (command.isPhotoReview()) {
-			try {
-				review = Review.createReview(product, user, command.getReviewPoint(), command.getContents());
-				review = reviewRepository.save(review);
-				ReviewImage reviewImage = (ReviewImage)fileManager.store(command.getReviewImage(), review);
-				review.assignReviewImage(reviewImage);
-			} catch (FileIOException e) {
-				throw new ReviewRegisterFailException(e.getMessage(), e);
-			}
-		} else {
-			review = Review.createReview(product, user, command.getReviewPoint(), command.getContents());
-		}
+
+		Review review = Review.createReview(product, user, command.getReviewPoint(), command.getContents());
+		review = reviewRepository.save(review);
+		fileManager.store(command.getReviewImage(), review);
 		return reviewRepository.save(review).getId();
 	}
 }

@@ -2,7 +2,7 @@ package com.prgrms.ohouse.web.responses;
 
 import java.util.List;
 
-import com.prgrms.ohouse.domain.common.file.QuestionPostImage;
+import com.prgrms.ohouse.domain.community.model.post.question.QuestionPostImage;
 import com.prgrms.ohouse.domain.community.model.post.question.QuestionPost;
 
 import lombok.Getter;

@@ -1,13 +1,11 @@
-package com.prgrms.ohouse.domain.common.file;
+package com.prgrms.ohouse.domain.community.model.post.question;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.prgrms.ohouse.domain.community.model.post.question.QuestionPost;
+import com.prgrms.ohouse.domain.common.file.StoredFile;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

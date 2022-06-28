@@ -24,9 +24,7 @@ public class QuestionPostServiceImpl implements QuestionPostService {
 	@Override
 	public QuestionPost createQuestionPost(QuestionPostRegisterCommand command) {
 		QuestionPost savedPost = questionPostRepository.save(new QuestionPost(command.getContents()));
-		List<StoredFile> questionImages = fileManager.store(command.getMultipartFiles(), savedPost);
-		//TODO: 연관관계 설정방식을 재고
-		savedPost.setImages(questionImages);
+		fileManager.store(command.getMultipartFiles(), savedPost);
 		return savedPost;
 	}
 

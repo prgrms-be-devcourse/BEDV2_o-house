@@ -14,7 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
-import com.prgrms.ohouse.domain.common.ImageAttachable;
+import com.prgrms.ohouse.domain.common.file.ImageAttachable;
+import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
@@ -54,11 +55,6 @@ public class Review implements ImageAttachable {
 		return instance;
 	}
 
-	public void assignReviewImage(ReviewImage reviewImage) {
-		setReviewType(ReviewType.PHOTO);
-		setReviewImage(reviewImage);
-	}
-
 	private void validReviewPoint(int reviewPoint) {
 		checkArgument(reviewPoint >= 0 && reviewPoint <= 5, "invalid review point range");
 	}
@@ -75,6 +71,14 @@ public class Review implements ImageAttachable {
 	private void setContents(String contents) {
 		validContentLength(contents);
 		this.contents = contents;
+	}
+
+	@Override
+	public StoredFile attach(String fileName, String fileUrl) {
+		ReviewImage reviewImage = new ReviewImage(fileName, fileUrl, this);
+		setReviewType(ReviewType.PHOTO);
+		this.reviewImage = reviewImage;
+		return reviewImage;
 	}
 }
 
