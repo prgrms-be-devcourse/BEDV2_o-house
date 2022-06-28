@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.api;
+package com.prgrms.ohouse.web.user.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;

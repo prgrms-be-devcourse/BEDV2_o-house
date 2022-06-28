@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.requests;
+package com.prgrms.ohouse.web.user.requests;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;

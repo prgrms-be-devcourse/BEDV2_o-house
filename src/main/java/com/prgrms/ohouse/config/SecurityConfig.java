@@ -47,7 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/api/v0/user").hasRole("USER")
 			.anyRequest().permitAll()
 			.and()
-			//TODO filter activity check
 			.addFilterAt(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
 		;

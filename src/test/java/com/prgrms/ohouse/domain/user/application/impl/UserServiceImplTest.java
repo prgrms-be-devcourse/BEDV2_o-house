@@ -22,7 +22,7 @@ import com.prgrms.ohouse.domain.user.model.GenderType;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.profiles.active:test")
 class UserServiceImplTest {
 
 	@Autowired

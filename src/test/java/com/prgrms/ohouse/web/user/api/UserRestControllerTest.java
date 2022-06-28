@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.api;
+package com.prgrms.ohouse.web.user.api;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -24,11 +24,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.ohouse.domain.user.application.UserService;
-import com.prgrms.ohouse.domain.user.model.DuplicateEmailException;
 import com.prgrms.ohouse.domain.user.model.GenderType;
 import com.prgrms.ohouse.domain.user.model.User;
-import com.prgrms.ohouse.web.user.api.ApiExceptionHandler;
-import com.prgrms.ohouse.web.user.api.UserRestController;
 import com.prgrms.ohouse.web.user.requests.UserCreateRequest;
 import com.prgrms.ohouse.web.user.requests.UserUpdateRequest;
 
@@ -69,23 +66,6 @@ class UserRestControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("User Create Success")));
-	}
-
-	//TODO 왜안됨??
-	@Test
-	@Disabled
-	@DisplayName("회원가입 실패 테스트")
-	void failedUserSignUpTest() throws Exception {
-
-		String body = objectMapper.writeValueAsString(request);
-		doThrow(new DuplicateEmailException("Duplicate Email.")).when(userService).signUp(any());
-
-		mockMvc.perform(post("/api/v0/signUp")
-				.content(body)
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(result ->
-				assertThat(result.getResolvedException().getClass().getCanonicalName(),
-					is(equalTo(DuplicateEmailException.class.getCanonicalName()))));
 	}
 
 	@Test

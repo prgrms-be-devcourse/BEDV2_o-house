@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.api;
+package com.prgrms.ohouse.web.user.api;
 
 import java.util.Arrays;
 
@@ -24,7 +24,7 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
 
 		final JwtAuthenticationToken authenticationToken
 			= new JwtAuthenticationToken(new JwtAuthentication("token", annotation.email()), null,
-			Arrays.asList(new SimpleGrantedAuthority("USER")));
+			Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
 		authenticationToken.setDetails(securityUser);
 		securityContext.setAuthentication(authenticationToken);
 
