@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.user.api;
+package com.prgrms.ohouse.config;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
