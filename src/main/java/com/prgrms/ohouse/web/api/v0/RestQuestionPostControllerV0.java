@@ -6,6 +6,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,16 +26,22 @@ import lombok.RequiredArgsConstructor;
 public class RestQuestionPostControllerV0 {
 
 	//TODO: 한 계층 더 감싸주기
-	private final QuestionPostService questionService;
+	private final QuestionPostService questionPostService;
 
 	@PostMapping(value = "/api/v0/questions",
 		consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<QuestionPostResponse> registerNewQuestionPost(@RequestPart QuestionPostCreateRequest request,
 		@RequestPart List<MultipartFile> file) {
-		QuestionPost questionPost = questionService.createQuestionPost(
+		QuestionPost questionPost = questionPostService.createQuestionPost(
 			new QuestionPostRegisterCommand(request.getContent(), file));
 		return ResponseEntity
 			.created(URI.create("/api/v0/questions/" + questionPost.getId()))
 			.body(QuestionPostResponse.of(questionPost));
+	}
+
+	@DeleteMapping("/api/v0/questions/{id}")
+	public ResponseEntity<Object> deleteQuestionPost(@PathVariable("id") Long postId) {
+		questionPostService.deletePost(postId);
+		return ResponseEntity.ok().build();
 	}
 }

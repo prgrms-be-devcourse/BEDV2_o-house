@@ -44,4 +44,13 @@ public class S3FileStore implements FileStore {
 			throw new FileIOException(e.getMessage(), e);
 		}
 	}
+
+	@Override
+	public void delete(String fileUrl) {
+		amazonS3Client.deleteObject(bucketName, fileUrlToStoredFileName(fileUrl));
+	}
+
+	private String fileUrlToStoredFileName(String fileUrl) {
+		return fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+	}
 }
