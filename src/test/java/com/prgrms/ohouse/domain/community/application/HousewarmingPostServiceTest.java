@@ -11,12 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.Budget;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.Family;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.HousewarmingPostRepository;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.HousingType;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.WorkMetadata;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.WorkerType;
+import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
+import com.prgrms.ohouse.domain.community.model.housewarming.Family;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
+import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
+import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
 
 @SpringBootTest
 @Transactional

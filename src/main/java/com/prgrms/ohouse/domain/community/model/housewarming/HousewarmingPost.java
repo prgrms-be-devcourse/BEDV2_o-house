@@ -3,8 +3,8 @@ package com.prgrms.ohouse.domain.community.model.housewarming;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -18,7 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.prgrms.ohouse.domain.common.ImageAttachable;
+import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.model.User;
 
@@ -84,10 +84,10 @@ public class HousewarmingPost implements ImageAttachable {
 
 	private String copyrightHolder;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
 	private List<Link> links = new ArrayList<>();
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "housewarmingPost")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "housewarmingPost", cascade = CascadeType.REMOVE)
 	private List<HousewarmingPostImage> images = new ArrayList<>();
 
 	@Embedded
@@ -115,11 +115,6 @@ public class HousewarmingPost implements ImageAttachable {
 		this.links = links;
 	}
 
-	public void assignImages(List<StoredFile> storedFiles) {
-		this.images = storedFiles.stream().map(HousewarmingPostImage.class::cast)
-			.collect(Collectors.toUnmodifiableList());
-	}
-
 	public void validateContent(int imageCount) {
 		int matchedSequenceCount = 0;
 		var matcher = IMAGE_ESCAPE_PATTERN.matcher(content);
@@ -129,6 +124,13 @@ public class HousewarmingPost implements ImageAttachable {
 
 		if (imageCount != matchedSequenceCount)
 			throw new InvalidContentFormatException(imageCount, matchedSequenceCount);
+	}
+
+	@Override
+	public StoredFile attach(String fileName, String fileUrl) {
+		var image = new HousewarmingPostImage(fileName, fileUrl, this);
+		images.add(image);
+		return image;
 	}
 }
 

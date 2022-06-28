@@ -2,13 +2,13 @@ package com.prgrms.ohouse.domain.community.application.command;
 
 import java.util.List;
 
-import com.prgrms.ohouse.domain.community.model.post.hwpost.Budget;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.District;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.Family;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.HousewarmingPost;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.HousingType;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.Link;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.WorkMetadata;
+import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
+import com.prgrms.ohouse.domain.community.model.housewarming.District;
+import com.prgrms.ohouse.domain.community.model.housewarming.Family;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
+import com.prgrms.ohouse.domain.community.model.housewarming.Link;
+import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.community.model.post.hwpost;
+package com.prgrms.ohouse.domain.community.model.hwpost;
 
 import static org.assertj.core.api.Assertions.*;
 

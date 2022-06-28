@@ -1,10 +1,12 @@
-package com.prgrms.ohouse.domain.community.model.post.hwpost;
+package com.prgrms.ohouse.domain.community.model.hwpost;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import com.prgrms.ohouse.domain.community.model.housewarming.Family;
 
 class FamilyTest {
 

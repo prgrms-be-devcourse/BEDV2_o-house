@@ -1,5 +1,7 @@
 package com.prgrms.ohouse.infrastructure;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,13 @@ import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
+import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
+import com.prgrms.ohouse.domain.community.model.housewarming.Family;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
+import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
+import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
@@ -35,6 +44,8 @@ public class TestDataProvider {
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private AttributeRepository attributeRepository;
+	@Autowired
+	private HousewarmingPostRepository housewarmingPostRepository;
 
 	public User insertUser() {
 		User user = User.builder()
@@ -63,5 +74,19 @@ public class TestDataProvider {
 		Attribute attribute = insertAttribute();
 		Product product = Product.of("product", 2000, "content", category, attribute);
 		return productRepository.save(product);
+	}
+
+	public HousewarmingPost insertHousewarmingPost() {
+		return housewarmingPostRepository.save(
+			HousewarmingPost.builder()
+				.title("제목1")
+				.content("내용1{{image}}내용2{{image}}내용3{{image}}")
+				.housingType(HousingType.APARTMENT)
+				.area(2L)
+				.budget(new Budget(100L, 150L))
+				.family(new Family("SINGLE", null, null))
+				.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
+				.links(Collections.emptyList())
+				.build());
 	}
 }

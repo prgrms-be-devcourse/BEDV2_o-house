@@ -20,7 +20,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.ohouse.domain.community.model.post.hwpost.HousewarmingPostRepository;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,10 +36,13 @@ class HousewarmingPostControllerTest {
 	@Value("${app.host}")
 	private String host;
 
+	@Value("${file.dir}")
+	private String fileDir;
+
 	@Test
 	@DisplayName("집들이 게시물 생성 요청을 애플리케이션에 전달한 뒤 생성된 게시물의 URI를 응답한다.")
 	void HousewarmingCrateRequest() throws Exception {
-		var image = Files.readAllBytes(Path.of("C:\\Users\\epicb\\Desktop\\test.png"));
+		var image = Files.readAllBytes(Path.of(fileDir + "test.png"));
 		var payload = json.writeValueAsBytes(Map.of(
 			"title", "baka",
 			"content", "content{{image}}content1{{image}}",
