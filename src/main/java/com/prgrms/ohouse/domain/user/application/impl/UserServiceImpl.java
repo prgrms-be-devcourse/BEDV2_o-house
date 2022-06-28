@@ -6,10 +6,10 @@ import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserLoginCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserUpdateCommand;
-import com.prgrms.ohouse.domain.user.model.DuplicateEmailException;
-import com.prgrms.ohouse.domain.user.model.FailedLoginException;
+import com.prgrms.ohouse.domain.user.model.exception.DuplicateEmailException;
+import com.prgrms.ohouse.domain.user.model.exception.FailedLoginException;
 import com.prgrms.ohouse.domain.user.model.User;
-import com.prgrms.ohouse.domain.user.model.UserNotFoundException;
+import com.prgrms.ohouse.domain.user.model.exception.UserNotFoundException;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
 
 import lombok.RequiredArgsConstructor;

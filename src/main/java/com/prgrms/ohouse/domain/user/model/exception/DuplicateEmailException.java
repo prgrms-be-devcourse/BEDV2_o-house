@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.user.model;
+package com.prgrms.ohouse.domain.user.model.exception;
 
 public class DuplicateEmailException extends RuntimeException{
 

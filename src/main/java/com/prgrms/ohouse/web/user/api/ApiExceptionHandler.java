@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.prgrms.ohouse.domain.user.model.DuplicateEmailException;
-import com.prgrms.ohouse.domain.user.model.FailedLoginException;
+import com.prgrms.ohouse.domain.user.model.exception.DuplicateEmailException;
+import com.prgrms.ohouse.domain.user.model.exception.FailedLoginException;
 import com.prgrms.ohouse.web.user.results.ErrorCode;
 import com.prgrms.ohouse.web.user.results.ErrorResult;
 

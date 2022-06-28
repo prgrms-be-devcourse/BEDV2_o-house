@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.validator.constraints.URL;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,6 +48,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	@Column(name = "gender", length = 10)
 	private GenderType gender;
 
+	@URL
 	@Column(name = "personal_url", length = 500)
 	private String personalUrl;
 
