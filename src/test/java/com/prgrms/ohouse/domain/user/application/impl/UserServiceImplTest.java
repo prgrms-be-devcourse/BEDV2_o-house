@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserLoginCommand;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -24,12 +25,15 @@ class UserServiceImplTest {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private FileManager fileManager;
+
 	private UserServiceImpl userService;
-	private UserCreateCommand createCommand = new UserCreateCommand("testname", "test@gmail.com", "testPassword");
+	private UserCreateCommand createCommand = new UserCreateCommand("guest", "guest@gmail.com", "guestPw12");
 
 	@BeforeEach
 	void init() {
-		userService = new UserServiceImpl(userRepository, passwordEncoder);
+		userService = new UserServiceImpl(userRepository, passwordEncoder, fileManager);
 	}
 
 	@Test
