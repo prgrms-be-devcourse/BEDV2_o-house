@@ -2,6 +2,7 @@ package com.prgrms.ohouse.domain.common.file;
 
 import static javax.persistence.GenerationType.*;
 
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -10,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@EntityListeners(FileDeleteEntityListener.class)
 @MappedSuperclass
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
