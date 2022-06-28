@@ -61,7 +61,7 @@ public class UserRestController {
 	}
 
 	@GetMapping("/user")
-	public ResponseEntity<UserInfoResult> getUserInfo() {
+	public ResponseEntity<UserInfoResult> getUserInformation() {
 		User user = AuthUtils.getAuthUser();
 		return ResponseEntity.ok()
 			.body(UserInfoResult.build(user));
@@ -69,7 +69,7 @@ public class UserRestController {
 
 	@PutMapping(value = "/user",
 		consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<String> modifyUserInfo(@RequestPart(name = "image", required = false) MultipartFile file,
+	public ResponseEntity<String> modifyUserInformation(@RequestPart(name = "image", required = false) MultipartFile file,
 		@Valid @RequestPart(name = "request") UserUpdateRequest request, Errors errors) {
 		if (errors.hasErrors()) {
 			throw new IllegalArgumentException();

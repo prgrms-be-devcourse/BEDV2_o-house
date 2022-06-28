@@ -58,10 +58,10 @@ public class UserServiceImpl implements UserService {
 			StoredFile image = fileManager.store(command.getImage(), updatedUser);
 			updatedUser.update(command.getNickname(), command.getGender(), command.getPersonalUrl(),
 				command.getBirth(), image, command.getIntroductions());
+		} else {
+			updatedUser.update(command.getNickname(), command.getGender(), command.getPersonalUrl(),
+				command.getBirth(), null, command.getIntroductions());
 		}
-
-		updatedUser.update(command.getNickname(), command.getGender(), command.getPersonalUrl(),
-			command.getBirth(), null, command.getIntroductions());
 
 		return updatedUser;
 	}

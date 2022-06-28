@@ -44,7 +44,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	private String password;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "gender", length = 2)
+	@Column(name = "gender", length = 10)
 	private GenderType gender;
 
 	@Column(name = "personal_url", length = 500)
