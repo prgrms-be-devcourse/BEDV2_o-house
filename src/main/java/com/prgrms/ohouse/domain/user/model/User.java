@@ -17,13 +17,18 @@ import javax.persistence.*;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+
+import com.prgrms.ohouse.domain.common.ImageAttachable;
+import com.prgrms.ohouse.domain.common.file.StoredFile;
+import com.prgrms.ohouse.domain.common.file.UserImage;
 
 @Getter
 @Setter(value = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails, ImageAttachable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -37,6 +42,22 @@ public class User extends BaseEntity implements UserDetails {
 
 	@Column(name = "password", nullable = false, length = 60)
 	private String password;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "gender", length = 2)
+	private GenderType gender;
+
+	@Column(name = "personal_url", length = 500)
+	private String personalUrl;
+
+	@Column(name = "birth")
+	private Date birth;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private UserImage image;
+
+	@Column(name = "introductions")
+	private String introductions;
 
 	@Column(name = "following_count")
 	private int followingCount = 0;
@@ -52,14 +73,39 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	@Builder
-	public User(String nickname, String email, String password, int followingCount, int followerCount,
+	public User(String nickname, String email, String password,
+		GenderType gender, String personalUrl, Date birth, StoredFile image, String introductions,
+		int followingCount, int followerCount,
 		Address defaultAddress) {
 		setNickname(nickname);
 		setEmail(email);
 		setPassword(password);
+
+		setGender(gender);
+		setPersonalUrl(personalUrl);
+		setBirth(birth);
+		setImage(image);
+		setIntroductions(introductions);
+
 		setFollowerCount(followerCount);
 		setFollowingCount(followingCount);
 		setDefaultAddress(defaultAddress);
+	}
+
+	public User update(String nickname, GenderType gender, String personalUrl, Date birth, StoredFile image,
+		String introductions) {
+
+		setNickname(nickname);
+		setGender(gender);
+		setPersonalUrl(personalUrl);
+		setBirth(birth);
+		setImage(image);
+		setIntroductions(introductions);
+		return this;
+	}
+
+	private void setImage(StoredFile image) {
+		this.image = (UserImage)image;
 	}
 
 	private void setFollowerCount(int followerCount) {
