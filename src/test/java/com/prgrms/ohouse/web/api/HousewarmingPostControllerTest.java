@@ -42,7 +42,7 @@ class HousewarmingPostControllerTest {
 		var image = Files.readAllBytes(Path.of("C:\\Users\\epicb\\Desktop\\test.png"));
 		var payload = json.writeValueAsBytes(Map.of(
 			"title", "baka",
-			"content", "content",
+			"content", "content{{image}}content1{{image}}",
 			"housingTypeCode", "PRIVATE_ROOM",
 			"area", 2,
 			"constructionFee", 200,
