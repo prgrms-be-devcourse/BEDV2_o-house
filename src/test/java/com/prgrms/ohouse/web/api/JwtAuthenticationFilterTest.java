@@ -46,9 +46,8 @@ class JwtAuthenticationFilterTest {
 			.andDo(print());
 	}
 
-	//TODO antmatchers, addFilterAt Username~~ 설정 시
 	@Test
-	@DisplayName("잘못된 token 입력 테스트")
+	@DisplayName("잘못된 token 입력 -> AccessDeniedHandler 처리 테스트")
 	void falseTokenInputTest() throws Exception{
 
 		mockMvc.perform(get("/api/v0/user")
