@@ -1,16 +1,15 @@
 package com.prgrms.ohouse.web.user.api;
 
-import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,10 +18,13 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.ohouse.config.WithMockCustomUser;
+import com.prgrms.ohouse.domain.common.security.AuthUtils;
 import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.model.GenderType;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -74,36 +76,68 @@ class UserRestControllerTest {
 	void getUserInformationTest() throws Exception {
 
 		mockMvc.perform(get("/api/v0/user"))
-			.andExpect(status().isOk())
-			.andDo(print());
+			.andExpect(status().isOk());
 	}
 
 	@Test
-	@Disabled
 	@WithMockCustomUser
-	@DisplayName("개인정보 업데이트 테스트")
-	void updateUserInformationTest() {
+	@DisplayName("개인정보 업데이트 테스트(이미지 x)")
+	void updateUserInformationTest() throws Exception {
 
-		User user = User.builder()
-			.nickname("testUser")
-			.birth(new Date())
-			.email("test@gamil.com")
-			.password("testPassword12")
-			.build();
-		UserUpdateRequest updateRequest = new UserUpdateRequest(user.getNickname(), "F", "http://github.com",
-			user.getBirth(), null);
+		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "F", "http://github.com",
+			new Date(), null);
+		String body = objectMapper.writeValueAsString(updateRequest);
+		MockMultipartFile jsonRequest = new MockMultipartFile("request", "updateRequest", "application/json",
+			body.getBytes(
+				StandardCharsets.UTF_8));
 
 		User updatedUser = User.builder()
-			.nickname("testUser")
-			.birth(new Date())
-			.email("test@gamil.com")
-			.password("testPassword12")
+			.nickname(updateRequest.getNickname())
+			.birth(updateRequest.getBirth())
+			.email("guest@gmail.com")
+			.password("guestPassword12")
 			.gender(GenderType.FEMALE)
 			.personalUrl(updateRequest.getPersonalUrl())
-			.birth(updateRequest.getBirth())
 			.build();
 
-		// when(userService.updateUser(user, updateRequest.toCommand())).thenReturn(updatedUser);
+		when(userService.updateUser(AuthUtils.getAuthUser(), updateRequest.toCommand(null))).thenReturn(updatedUser);
 
+		mockMvc.perform(multipart("/api/v0/user")
+				.file(jsonRequest))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("Update succeed.")));
+	}
+
+	@Test
+	@WithMockCustomUser
+	@DisplayName("개인정보 업데이트 테스트(이미지 o)")
+	void updateUserInformationWithImageTest() throws Exception {
+
+		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "F", "http://github.com",
+			new Date(), null);
+		String body = objectMapper.writeValueAsString(updateRequest);
+		MockMultipartFile jsonRequest = new MockMultipartFile(
+			"request", "updateRequest", "application/json", body.getBytes(StandardCharsets.UTF_8));
+		MockMultipartFile fileRequest = new MockMultipartFile(
+			"image", "test.png", "image/png", "<<png data>>".getBytes()
+		);
+
+		User updatedUser = User.builder()
+			.nickname(updateRequest.getNickname())
+			.birth(updateRequest.getBirth())
+			.email("guest@gmail.com")
+			.password("guestPassword12")
+			.gender(GenderType.FEMALE)
+			.personalUrl(updateRequest.getPersonalUrl())
+			.build();
+
+		when(userService.updateUser(AuthUtils.getAuthUser(), updateRequest.toCommand(fileRequest)))
+			.thenReturn(updatedUser);
+
+		mockMvc.perform(multipart("/api/v0/user")
+				.file(jsonRequest)
+				.file(fileRequest))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("Update succeed.")));
 	}
 }

@@ -67,10 +67,10 @@ public class UserRestController {
 			.body(UserInfoResult.build(user));
 	}
 
-	@PutMapping(value = "/user",
+	@PostMapping(value = "/user",
 		consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<String> modifyUserInformation(@RequestPart(name = "image", required = false) MultipartFile file,
-		@Valid @RequestPart(name = "request") UserUpdateRequest request, Errors errors) {
+		@Valid @RequestPart("request") UserUpdateRequest request, Errors errors) {
 		if (errors.hasErrors()) {
 			throw new IllegalArgumentException();
 		}
