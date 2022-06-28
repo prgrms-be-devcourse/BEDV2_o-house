@@ -97,4 +97,24 @@ public class TestDataProvider {
 		}
 		return result;
 	}
+
+
+	public Review insertReview(){
+		Product product = insertProduct();
+		User user = insertUser();
+		Review review = Review.createReview(product,user,4,"content content content content content content");
+		return reviewRepository.save(review);
+	}
+
+	public List<Review> insert40Review(){
+		Product product = insertProduct();
+		User user = insertUser();
+		List<Review> result = new ArrayList<>();
+		for (int i = 0; i < 40; i++) {
+			Review review = Review.createReview(product,user,4,i + "content content content content content content");
+			result.add(reviewRepository.save(review));
+		}
+		return result;
+	}
+
 }

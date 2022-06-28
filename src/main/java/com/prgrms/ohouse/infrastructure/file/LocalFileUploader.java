@@ -24,8 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 public class LocalFileUploader implements FileStore {
 	@Value("${file.dir}")
 	private String fileDir;
-	@Value("${app.host}")
-	private String host;
 
 	@Override
 	public String save(MultipartFile multipartFile, String fileName) throws FileIOException {
@@ -34,25 +32,25 @@ public class LocalFileUploader implements FileStore {
 			return null;
 		}
 		try {
-			multipartFile.transferTo(new File(fileDir + fileName));
+			String fileUrl = fileDir + fileName;
+			multipartFile.transferTo(new File(fileUrl));
+			log.debug("file created successful at " + fileDir);
+			return fileUrl;
 		} catch (IOException e) {
 			throw new FileIOException(e.getMessage(), e);
 		}
-		log.debug("file created successful at " + fileDir);
-		return host + fileName;
 	}
-
 
 	@Override
 	public void delete(String fileUrl) {
 		File file = new File(fileUrl);
-		if (existByFileName(fileUrl)) {
+		if (existByFileUrl(fileUrl)) {
 			file.delete();
 		}
 	}
 
-	private boolean existByFileName(String fileName) {
-		File file = new File(fileDir + fileName);
+	public boolean existByFileUrl(String fileUrl) {
+		File file = new File(fileUrl);
 		return file.exists();
 	}
 
