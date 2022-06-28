@@ -53,7 +53,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	@Column(name = "birth")
 	private Date birth;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private UserImage image;
 
 	@Column(name = "introductions")

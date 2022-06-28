@@ -1,6 +1,7 @@
 package com.prgrms.ohouse.domain.common.file;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
@@ -18,7 +19,7 @@ public class UserImage extends StoredFile{
 		this.user = user;
 	}
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 }
