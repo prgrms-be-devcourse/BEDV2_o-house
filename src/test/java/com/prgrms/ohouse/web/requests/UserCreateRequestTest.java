@@ -13,6 +13,8 @@ import javax.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import com.prgrms.ohouse.web.user.requests.UserCreateRequest;
+
 class UserCreateRequestTest {
 
 	private static ValidatorFactory factory;

@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.api;
+package com.prgrms.ohouse.web.user.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.prgrms.ohouse.domain.user.model.DuplicateEmailException;
 import com.prgrms.ohouse.domain.user.model.FailedLoginException;
-import com.prgrms.ohouse.web.results.ErrorCode;
-import com.prgrms.ohouse.web.results.ErrorResult;
+import com.prgrms.ohouse.web.user.results.ErrorCode;
+import com.prgrms.ohouse.web.user.results.ErrorResult;
 
 import lombok.extern.slf4j.Slf4j;
 
