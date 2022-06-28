@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.api;
+package com.prgrms.ohouse.web.community.api;
 
 import java.net.URI;
 import java.util.List;

@@ -2,6 +2,8 @@ package com.prgrms.ohouse.domain.community.model.housewarming;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -16,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.prgrms.ohouse.domain.common.ImageAttachable;
+import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
@@ -26,7 +30,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class HousewarmingPost {
+public class HousewarmingPost implements ImageAttachable {
+
+	/**
+	 * "{{image}}" 이미지의 위치를 지정한 문자열
+	 */
+	private static final Pattern IMAGE_ESCAPE_PATTERN = Pattern.compile("\\{{2}image\\}{2}");
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -78,6 +87,9 @@ public class HousewarmingPost {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
 	private List<Link> links = new ArrayList<>();
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "housewarmingPost")
+	private List<HousewarmingPostImage> images = new ArrayList<>();
+
 	@Embedded
 	private District district;
 
@@ -101,6 +113,22 @@ public class HousewarmingPost {
 			link.assignPost(this);
 		}
 		this.links = links;
+	}
+
+	public void assignImages(List<StoredFile> storedFiles) {
+		this.images = storedFiles.stream().map(HousewarmingPostImage.class::cast)
+			.collect(Collectors.toUnmodifiableList());
+	}
+
+	public void validateContent(int imageCount) {
+		int matchedSequenceCount = 0;
+		var matcher = IMAGE_ESCAPE_PATTERN.matcher(content);
+		while (matcher.find()) {
+			matchedSequenceCount++;
+		}
+
+		if (imageCount != matchedSequenceCount)
+			throw new InvalidContentFormatException(imageCount, matchedSequenceCount);
 	}
 }
 
