@@ -81,4 +81,3 @@ public class Review implements ImageAttachable {
 		return reviewImage;
 	}
 }
-

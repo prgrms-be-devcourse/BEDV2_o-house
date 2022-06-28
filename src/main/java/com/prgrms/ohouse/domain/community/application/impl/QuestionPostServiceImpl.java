@@ -1,13 +1,13 @@
-package com.prgrms.ohouse.domain.community.model.post.question;
-
-import java.util.List;
+package com.prgrms.ohouse.domain.community.application.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.common.file.FileManager;
-import com.prgrms.ohouse.domain.common.file.StoredFile;
-import com.prgrms.ohouse.domain.community.model.post.question.command.QuestionPostRegisterCommand;
+import com.prgrms.ohouse.domain.community.application.QuestionPostService;
+import com.prgrms.ohouse.domain.community.application.command.QuestionPostRegisterCommand;
+import com.prgrms.ohouse.domain.community.model.question.QuestionPost;
+import com.prgrms.ohouse.domain.community.model.question.QuestionPostRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,10 +22,10 @@ public class QuestionPostServiceImpl implements QuestionPostService {
 
 	@Transactional
 	@Override
-	public QuestionPost createQuestionPost(QuestionPostRegisterCommand command) {
+	public Long createQuestionPost(QuestionPostRegisterCommand command) {
 		QuestionPost savedPost = questionPostRepository.save(new QuestionPost(command.getContents()));
 		fileManager.store(command.getMultipartFiles(), savedPost);
-		return savedPost;
+		return savedPost.getId();
 	}
 
 	@Transactional

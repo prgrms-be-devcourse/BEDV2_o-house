@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.community.model.post.question;
+package com.prgrms.ohouse.domain.community.model.question;
 
 import java.util.ArrayList;
 import java.util.List;
