@@ -23,3 +23,11 @@ file:
   dir: src/test/resources/static/
 app:
   host: http://localhost:8080/
+
+cloud:
+  aws:
+    region:
+      auto: false
+      static: us-east-1
+    stack:
+      auto: false
