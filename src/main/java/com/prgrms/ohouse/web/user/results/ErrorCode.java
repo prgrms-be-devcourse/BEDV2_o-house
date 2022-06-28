@@ -1,14 +1,13 @@
-package com.prgrms.ohouse.web.results;
+package com.prgrms.ohouse.web.user.results;
 
 import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
 
-	INVALID_INPUT_VALUE(400,"Invalid input value."),
-	DUPLICATED_EMAIL(400,"Duplicated Email."),
-	FAILED_LOGIN(400,"Login Failed.")
-	;
+	INVALID_INPUT_VALUE(400, "Invalid input value."),
+	DUPLICATED_EMAIL(400, "Duplicated Email."),
+	FAILED_LOGIN(400, "Login Failed.");
 
 	private final int code;
 	private final String message;
