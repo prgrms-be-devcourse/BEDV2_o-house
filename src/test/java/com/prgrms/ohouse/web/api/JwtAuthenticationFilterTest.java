@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
-import com.prgrms.ohouse.web.requests.UserLoginRequest;
+import com.prgrms.ohouse.web.user.requests.UserLoginRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
@@ -33,16 +33,28 @@ class JwtAuthenticationFilterTest {
 	@Test
 	@DisplayName("token 발급 테스트")
 	void createTokenTest() throws Exception {
-		UserCreateCommand createCommand = new UserCreateCommand("testUser", "test@gmail.com", "testPassword12");
+		UserCreateCommand createCommand = new UserCreateCommand("guest", "guest@gmail.com", "guestPw12");
 		userService.signUp(createCommand);
 
 		String body = objectMapper.writeValueAsString(
 			new UserLoginRequest(createCommand.getEmail(), createCommand.getPassword()));
-		mockMvc.perform(post("/api/v0/user/login")
+		mockMvc.perform(post("/api/v0/login")
 				.content(body)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(header().exists("Authorization"))
+			.andDo(print());
+	}
+
+	//TODO antmatchers, addFilterAt Username~~ 설정 시
+	@Test
+	@DisplayName("잘못된 token 입력 테스트")
+	void falseTokenInputTest() throws Exception{
+
+		mockMvc.perform(get("/api/v0/user")
+				.header("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isForbidden())
 			.andDo(print());
 	}
 }
