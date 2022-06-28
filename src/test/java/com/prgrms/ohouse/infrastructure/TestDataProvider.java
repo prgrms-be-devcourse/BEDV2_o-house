@@ -1,5 +1,8 @@
 package com.prgrms.ohouse.infrastructure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ import com.prgrms.ohouse.domain.commerce.model.product.enums.SecondCategory;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
+import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -63,5 +67,34 @@ public class TestDataProvider {
 		Attribute attribute = insertAttribute();
 		Product product = Product.of("product", 2000, "content", category, attribute);
 		return productRepository.save(product);
+	}
+
+	public List<Product> insert40Product() {
+		Category category = insertCategory();
+		Attribute attribute = insertAttribute();
+		List<Product> result = new ArrayList<>();
+		for (int i = 0; i < 40; i++) {
+			Product product = Product.of("product" + i, 2000, "content" + 1, category, attribute);
+			result.add(productRepository.save(product));
+		}
+		return result;
+	}
+
+	public Review insertReview(){
+		Product product = insertProduct();
+		User user = insertUser();
+		Review review = Review.createNormalReview(product,user,4,"content content content content content content");
+		return reviewRepository.save(review);
+	}
+
+	public List<Review> insert40Review(){
+		Product product = insertProduct();
+		User user = insertUser();
+		List<Review> result = new ArrayList<>();
+		for (int i = 0; i < 40; i++) {
+			Review review = Review.createNormalReview(product,user,4,i + "content content content content content content");
+			result.add(reviewRepository.save(review));
+		}
+		return result;
 	}
 }

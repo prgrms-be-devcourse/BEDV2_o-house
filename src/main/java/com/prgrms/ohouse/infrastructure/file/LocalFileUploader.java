@@ -42,9 +42,11 @@ public class LocalFileUploader implements FileStore {
 		return host + fileName;
 	}
 
-	public void deleteFile(String fileName) {
-		File file = new File(fileDir + fileName);
-		if (existByFileName(fileName)) {
+
+	@Override
+	public void delete(String fileUrl) {
+		File file = new File(fileUrl);
+		if (existByFileName(fileUrl)) {
 			file.delete();
 		}
 	}

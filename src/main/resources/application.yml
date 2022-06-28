@@ -22,6 +22,7 @@ spring:
       max-request-size: 10MB
   profiles:
     active: aws
+
 jwt:
   headerName: Authorization
   secretKey: ohouseTokenvalidate
@@ -29,3 +30,4 @@ file:
   dir: src/test/resources/static/
 app:
   host: http://localhost:8080/
+
