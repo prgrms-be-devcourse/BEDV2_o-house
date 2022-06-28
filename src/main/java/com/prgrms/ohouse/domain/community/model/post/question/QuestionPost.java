@@ -3,6 +3,7 @@ package com.prgrms.ohouse.domain.community.model.post.question;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -39,7 +40,7 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 	private String content;
 
 	//TODO: 컬렉션 getter로 인한 불변성 붕괴 문제 수정
-	@OneToMany(mappedBy = "questionPost")
+	@OneToMany(mappedBy = "questionPost", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<QuestionPostImage> questionImages;
 
 	public void setImages(List<StoredFile> storedFiles) {

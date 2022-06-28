@@ -10,4 +10,10 @@ public interface FileStore {
 	 * @return 파일 url을 반환합니다.
 	 */
 	String save(MultipartFile multipartFile, String fileName) throws FileIOException;
+
+	/**
+	 * 파일을 삭제합니다.
+	 * @param fileUrl 해당 파일의 url입니다.
+	 */
+	void delete(String fileUrl);
 }

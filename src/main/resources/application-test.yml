@@ -1,10 +1,3 @@
-jwt:
-  headerName: Authorization
-  secretKey: ohouseTokenvalidate
-file:
-  dir: src/test/resources/static/
-app:
-  host: http://localhost:8080/
 spring:
   datasource:
     url: jdbc:h2:mem:ohouse
@@ -23,3 +16,17 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
+jwt:
+  headerName: Authorization
+  secretKey: ohouseTokenvalidate
+file:
+  dir: src/test/resources/static/
+app:
+  host: http://localhost:8080/
+cloud:
+  aws:
+    region:
+      auto: false
+      static: us-east-1
+    stack:
+      auto: false
