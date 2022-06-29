@@ -13,6 +13,8 @@ public class Address {
 	private String detail;
 	@Column(name = "zipcode")
 	private String zipcode;
+	@Column(name = "lot_number_address")
+	private String lotNumberAddress;
 
 	@Override
 	public String toString() {
@@ -21,6 +23,7 @@ public class Address {
 			.append(",street=" + street)
 			.append(",detail=" + detail)
 			.append(",zipcode=" + zipcode)
+			.append(",lotNumberAddress="+lotNumberAddress)
 			.append("]")
 			.toString();
 	}

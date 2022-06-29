@@ -11,8 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.prgrms.ohouse.domain.common.security.AccessDeniedHandlerImpl;
 import com.prgrms.ohouse.domain.common.security.JwtAuthenticationFilter;
 import com.prgrms.ohouse.domain.common.security.JwtTokenProvider;
 import com.prgrms.ohouse.domain.common.security.TokenProvideService;
@@ -42,9 +44,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.authorizeRequests()
+			.antMatchers("/api/v0/user").hasRole("USER")
 			.anyRequest().permitAll()
 			.and()
-			.addFilterAfter(new JwtAuthenticationFilter(jwtTokenProvider), SecurityContextPersistenceFilter.class)
+			.addFilterAt(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+			.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
 		;
+	}
+
+	@Bean
+	public AccessDeniedHandler accessDeniedHandler(){
+		return new AccessDeniedHandlerImpl();
 	}
 }

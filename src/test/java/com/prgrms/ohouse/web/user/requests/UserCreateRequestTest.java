@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.requests;
+package com.prgrms.ohouse.web.user.requests;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -12,6 +12,8 @@ import javax.validation.ValidatorFactory;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import com.prgrms.ohouse.web.user.requests.UserCreateRequest;
 
 class UserCreateRequestTest {
 

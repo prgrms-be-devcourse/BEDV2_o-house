@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.results;
+package com.prgrms.ohouse.web.user.results;
 
 import lombok.Data;
 
