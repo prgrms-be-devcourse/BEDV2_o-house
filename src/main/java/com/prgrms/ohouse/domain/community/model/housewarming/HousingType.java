@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.community.model.post.hwpost;
+package com.prgrms.ohouse.domain.community.model.housewarming;
 
 // CRUD 주체 : 관리자.
 public enum HousingType {

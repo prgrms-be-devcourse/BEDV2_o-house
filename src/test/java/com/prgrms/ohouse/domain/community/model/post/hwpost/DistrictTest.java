@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import com.prgrms.ohouse.domain.community.model.housewarming.District;
+
 class DistrictTest {
 
 	@DisplayName("생성자 불변식을 통과한다.")
