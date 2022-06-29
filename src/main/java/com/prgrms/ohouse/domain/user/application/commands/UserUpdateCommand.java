@@ -1,6 +1,6 @@
 package com.prgrms.ohouse.domain.user.application.commands;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -26,10 +26,10 @@ public class UserUpdateCommand {
 	@Pattern(regexp = "^((http(s?))\\:\\/\\/)([0-9a-zA-Z\\-]+\\.)+[a-zA-Z]{2,6}(\\:[0-9]+)?(\\/\\S*)?$")
 	private String personalUrl;
 
-	private Date birth;
+	private LocalDate birth;
 
 	private MultipartFile image;
 
-	@Length(max = 255, message = "255자 이내의 소개글만 입력 가능합니다.")
+	@Length(max = 40, message = "40자 이내의 소개글만 입력 가능합니다.")
 	private String introductions;
 }

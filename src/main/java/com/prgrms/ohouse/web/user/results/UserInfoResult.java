@@ -1,6 +1,6 @@
 package com.prgrms.ohouse.web.user.results;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.prgrms.ohouse.domain.common.file.UserImage;
 import com.prgrms.ohouse.domain.user.model.GenderType;
@@ -17,7 +17,7 @@ public class UserInfoResult {
 
 	private String personalUrl;
 
-	private Date birth;
+	private LocalDate birth;
 
 	private UserImage image;
 
@@ -28,7 +28,7 @@ public class UserInfoResult {
 			user.getImage(), user.getIntroductions());
 	}
 
-	private UserInfoResult(String nickname, GenderType gender, String personalUrl, Date birth, UserImage image,
+	private UserInfoResult(String nickname, GenderType gender, String personalUrl, LocalDate birth, UserImage image,
 		String introductions) {
 		this.nickname = nickname;
 		this.gender = gender;

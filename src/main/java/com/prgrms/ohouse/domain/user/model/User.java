@@ -17,9 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
@@ -55,12 +55,12 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	private String personalUrl;
 
 	@Column(name = "birth")
-	private Date birth;
+	private LocalDate birth;
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private UserImage image;
 
-	@Column(name = "introductions")
+	@Column(name = "introductions", length = 40)
 	private String introductions;
 
 	@Column(name = "following_count")
@@ -78,7 +78,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 
 	@Builder
 	public User(String nickname, String email, String password,
-		GenderType gender, String personalUrl, Date birth, StoredFile image, String introductions,
+		GenderType gender, String personalUrl, LocalDate birth, StoredFile image, String introductions,
 		int followingCount, int followerCount,
 		Address defaultAddress) {
 		setNickname(nickname);
@@ -96,7 +96,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 		setDefaultAddress(defaultAddress);
 	}
 
-	public User update(String nickname, GenderType gender, String personalUrl, Date birth,
+	public User update(String nickname, GenderType gender, String personalUrl, LocalDate birth,
 		String introductions) {
 
 		setNickname(nickname);

@@ -36,7 +36,7 @@ public class UserRestController {
 	private final UserService userService;
 	private final JwtAuthenticationProvider authenticationProvider;
 
-	@PostMapping("/signUp")
+	@PostMapping("/signup")
 	public ResponseEntity<String> signUp(@RequestBody @Valid UserCreateRequest request, Errors errors) {
 		if (errors.hasErrors()) {
 			throw new IllegalArgumentException();

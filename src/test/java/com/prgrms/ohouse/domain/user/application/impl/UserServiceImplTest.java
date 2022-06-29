@@ -3,7 +3,7 @@ package com.prgrms.ohouse.domain.user.application.impl;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -76,7 +76,7 @@ class UserServiceImplTest {
 
 		UserLoginCommand loginCommand = new UserLoginCommand(createCommand.getEmail(), createCommand.getPassword());
 		UserUpdateCommand command = new UserUpdateCommand(createCommand.getNickname(), GenderType.FEMALE,
-			"http://naver.com", new Date(), file, null);
+			"http://naver.com", LocalDate.now(), file, null);
 		User user = userService.login(loginCommand);
 
 	    //when

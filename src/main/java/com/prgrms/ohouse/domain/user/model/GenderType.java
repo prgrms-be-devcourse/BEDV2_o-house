@@ -17,6 +17,6 @@ public enum GenderType {
 		else if(value.equals(FEMALE.value))
 			return FEMALE;
 		else
-			return null;
+			throw new IllegalArgumentException();
 	}
 }

@@ -1,6 +1,6 @@
 package com.prgrms.ohouse.web.user.requests;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -31,13 +31,12 @@ public class UserUpdateRequest {
 
 	//TODO formatting 확인. null 입력시 확인
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	private Date birth;
+	private LocalDate birth;
 
-	@Length(max = 255, message = "255자 이내의 소개글만 입력 가능합니다.")
+	@Length(max = 40, message = "40자 이내의 소개글만 입력 가능합니다.")
 	private String introductions;
 
 	public UserUpdateCommand toCommand(MultipartFile image) {
-		GenderType type = GenderType.of(gender);
-		return new UserUpdateCommand(nickname, type, personalUrl, birth, image, introductions);
+		return new UserUpdateCommand(nickname, GenderType.of(gender), personalUrl, birth, image, introductions);
 	}
 }

@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.prgrms.ohouse.config.WithMockCustomUser;
 import com.prgrms.ohouse.domain.common.security.AuthUtils;
 import com.prgrms.ohouse.domain.user.application.UserService;
@@ -50,6 +51,7 @@ class UserRestControllerTest {
 	@BeforeEach
 	void setup() {
 		MockitoAnnotations.initMocks(this);
+		objectMapper.registerModule(new JavaTimeModule());
 		mockMvc = MockMvcBuilders.standaloneSetup(userRestController)
 			.setControllerAdvice(ApiExceptionHandler.class)
 			.alwaysDo(print())
@@ -63,7 +65,7 @@ class UserRestControllerTest {
 		String body = objectMapper.writeValueAsString(request);
 		doNothing().when(userService).signUp(any());
 
-		mockMvc.perform(post("/api/v0/signUp")
+		mockMvc.perform(post("/api/v0/signup")
 				.content(body)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -85,7 +87,7 @@ class UserRestControllerTest {
 	void updateUserInformationTest() throws Exception {
 
 		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "F", "http://github.com",
-			new Date(), null);
+			LocalDate.now(), null);
 		String body = objectMapper.writeValueAsString(updateRequest);
 		MockMultipartFile jsonRequest = new MockMultipartFile("request", "updateRequest", "application/json",
 			body.getBytes(
@@ -114,7 +116,7 @@ class UserRestControllerTest {
 	void updateUserInformationWithImageTest() throws Exception {
 
 		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "F", "http://github.com",
-			new Date(), null);
+			LocalDate.now(), null);
 		String body = objectMapper.writeValueAsString(updateRequest);
 		MockMultipartFile jsonRequest = new MockMultipartFile(
 			"request", "updateRequest", "application/json", body.getBytes(StandardCharsets.UTF_8));
