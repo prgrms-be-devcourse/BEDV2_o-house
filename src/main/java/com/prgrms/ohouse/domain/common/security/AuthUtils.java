@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.utils;
+package com.prgrms.ohouse.domain.common.security;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 

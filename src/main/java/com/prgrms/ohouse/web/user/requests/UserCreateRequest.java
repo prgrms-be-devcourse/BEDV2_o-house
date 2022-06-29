@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.requests;
+package com.prgrms.ohouse.web.user.requests;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

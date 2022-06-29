@@ -36,5 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
+## AWS 설정
 application-aws.yml
+
+## ETC
 /spy.log
