@@ -17,6 +17,7 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRep
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
+import com.prgrms.ohouse.infrastructure.TestDataProvider;
 
 @SpringBootTest
 @Transactional
@@ -28,6 +29,9 @@ class HousewarmingPostServiceTest {
 
 	@Autowired
 	private HousewarmingPostRepository housewarmingPostRepository;
+
+	@Autowired
+	private TestDataProvider fixtureProvider;
 
 	@Test
 	@DisplayName("post 생성 요청을 받아서 post를 생성하고 영속화한다.")
@@ -58,4 +62,33 @@ class HousewarmingPostServiceTest {
 
 	}
 
+	@Test
+	@DisplayName("사용자의 권한이 있는 집들이 게시물을 삭제한다. - 성공")
+	void delete_authorized_housewarming_content() {
+
+		// Given
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor();
+		var postId = persistedPost.getId();
+		var authorId = persistedPost.getUser().getId();
+		// When
+		housewarmingPostService.deletePost(authorId, postId);
+
+		// Then
+		assertThat(housewarmingPostRepository.findById(postId)).isEmpty();
+	}
+
+	@Test
+	@DisplayName("사용자의 권한이 없을 경우 게시물 권한 없음 예외를 던진다.")
+	void throws_unauthorized_content_exception() {
+
+		// Given
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor();
+		var postId = persistedPost.getId();
+		var unauthorizedId = persistedPost.getUser().getId() + 4123;
+
+		assertThatThrownBy(() -> {
+			housewarmingPostService.deletePost(unauthorizedId, postId);
+		}).isInstanceOf(UnauthorizedContentAccessException.class);
+
+	}
 }

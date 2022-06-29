@@ -4,8 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +40,6 @@ class HousewarmingPostControllerTest {
 	@Test
 	@DisplayName("집들이 게시물 생성 요청을 애플리케이션에 전달한 뒤 생성된 게시물의 URI를 응답한다.")
 	void HousewarmingCrateRequest() throws Exception {
-		var image = Files.readAllBytes(Path.of(fileDir + "test.png"));
 		var payload = json.writeValueAsBytes(Map.of(
 			"title", "baka",
 			"content", "content{{image}}content1{{image}}",
@@ -61,8 +58,8 @@ class HousewarmingPostControllerTest {
 			payload);
 		var images =
 			List.of(
-				new MockMultipartFile("image", "fav.png", "image/png", image),
-				new MockMultipartFile("image", "fav2.png", "image/png", image)
+				new MockMultipartFile("image", "fav.png", "image/png", "chunk1".getBytes()),
+				new MockMultipartFile("image", "fav2.png", "image/png", "chunk2".getBytes())
 			);
 		var multipartRequest = multipart("/api/v0/hwpost");
 		images.forEach(multipartRequest::file);
@@ -77,7 +74,6 @@ class HousewarmingPostControllerTest {
 				status().isCreated(),
 				header().string("Location", Matchers.matchesRegex(host + "api/v0/hwpost/\\d+$"))
 			);
-
 	}
 
 }

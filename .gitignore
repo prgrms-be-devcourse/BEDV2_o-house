@@ -37,3 +37,4 @@ out/
 .vscode/
 
 application-aws.yml
+/spy.log

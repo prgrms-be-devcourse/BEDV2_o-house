@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.community.api;
+package com.prgrms.ohouse.web.community.housewarming.api;
 
 import java.net.URI;
 import java.util.List;

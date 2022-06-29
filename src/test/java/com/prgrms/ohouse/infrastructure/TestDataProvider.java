@@ -76,7 +76,8 @@ public class TestDataProvider {
 		return productRepository.save(product);
 	}
 
-	public HousewarmingPost insertHousewarmingPost() {
+	@Transactional
+	public HousewarmingPost insertHousewarmingPostWithAuthor() {
 		return housewarmingPostRepository.save(
 			HousewarmingPost.builder()
 				.title("제목1")
@@ -87,6 +88,7 @@ public class TestDataProvider {
 				.family(new Family("SINGLE", null, null))
 				.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
 				.links(Collections.emptyList())
+				.user(insertUser())
 				.build());
 	}
 }
