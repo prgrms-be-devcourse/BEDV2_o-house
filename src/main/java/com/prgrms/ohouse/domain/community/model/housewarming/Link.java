@@ -9,10 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Link {
 
 	@Id
@@ -28,4 +31,13 @@ public class Link {
 	@ManyToOne
 	@JoinColumn(name = "post_id")
 	private HousewarmingPost post;
+
+	public Link(String url, String urlDetail) {
+		this.url = url;
+		this.urlDetail = urlDetail;
+	}
+
+	public void assignPost(HousewarmingPost housewarmingPost) {
+		this.post = housewarmingPost;
+	}
 }
