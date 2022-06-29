@@ -8,7 +8,13 @@ import org.springframework.data.repository.config.BootstrapMode;
 
 @EnableJpaRepositories(bootstrapMode = BootstrapMode.DEFERRED)
 @EnableJpaAuditing
-@SpringBootApplication
+@SpringBootApplication(
+	exclude = {
+		org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration.class,
+		org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration.class,
+		org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration.class
+	}
+)
 public class OhouseApplication {
 
 	public static void main(String[] args) {

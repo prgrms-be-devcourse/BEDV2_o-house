@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.community.model.post.hwpost;
+package com.prgrms.ohouse.domain.community.model.housewarming;
 
 public enum WorkTarget {
 	FOLDING_DOOR, KITCHEN_RENOVATION, BATHROOM_RENOVATION, ART_WALL, LIGHT_INSTALLATION,

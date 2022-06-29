@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.ohouse.domain.common.ImageAttachable;
-
 public interface FileManager {
 	<T extends ImageAttachable> List<StoredFile> store(List<MultipartFile> multipartFiles, T attached);
 

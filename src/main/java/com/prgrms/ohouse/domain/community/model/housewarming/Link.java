@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.community.model.post.hwpost;
+package com.prgrms.ohouse.domain.community.model.housewarming;
 
 import static javax.persistence.GenerationType.*;
 

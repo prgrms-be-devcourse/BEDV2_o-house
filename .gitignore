@@ -38,4 +38,3 @@ out/
 
 ## AWS 설정
 application-aws.yml
-spy.log

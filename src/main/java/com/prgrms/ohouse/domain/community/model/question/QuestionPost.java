@@ -1,7 +1,7 @@
-package com.prgrms.ohouse.domain.community.model.post.question;
+package com.prgrms.ohouse.domain.community.model.question;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,8 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.prgrms.ohouse.domain.common.BaseTimeEntity;
-import com.prgrms.ohouse.domain.common.ImageAttachable;
-import com.prgrms.ohouse.domain.common.file.QuestionPostImage;
+import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 
 import lombok.AccessLevel;
@@ -41,11 +40,12 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 
 	//TODO: 컬렉션 getter로 인한 불변성 붕괴 문제 수정
 	@OneToMany(mappedBy = "questionPost", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<QuestionPostImage> questionImages;
+	private List<QuestionPostImage> questionImages = new ArrayList<>();
 
-	public void setImages(List<StoredFile> storedFiles) {
-		this.questionImages = storedFiles.stream()
-			.map((f) -> (QuestionPostImage)f)
-			.collect(Collectors.toUnmodifiableList());
+	@Override
+	public StoredFile attach(String fileName, String fileUrl) {
+		QuestionPostImage image = new QuestionPostImage(fileName, fileUrl, this);
+		questionImages.add(image);
+		return image;
 	}
 }
