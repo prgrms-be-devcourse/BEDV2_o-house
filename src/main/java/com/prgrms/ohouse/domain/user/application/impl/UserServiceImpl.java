@@ -1,5 +1,7 @@
 package com.prgrms.ohouse.domain.user.application.impl;
 
+import java.util.Optional;
+
 import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.application.UserService;
@@ -7,6 +9,7 @@ import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserLoginCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserUpdateCommand;
 import com.prgrms.ohouse.domain.user.model.exception.DuplicateEmailException;
+import com.prgrms.ohouse.domain.user.model.exception.DuplicateNicknameException;
 import com.prgrms.ohouse.domain.user.model.exception.FailedLoginException;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.exception.UserNotFoundException;
@@ -32,6 +35,9 @@ public class UserServiceImpl implements UserService {
 		if (userRepository.findByEmail(command.getEmail()).isPresent()) {
 			throw new DuplicateEmailException("Duplicate Email. -> " + command.getEmail());
 		}
+		if (userRepository.findByNickname(command.getNickname()).isPresent()) {
+			throw new DuplicateNicknameException("Duplicate Nickname. -> " + command.getNickname());
+		}
 
 		User newUser = User.builder()
 			.nickname(command.getNickname())
@@ -53,6 +59,11 @@ public class UserServiceImpl implements UserService {
 	public User updateUser(User user, UserUpdateCommand command) {
 		User updatedUser = userRepository.findByEmail(user.getEmail())
 			.orElseThrow(() -> new UserNotFoundException("User not found. Try Again."));
+
+		Optional<User> findUser = userRepository.findByNickname(command.getNickname());
+		if (findUser.isPresent() && !updatedUser.equals(findUser.get())){
+				throw new DuplicateNicknameException("Duplicate Nickname. -> " + command.getNickname());
+		}
 
 		if (!command.getImage().isEmpty()) {
 			StoredFile image = fileManager.store(command.getImage(), updatedUser);

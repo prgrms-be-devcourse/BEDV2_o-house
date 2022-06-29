@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.*;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +28,7 @@ import com.prgrms.ohouse.domain.common.file.UserImage;
 @Getter
 @Setter(value = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails, ImageAttachable {
@@ -35,7 +37,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
-	@Column(name = "nickname", nullable = false, length = 10)
+	@Column(name = "nickname", nullable = false, unique = true, length = 10)
 	private String nickname;
 
 	@Column(name = "email", nullable = false, unique = true, length = 300)
@@ -119,6 +121,8 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 		checkArgument(followingCount >= 0, "Following count can't be negative.");
 		this.followingCount = followingCount;
 	}
+
+
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
