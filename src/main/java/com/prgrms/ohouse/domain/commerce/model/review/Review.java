@@ -64,7 +64,7 @@ public class Review implements ImageAttachable {
 	}
 
 	private void validReviewPoint(int reviewPoint) {
-		checkArgument(reviewPoint >= 0 && reviewPoint <= 5, "invalid review point range");
+		checkArgument(reviewPoint >= 1 && reviewPoint <= 5, "invalid review point range");
 	}
 
 	private void validContentLength(String contents) {
