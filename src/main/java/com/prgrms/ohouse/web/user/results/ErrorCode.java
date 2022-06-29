@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum ErrorCode {
 
 	INVALID_INPUT_VALUE(400, "Invalid input value."),
-	DUPLICATED_EMAIL(400, "Duplicated Email."),
+	DUPLICATED_EMAIL(409, "Duplicated Email."),
+	DUPLICATED_NICKNAME(409, "Duplicated Nickname"),
 	FAILED_LOGIN(400, "Login Failed.");
 
 	private final int code;

@@ -3,7 +3,6 @@ package com.prgrms.ohouse.domain.user.application.impl;
 import java.util.Optional;
 
 import com.prgrms.ohouse.domain.common.file.FileManager;
-import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserLoginCommand;
@@ -61,18 +60,15 @@ public class UserServiceImpl implements UserService {
 			.orElseThrow(() -> new UserNotFoundException("User not found. Try Again."));
 
 		Optional<User> findUser = userRepository.findByNickname(command.getNickname());
-		if (findUser.isPresent() && !updatedUser.equals(findUser.get())){
-				throw new DuplicateNicknameException("Duplicate Nickname. -> " + command.getNickname());
+		if (findUser.isPresent() && !updatedUser.equals(findUser.get())) {
+			throw new DuplicateNicknameException("Duplicate Nickname. -> " + command.getNickname());
 		}
 
 		if (!command.getImage().isEmpty()) {
-			StoredFile image = fileManager.store(command.getImage(), updatedUser);
-			updatedUser.update(command.getNickname(), command.getGender(), command.getPersonalUrl(),
-				command.getBirth(), image, command.getIntroductions());
-		} else {
-			updatedUser.update(command.getNickname(), command.getGender(), command.getPersonalUrl(),
-				command.getBirth(), null, command.getIntroductions());
+			fileManager.store(command.getImage(), updatedUser);
 		}
+		updatedUser.update(command.getNickname(), command.getGender(), command.getPersonalUrl(),
+			command.getBirth(), command.getIntroductions());
 
 		return updatedUser;
 	}

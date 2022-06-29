@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
-import com.prgrms.ohouse.domain.common.ImageAttachable;
+import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.common.file.UserImage;
 
@@ -96,14 +96,13 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 		setDefaultAddress(defaultAddress);
 	}
 
-	public User update(String nickname, GenderType gender, String personalUrl, Date birth, StoredFile image,
+	public User update(String nickname, GenderType gender, String personalUrl, Date birth,
 		String introductions) {
 
 		setNickname(nickname);
 		setGender(gender);
 		setPersonalUrl(personalUrl);
 		setBirth(birth);
-		setImage(image);
 		setIntroductions(introductions);
 		return this;
 	}
@@ -152,5 +151,12 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public StoredFile attach(String fileName, String fileUrl) {
+		UserImage userImage = new UserImage(fileName, fileUrl, this);
+		setImage(userImage);
+		return userImage;
 	}
 }
