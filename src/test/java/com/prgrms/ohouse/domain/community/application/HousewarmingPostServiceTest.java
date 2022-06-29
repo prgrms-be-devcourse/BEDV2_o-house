@@ -67,7 +67,7 @@ class HousewarmingPostServiceTest {
 	void delete_authorized_housewarming_content() {
 
 		// Given
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor();
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest"));
 		var postId = persistedPost.getId();
 		var authorId = persistedPost.getUser().getId();
 		// When
@@ -82,7 +82,7 @@ class HousewarmingPostServiceTest {
 	void throws_unauthorized_content_exception() {
 
 		// Given
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor();
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest"));
 		var postId = persistedPost.getId();
 		var unauthorizedId = persistedPost.getUser().getId() + 4123;
 

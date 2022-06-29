@@ -76,8 +76,18 @@ public class TestDataProvider {
 		return productRepository.save(product);
 	}
 
-	@Transactional
-	public HousewarmingPost insertHousewarmingPostWithAuthor() {
+	public User insertGuestUser(String nickname) {
+		User user = User.builder()
+			.email(nickname + "@gmail.com")
+			.nickname(nickname)
+			.password(nickname)
+			.followerCount(0)
+			.defaultAddress(new Address())
+			.build();
+		return userRepository.save(user);
+	}
+
+	public HousewarmingPost insertHousewarmingPostWithAuthor(User author) {
 		return housewarmingPostRepository.save(
 			HousewarmingPost.builder()
 				.title("제목1")
@@ -88,7 +98,7 @@ public class TestDataProvider {
 				.family(new Family("SINGLE", null, null))
 				.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
 				.links(Collections.emptyList())
-				.user(insertUser())
+				.user(author)
 				.build());
 	}
 }

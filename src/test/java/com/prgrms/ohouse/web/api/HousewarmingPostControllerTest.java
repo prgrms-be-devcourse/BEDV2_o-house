@@ -1,5 +1,6 @@
 package com.prgrms.ohouse.web.api;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -16,20 +17,28 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
+import com.prgrms.ohouse.infrastructure.TestDataProvider;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class HousewarmingPostControllerTest {
 
 	private static final ObjectMapper json = new ObjectMapper();
+
+	private static final String HW_URL = "/api/v0/hwpost";
 	@Autowired
 	MockMvc mockMvc;
 
 	@Autowired
 	HousewarmingPostRepository postRepository;
+
+	@Autowired
+	TestDataProvider fixtureProvider;
 
 	@Value("${app.host}")
 	private String host;
@@ -61,7 +70,7 @@ class HousewarmingPostControllerTest {
 				new MockMultipartFile("image", "fav.png", "image/png", "chunk1".getBytes()),
 				new MockMultipartFile("image", "fav2.png", "image/png", "chunk2".getBytes())
 			);
-		var multipartRequest = multipart("/api/v0/hwpost");
+		var multipartRequest = multipart(HW_URL);
 		images.forEach(multipartRequest::file);
 		multipartRequest.file(payloadPart);
 		// When
@@ -76,4 +85,41 @@ class HousewarmingPostControllerTest {
 			);
 	}
 
+	@Test
+	@DisplayName("인증 받은 사용자의 삭제 요청을 받으면 삭제 성공 응답을 보내야 한다.")
+	void delete_hwpost_with_proper_authorization() throws Exception {
+
+		// Given
+		var userToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWVzdEBnbWFpbC5jb20iLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE2NTYzMTU3NDQsImV4cCI6MTY1ODA0Mzc0NH0.SN55dE55PSha8BpAFP_J6zd113Tnnk2eDF1Ni2Gd53U";
+		var post = fixtureProvider.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest"));
+		var postId = post.getId();
+		// When
+		var result = mockMvc.perform(delete(HW_URL + "/" + postId).header("Authorization", userToken));
+
+		// Then
+		assertThat(postRepository.findById(postId)).isEmpty();
+		result.andExpectAll(
+			status().is2xxSuccessful()
+		).andDo(print());
+	}
+
+	@Test
+	@DisplayName("컨텐츠에 대한 권한이 없는 사용자의 삭제 요청을 받으면 권한 없음 응답을 보내야 한다.")
+	void deleting_hwpost_fails_with_wrong_authorization_failure_error() throws Exception {
+
+		// Given
+		fixtureProvider.insertGuestUser("guest");
+		var userToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWVzdEBnbWFpbC5jb20iLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE2NTYzMTU3NDQsImV4cCI6MTY1ODA0Mzc0NH0.SN55dE55PSha8BpAFP_J6zd113Tnnk2eDF1Ni2Gd53U";
+		var savedPost = fixtureProvider
+			.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest2"));
+		var postId = savedPost.getId();
+		// When
+		var result = mockMvc.perform(delete(HW_URL + "/" + postId).header("Authorization", userToken));
+
+		// Then
+		assertThat(postRepository.findById(postId)).isNotEmpty();
+		result.andExpectAll(
+			status().isUnauthorized()
+		).andDo(print());
+	}
 }
