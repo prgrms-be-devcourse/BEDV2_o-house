@@ -21,6 +21,7 @@ import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
+import com.prgrms.ohouse.domain.commerce.model.review.ReviewImage;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -80,14 +81,34 @@ public class TestDataProvider {
 		return result;
 	}
 
-	public Review insertReview(){
-		Product product = insertProduct();
-		User user = insertUser();
-		Review review = Review.createReview(product, user, 4, "content content content content content content");
+	public Review insertNormalReview(Product product, User user, int reviewPoint, String contents, int helpPoint) {
+		Review review = Review.createReview(product, user, reviewPoint, contents);
+		review.increaseHelpPoint(helpPoint);
 		return reviewRepository.save(review);
 	}
 
-	public List<Review> insert40Review() {
+	public Review insertPhotoReview(Product product, User user, int reviewPoint, String contents, int helpPoint) {
+		Review review = Review.createReview(product, user, reviewPoint, contents);
+
+		return reviewRepository.save(review);
+	}
+
+	public List<Review> insert40PhotoReview() {
+		Product product = insertProduct();
+		User user = insertUser();
+		List<Review> result = new ArrayList<>();
+		for (int i = 0; i < 40; i++) {
+			Review review = Review.createReview(product, user, 4,
+				i + "content content content content content content");
+			Review entity = reviewRepository.save(review);
+			ReviewImage reviewImage = new ReviewImage("testFile", "testUrl", entity);
+			entity.assignReviewImage(reviewImage);
+			result.add(entity);
+		}
+		return result;
+	}
+
+	public List<Review> insert40NormalReview() {
 		Product product = insertProduct();
 		User user = insertUser();
 		List<Review> result = new ArrayList<>();
