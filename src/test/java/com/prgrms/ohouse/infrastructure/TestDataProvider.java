@@ -102,7 +102,7 @@ public class TestDataProvider {
 				i + "content content content content content content");
 			Review entity = reviewRepository.save(review);
 			ReviewImage reviewImage = new ReviewImage("testFile", "testUrl", entity);
-			entity.assignReviewImage(reviewImage);
+			entity.attach("reviewImage","src/test/resources/static/");
 			result.add(entity);
 		}
 		return result;

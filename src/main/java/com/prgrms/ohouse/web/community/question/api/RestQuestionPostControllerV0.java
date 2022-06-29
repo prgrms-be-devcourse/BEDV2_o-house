@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.api.v0;
+package com.prgrms.ohouse.web.community.question.api;
 
 import static org.springframework.http.MediaType.*;
 
@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.ohouse.domain.community.model.post.question.QuestionPost;
-import com.prgrms.ohouse.domain.community.model.post.question.QuestionPostService;
-import com.prgrms.ohouse.domain.community.model.post.question.command.QuestionPostRegisterCommand;
+import com.prgrms.ohouse.domain.community.application.QuestionPostService;
+import com.prgrms.ohouse.domain.community.application.command.QuestionPostRegisterCommand;
 import com.prgrms.ohouse.web.requests.QuestionPostCreateRequest;
-import com.prgrms.ohouse.web.responses.QuestionPostResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,17 +28,17 @@ public class RestQuestionPostControllerV0 {
 
 	@PostMapping(value = "/api/v0/questions",
 		consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<QuestionPostResponse> registerNewQuestionPost(@RequestPart QuestionPostCreateRequest request,
+	public ResponseEntity registerNewQuestionPost(@RequestPart QuestionPostCreateRequest request,
 		@RequestPart List<MultipartFile> file) {
-		QuestionPost questionPost = questionPostService.createQuestionPost(
+		Long questionPostId = questionPostService.createQuestionPost(
 			new QuestionPostRegisterCommand(request.getContent(), file));
 		return ResponseEntity
-			.created(URI.create("/api/v0/questions/" + questionPost.getId()))
-			.body(QuestionPostResponse.of(questionPost));
+			.created(URI.create("/api/v0/questions/" + questionPostId))
+			.build();
 	}
 
 	@DeleteMapping("/api/v0/questions/{id}")
-	public ResponseEntity<Object> deleteQuestionPost(@PathVariable("id") Long postId) {
+	public ResponseEntity deleteQuestionPost(@PathVariable("id") Long postId) {
 		questionPostService.deletePost(postId);
 		return ResponseEntity.ok().build();
 	}

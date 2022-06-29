@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.community.model.post.hwpost;
+package com.prgrms.ohouse.domain.community.model.housewarming;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

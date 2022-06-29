@@ -7,8 +7,6 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.ohouse.domain.common.ImageAttachable;
-
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -16,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class MultipartFileManager implements FileManager {
 
 	private final FileStore fileStore;
-	private final FileRepositoryDelegator fileRepositoryDelegator;
+	private final FileRepository fileRepository;
 
 	private static final String[] SUPPORTING_EXTENSIONS = {
 		"png", "jpg"
@@ -34,7 +32,7 @@ public class MultipartFileManager implements FileManager {
 
 	@Override
 	public <T extends ImageAttachable> StoredFile store(MultipartFile multipartFile, T attached) {
-		if (multipartFile.isEmpty()) {
+		if (multipartFile == null || multipartFile.isEmpty()) {
 			return null;
 		}
 
@@ -42,7 +40,7 @@ public class MultipartFileManager implements FileManager {
 		String storedFileName = generateFileNameOf(originalFilename);
 
 		String fileUrl = fileStore.save(multipartFile, storedFileName);
-		StoredFile savedFile = fileRepositoryDelegator.save(originalFilename, fileUrl, attached);
+		StoredFile savedFile = fileRepository.save(attached.attach(originalFilename, fileUrl));
 
 		return savedFile;
 	}
