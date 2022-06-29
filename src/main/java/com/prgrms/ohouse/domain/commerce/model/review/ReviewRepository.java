@@ -12,6 +12,8 @@ public interface ReviewRepository {
 
 	Optional<Review> findById(Long id);
 
-	Page<Review> findByProduct(Product product,Pageable pageable);
+	Page<Review> findByProduct(Product product, Pageable pageable);
+
+	Page<Review> findByProductAndReviewType(Product product, ReviewType type, Pageable pageable);
 
 }

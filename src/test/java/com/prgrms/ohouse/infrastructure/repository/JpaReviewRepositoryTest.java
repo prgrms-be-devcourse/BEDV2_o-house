@@ -1,11 +1,9 @@
 package com.prgrms.ohouse.infrastructure.repository;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
@@ -22,7 +19,7 @@ import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 
-@SpringBootTest(properties = "spring.profiles.active:local")
+@SpringBootTest(properties = "spring.profiles.active:test")
 @Transactional
 class JpaReviewRepositoryTest {
 	@Autowired
@@ -33,7 +30,7 @@ class JpaReviewRepositoryTest {
 	@DisplayName("상품 리뷰를 날짜순으로 페이징 하여 조회한다.")
 	@Test
 	void test() {
-		List<Review> reviews = dataProvider.insert40Review();
+		List<Review> reviews = dataProvider.insert40NormalReview();
 		Product target = reviews.get(0).getProduct();
 		Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createdAt");
 

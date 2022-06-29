@@ -5,24 +5,20 @@ import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-@Builder
-public class PagedReviewInformation {
+public class PagedPhotoReviewInformation {
 	private PageInformation pageInformation;
-	private List<ReviewInformation> content = new ArrayList<>();
+	private List<PhotoReviewInformation> content = new ArrayList<>();
 
-	public static PagedReviewInformation of(PageInformation pageInformation, List<Review> reviews) {
-		PagedReviewInformation instance = new PagedReviewInformation();
+	public static PagedPhotoReviewInformation of(PageInformation pageInformation, List<Review> reviews) {
+		PagedPhotoReviewInformation instance = new PagedPhotoReviewInformation();
 		instance.pageInformation = pageInformation;
-		reviews.forEach(review -> instance.content.add(ReviewInformation.from(review)));
+		reviews.forEach(review -> instance.content.add(PhotoReviewInformation.from(review)));
 		return instance;
 	}
-
-
 }

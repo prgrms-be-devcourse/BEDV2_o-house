@@ -2,7 +2,6 @@ package com.prgrms.ohouse.domain.commerce.application.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,11 +10,13 @@ import com.prgrms.ohouse.domain.commerce.application.command.ReviewRegisterComma
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.prgrms.ohouse.domain.commerce.model.product.ProductRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.PageInformation;
+import com.prgrms.ohouse.domain.commerce.model.review.PagedPhotoReviewInformation;
 import com.prgrms.ohouse.domain.commerce.model.review.PagedReviewInformation;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewImage;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRegisterFailException;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
+import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
 import com.prgrms.ohouse.domain.common.file.FileIOException;
 import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -60,13 +61,14 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public PagedReviewInformation loadAllProductReviews(Pageable pageable, Product product) {
 		Page<Review> reviewPage = reviewRepository.findByProduct(product, pageable);
-		PageInformation pageInformation = PageInformation.builder()
-			.totalElements(reviewPage.getTotalElements())
-			.numberOfElements(reviewPage.getNumberOfElements())
-			.totalPages(reviewPage.getTotalPages())
-			.pageNumber(reviewPage.getNumber())
-			.pageSize(reviewPage.getSize())
-			.build();
-		return PagedReviewInformation.from(pageInformation, reviewPage.getContent());
+		PageInformation pageInformation = PageInformation.createNewPageInformation(reviewPage);
+		return PagedReviewInformation.of(pageInformation, reviewPage.getContent());
+	}
+
+	@Override
+	public PagedPhotoReviewInformation loadOnlyPhotoReviews(Pageable pageable, Product product) {
+		Page<Review> reviewPage = reviewRepository.findByProductAndReviewType(product, ReviewType.PHOTO, pageable);
+		PageInformation pageInformation = PageInformation.createNewPageInformation(reviewPage);
+		return PagedPhotoReviewInformation.of(pageInformation, reviewPage.getContent());
 	}
 }
