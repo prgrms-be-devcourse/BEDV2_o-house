@@ -122,4 +122,5 @@ class HousewarmingPostControllerTest {
 			status().isUnauthorized()
 		).andDo(print());
 	}
+
 }

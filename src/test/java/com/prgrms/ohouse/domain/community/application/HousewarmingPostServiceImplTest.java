@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
@@ -22,10 +23,10 @@ import com.prgrms.ohouse.infrastructure.TestDataProvider;
 @SpringBootTest
 @Transactional
 @DisplayName("HousewarmingPostService는")
-class HousewarmingPostServiceTest {
+class HousewarmingPostServiceImplTest {
 
 	@Autowired
-	private HousewarmingPostService housewarmingPostService;
+	private HousewarmingPostServiceImpl housewarmingPostServiceImpl;
 
 	@Autowired
 	private HousewarmingPostRepository housewarmingPostRepository;
@@ -51,7 +52,7 @@ class HousewarmingPostServiceTest {
 			.build();
 
 		// When
-		Long postId = housewarmingPostService.createPost(command, Collections.emptyList());
+		Long postId = housewarmingPostServiceImpl.createPost(command, Collections.emptyList());
 
 		// Then
 		var createdPost = housewarmingPostRepository.findById(postId);
@@ -67,11 +68,12 @@ class HousewarmingPostServiceTest {
 	void delete_authorized_housewarming_content() {
 
 		// Given
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest"));
+		var persistedUserWithToken = fixtureProvider.insertGuestUser("guest");
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken);
 		var postId = persistedPost.getId();
 		var authorId = persistedPost.getUser().getId();
 		// When
-		housewarmingPostService.deletePost(authorId, postId);
+		housewarmingPostServiceImpl.deletePost(authorId, postId);
 
 		// Then
 		assertThat(housewarmingPostRepository.findById(postId)).isEmpty();
@@ -82,12 +84,13 @@ class HousewarmingPostServiceTest {
 	void throws_unauthorized_content_exception() {
 
 		// Given
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest"));
+		var persistedUserWithToken = fixtureProvider.insertGuestUser("guest");
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken);
 		var postId = persistedPost.getId();
 		var unauthorizedId = persistedPost.getUser().getId() + 4123;
 
 		assertThatThrownBy(() -> {
-			housewarmingPostService.deletePost(unauthorizedId, postId);
+			housewarmingPostServiceImpl.deletePost(unauthorizedId, postId);
 		}).isInstanceOf(UnauthorizedContentAccessException.class);
 
 	}

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
+import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.utils.AuthUtils;
 import com.prgrms.ohouse.web.requests.HousewarmingPostCreateRequest;
 import com.prgrms.ohouse.web.results.ErrorCode;
@@ -31,11 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HousewarmingPostController {
 
-	private final HousewarmingPostService postService;
+	private final HousewarmingPostServiceImpl postService;
 	@Value("${app.host}")
 	private String host;
 
-	public HousewarmingPostController(HousewarmingPostService postService) {
+	public HousewarmingPostController(HousewarmingPostServiceImpl postService) {
 		this.postService = postService;
 	}
 
