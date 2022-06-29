@@ -8,16 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.common.file.FileManager;
+import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
+import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
 
 @Service
 @Transactional(readOnly = true)
-public class HousewarmingPostServiceImpl implements
-	com.prgrms.ohouse.domain.community.application.HousewarmingPostService {
+public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 
 	private final HousewarmingPostRepository housewarmingPostRepository;
 	private final FileManager fileManager;
@@ -32,11 +33,14 @@ public class HousewarmingPostServiceImpl implements
 
 	@Override
 	@Transactional
-	public Long createPost(CreateHousewarmingPostCommand command, List<MultipartFile> images) {
-		HousewarmingPost post = housewarmingPostRepository.save(command.toPost());
+	public Long createPost(Long userId, CreateHousewarmingPostCommand command, List<MultipartFile> images) {
+		User user = userRepository.findById(userId).orElseThrow();
+		HousewarmingPost post = command.toPost();
+		post.assignUser(user);
+		post = housewarmingPostRepository.save(post);
 		post.validateContent(images.size());
 		fileManager.store(images, post);
-		// TODO: 사용자 id 받은 뒤에 post와 연관 관계 맺기
+		housewarmingPostRepository.save(post);
 		return post.getId();
 	}
 

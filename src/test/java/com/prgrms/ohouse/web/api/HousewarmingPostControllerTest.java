@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,9 +44,6 @@ class HousewarmingPostControllerTest {
 	@Value("${app.host}")
 	private String host;
 
-	@Value("${file.dir}")
-	private String fileDir;
-
 	@Test
 	@DisplayName("집들이 게시물 생성 요청을 애플리케이션에 전달한 뒤 생성된 게시물의 URI를 응답한다.")
 	void HousewarmingCrateRequest() throws Exception {
@@ -70,7 +68,9 @@ class HousewarmingPostControllerTest {
 				new MockMultipartFile("image", "fav.png", "image/png", "chunk1".getBytes()),
 				new MockMultipartFile("image", "fav2.png", "image/png", "chunk2".getBytes())
 			);
-		var multipartRequest = multipart(HW_URL);
+		fixtureProvider.insertGuestUser("guest");
+		MockMultipartHttpServletRequestBuilder multipartRequest = (MockMultipartHttpServletRequestBuilder)multipart(
+			HW_URL).header("Authorization", TestDataProvider.GUEST_TOKEN);
 		images.forEach(multipartRequest::file);
 		multipartRequest.file(payloadPart);
 		// When
