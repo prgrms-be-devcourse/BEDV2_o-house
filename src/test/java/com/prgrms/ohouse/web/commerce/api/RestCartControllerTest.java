@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.ohouse.domain.commerce.ApiDocumentUtils;
+import com.prgrms.ohouse.web.ApiDocumentUtils;
 import com.prgrms.ohouse.domain.commerce.application.CartService;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.prgrms.ohouse.domain.user.model.User;

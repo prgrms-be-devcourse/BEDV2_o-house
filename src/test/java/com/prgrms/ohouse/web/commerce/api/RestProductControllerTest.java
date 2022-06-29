@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.ohouse.domain.commerce.ApiDocumentUtils;
+import com.prgrms.ohouse.web.ApiDocumentUtils;
 import com.prgrms.ohouse.domain.commerce.application.ProductService;
 import com.prgrms.ohouse.web.commerce.results.ProductViewMainPageResult;
 import com.prgrms.ohouse.web.commerce.results.SliceResult;

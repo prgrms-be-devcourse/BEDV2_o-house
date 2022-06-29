@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.config;
+package com.prgrms.ohouse.infrastructure.repository.config;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
