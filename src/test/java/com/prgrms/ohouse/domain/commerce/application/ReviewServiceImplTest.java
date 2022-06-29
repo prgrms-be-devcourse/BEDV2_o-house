@@ -98,7 +98,7 @@ class ReviewServiceImplTest {
 		Product product = reviews.get(0).getProduct();
 		Pageable pageable = PageRequest.of(2, 10, Sort.Direction.DESC, "createdAt");
 
-		PagedReviewInformation result = reviewService.loadAllProductReviews(pageable, product);
+		PagedReviewInformation result = reviewService.loadAllProductReviews(pageable, product.getId());
 
 		PageInformation page = result.getPageInformation();
 		assertThat(page.getNumberOfElements()).isEqualTo(10);
@@ -108,7 +108,7 @@ class ReviewServiceImplTest {
 		assertThat(result.getContent()).hasSize(10);
 	}
 
-	@DisplayName("특정 상품에 달린 모든 리뷰를 help point 순으로 조회 할 수 있다")
+	@DisplayName("특정 상품에 달린 모든 리뷰를 도움 점수 순으로 조회 할 수 있다")
 	@Test
 	void testReviewInquiryOrderByHelpPoint() {
 		User user = dataProvider.insertUser();
@@ -119,7 +119,7 @@ class ReviewServiceImplTest {
 		}
 		Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "helpPoint");
 
-		PagedReviewInformation result = reviewService.loadAllProductReviews(pageable, product);
+		PagedReviewInformation result = reviewService.loadAllProductReviews(pageable, product.getId());
 		PageInformation page = result.getPageInformation();
 		List<ReviewInformation> resultContent = result.getContent();
 		assertThat(page.getNumberOfElements()).isEqualTo(10);
@@ -140,7 +140,7 @@ class ReviewServiceImplTest {
 		int pageSize = 10;
 		Pageable pageable = PageRequest.of(2, pageSize, Sort.Direction.DESC, "createdAt");
 
-		PagedPhotoReviewInformation result = reviewService.loadOnlyPhotoReviews(pageable, product);
+		PagedPhotoReviewInformation result = reviewService.loadOnlyPhotoReviews(pageable, product.getId());
 
 		PageInformation page = result.getPageInformation();
 		assertThat(page.getNumberOfElements()).isEqualTo(10);

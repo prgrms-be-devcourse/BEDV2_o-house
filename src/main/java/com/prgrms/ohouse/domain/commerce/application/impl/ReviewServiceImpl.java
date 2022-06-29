@@ -14,6 +14,7 @@ import com.prgrms.ohouse.domain.commerce.model.review.PagedPhotoReviewInformatio
 import com.prgrms.ohouse.domain.commerce.model.review.PagedReviewInformation;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewImage;
+import com.prgrms.ohouse.domain.commerce.model.review.ReviewInquiryFailException;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRegisterFailException;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional(readOnly = true)
 @Slf4j
 public class ReviewServiceImpl implements ReviewService {
+	private static final String INVALID_PRODUCT_MESSAGE = "invalid product id";
 	private final ProductRepository productRepository;
 	private final ReviewRepository reviewRepository;
 	private final UserRepository userRepository;
@@ -39,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public Long registerReview(ReviewRegisterCommand command) {
 		Product product = productRepository.findById(command.getProductId())
-			.orElseThrow(() -> new ReviewRegisterFailException("invalid product id"));
+			.orElseThrow(() -> new ReviewRegisterFailException(INVALID_PRODUCT_MESSAGE));
 		User user = userRepository.findById(command.getUserId())
 			.orElseThrow(() -> new ReviewRegisterFailException("invalid user id"));
 		Review review;
@@ -59,14 +61,18 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public PagedReviewInformation loadAllProductReviews(Pageable pageable, Product product) {
+	public PagedReviewInformation loadAllProductReviews(Pageable pageable, Long productId) {
+		Product product = productRepository.findById(productId)
+			.orElseThrow(() -> new ReviewInquiryFailException(INVALID_PRODUCT_MESSAGE));
 		Page<Review> reviewPage = reviewRepository.findByProduct(product, pageable);
 		PageInformation pageInformation = PageInformation.createNewPageInformation(reviewPage);
 		return PagedReviewInformation.of(pageInformation, reviewPage.getContent());
 	}
 
 	@Override
-	public PagedPhotoReviewInformation loadOnlyPhotoReviews(Pageable pageable, Product product) {
+	public PagedPhotoReviewInformation loadOnlyPhotoReviews(Pageable pageable, Long productId) {
+		Product product = productRepository.findById(productId)
+			.orElseThrow(() -> new ReviewInquiryFailException(INVALID_PRODUCT_MESSAGE));
 		Page<Review> reviewPage = reviewRepository.findByProductAndReviewType(product, ReviewType.PHOTO, pageable);
 		PageInformation pageInformation = PageInformation.createNewPageInformation(reviewPage);
 		return PagedPhotoReviewInformation.of(pageInformation, reviewPage.getContent());
