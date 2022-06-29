@@ -77,7 +77,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	@Embedded
 	private transient Address defaultAddress;
 
-	public void checkPassword(PasswordEncoder passwordEncoder, String password) {성
+	public void checkPassword(PasswordEncoder passwordEncoder, String password) {
 		checkArgument(passwordEncoder.matches(password, this.password), "Bad credential. Login failed.");
 	}
 
