@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.prgrms.ohouse.domain.common.security.AuthUtils;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
-import com.prgrms.ohouse.utils.AuthUtils;
 import com.prgrms.ohouse.web.requests.HousewarmingPostCreateRequest;
-import com.prgrms.ohouse.web.results.ErrorCode;
-import com.prgrms.ohouse.web.results.ErrorResult;
+import com.prgrms.ohouse.web.user.results.ErrorCode;
+import com.prgrms.ohouse.web.user.results.ErrorResult;
 
 import lombok.extern.slf4j.Slf4j;
 
