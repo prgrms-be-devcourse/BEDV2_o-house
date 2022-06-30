@@ -5,7 +5,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,7 +21,6 @@ import com.prgrms.ohouse.web.ApiDocumentUtils;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
-import com.prgrms.ohouse.web.api.WithMockCustomUser;
 import com.prgrms.ohouse.web.commerce.requests.CartCreateRequest;
 
 @SpringBootTest
@@ -39,7 +37,6 @@ class RestCartControllerTest {
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Test
-	@WithMockCustomUser
 	void createCartItem_정상_테스트() throws Exception {
 		//given
 		var userToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWVzdEBnbWFpbC5jb20iLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE2NTYzMTU3NDQsImV4cCI6MTY1ODA0Mzc0NH0.SN55dE55PSha8BpAFP_J6zd113Tnnk2eDF1Ni2Gd53U";
