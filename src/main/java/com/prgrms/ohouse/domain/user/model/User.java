@@ -114,11 +114,11 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	}
 
 	public void addFollowing() {
-		setFollowingCount(this.followingCount++);
+		setFollowingCount(++this.followingCount);
 	}
 
 	public void addFollower() {
-		setFollowerCount(this.followerCount++);
+		setFollowerCount(++this.followerCount);
 	}
 
 	private void setImage(StoredFile image) {
