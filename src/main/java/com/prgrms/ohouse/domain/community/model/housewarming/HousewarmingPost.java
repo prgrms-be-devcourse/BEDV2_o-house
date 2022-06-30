@@ -2,7 +2,9 @@ package com.prgrms.ohouse.domain.community.model.housewarming;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,14 +18,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.prgrms.ohouse.domain.common.file.ImageAttachable;
+import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HousewarmingPost {
+@Getter
+public class HousewarmingPost implements ImageAttachable {
+
+	/**
+	 * "{{image}}" 이미지의 위치를 지정한 문자열
+	 */
+	private static final Pattern IMAGE_ESCAPE_PATTERN = Pattern.compile("\\{{2}image\\}{2}");
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -72,10 +84,53 @@ public class HousewarmingPost {
 
 	private String copyrightHolder;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
 	private List<Link> links = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "housewarmingPost", cascade = CascadeType.REMOVE)
+	private List<HousewarmingPostImage> images = new ArrayList<>();
 
 	@Embedded
 	private District district;
+
+	@Builder
+	public HousewarmingPost(User user, String title, String content, HousingType housingType, String housingDescription,
+		Long area, Budget budget, Family family, String company, WorkMetadata workMetadata, String copyrightHolder,
+		List<Link> links, District district) {
+		this.user = user;
+		this.title = title;
+		this.content = content;
+		this.housingType = housingType;
+		this.housingDescription = housingDescription;
+		this.area = area;
+		this.budget = budget;
+		this.family = family;
+		this.company = company;
+		this.workMetadata = workMetadata;
+		this.copyrightHolder = copyrightHolder;
+		this.district = district;
+		for (Link link : links) {
+			link.assignPost(this);
+		}
+		this.links = links;
+	}
+
+	public void validateContent(int imageCount) {
+		int matchedSequenceCount = 0;
+		var matcher = IMAGE_ESCAPE_PATTERN.matcher(content);
+		while (matcher.find()) {
+			matchedSequenceCount++;
+		}
+
+		if (imageCount != matchedSequenceCount)
+			throw new InvalidContentFormatException(imageCount, matchedSequenceCount);
+	}
+
+	@Override
+	public StoredFile attach(String fileName, String fileUrl) {
+		var image = new HousewarmingPostImage(fileName, fileUrl, this);
+		images.add(image);
+		return image;
+	}
 }
 

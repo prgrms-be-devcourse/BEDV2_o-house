@@ -24,6 +24,7 @@ import java.util.Collections;
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.common.file.UserImage;
+import com.prgrms.ohouse.domain.commerce.model.cart.Cart;
 
 @Getter
 @Setter(value = AccessLevel.PRIVATE)
@@ -69,6 +70,10 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	@Column(name = "follower_count")
 	private int followerCount = 0;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cart_id", referencedColumnName = "id")
+	private Cart cart;
+
 	@Embedded
 	private transient Address defaultAddress;
 
@@ -94,6 +99,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 		setFollowerCount(followerCount);
 		setFollowingCount(followingCount);
 		setDefaultAddress(defaultAddress);
+		setCart(Cart.of(this));
 	}
 
 	public User update(String nickname, GenderType gender, String personalUrl, LocalDate birth,
@@ -121,7 +127,9 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 		this.followingCount = followingCount;
 	}
 
-
+	private void setCart(Cart cart) {
+		this.cart = cart;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

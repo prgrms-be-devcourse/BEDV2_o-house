@@ -11,8 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.commerce.application.ProductService;
-import com.prgrms.ohouse.domain.commerce.application.command.ProductViewMainPageCommand;
-import com.prgrms.ohouse.domain.commerce.application.command.SliceCommand;
+import com.prgrms.ohouse.web.commerce.results.ProductViewMainPageResult;
+import com.prgrms.ohouse.web.commerce.results.SliceResult;
 import com.prgrms.ohouse.domain.commerce.model.product.Attribute;
 import com.prgrms.ohouse.domain.commerce.model.product.AttributeRepository;
 import com.prgrms.ohouse.domain.commerce.model.product.Category;
@@ -56,7 +56,7 @@ class ProductServiceImplTest {
 		//given
 		Pageable pageable = PageRequest.of(0, 5);
 		//when
-		SliceCommand<ProductViewMainPageCommand> mainPageOrderByCreatedAtDesc = productService.findMainPageOrderByCreatedAtDesc(
+		SliceResult<ProductViewMainPageResult> mainPageOrderByCreatedAtDesc = productService.findMainPageOrderByCreatedAtDesc(
 			pageable, "attribute");
 		System.out.println(mainPageOrderByCreatedAtDesc.isHasNext());
 		//then
