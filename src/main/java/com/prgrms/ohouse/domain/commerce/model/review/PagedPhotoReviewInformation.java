@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PagedPhotoReviewInformation {
 	private PageInformation pageInformation;
-	private List<PhotoReviewInformation> content = new ArrayList<>();
+	private List<PhotoReviewInformation> reviews = new ArrayList<>();
 
 	public static PagedPhotoReviewInformation of(PageInformation pageInformation, List<Review> reviews) {
 		PagedPhotoReviewInformation instance = new PagedPhotoReviewInformation();
 		instance.pageInformation = pageInformation;
-		reviews.forEach(review -> instance.content.add(PhotoReviewInformation.from(review)));
+		reviews.forEach(review -> instance.reviews.add(PhotoReviewInformation.from(review)));
 		return instance;
 	}
 }

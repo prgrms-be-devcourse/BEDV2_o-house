@@ -2,23 +2,19 @@ package com.prgrms.ohouse.domain.commerce.model.review;
 
 import java.time.LocalDateTime;
 
-import com.prgrms.ohouse.domain.user.model.User;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewInformation {
 	private Long id;
-	private User user;
+	private ReviewAuthor user;
 	private int reviewPoint;
 	private String contents;
 	private int helpPoint;
@@ -27,7 +23,7 @@ public class ReviewInformation {
 	public static ReviewInformation from(Review review){
 		return ReviewInformation.builder()
 			.id(review.getId())
-			.user(review.getUser())
+			.user(ReviewAuthor.from(review.getUser()))
 			.reviewPoint(review.getReviewPoint())
 			.contents(review.getContents())
 			.helpPoint(review.getHelpPoint())

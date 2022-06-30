@@ -2,19 +2,24 @@ package com.prgrms.ohouse.domain.commerce.model.review;
 
 import org.springframework.data.domain.Page;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@Data
 public class PageInformation {
-	private final int pageNumber;
-	private final int pageSize;
-	private final int totalPages;
-	private final int numberOfElements;
-	private final long totalElements;
+	private int pageNumber;
+	private int pageSize;
+	private int totalPages;
+	private int numberOfElements;
+	private long totalElements;
 
 	public static PageInformation createNewPageInformation(Page<Review> reviewPage) {
 		return PageInformation.builder()

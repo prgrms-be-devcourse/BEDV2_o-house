@@ -105,7 +105,7 @@ class ReviewServiceImplTest {
 		assertThat(page.getTotalElements()).isEqualTo(40);
 		assertThat(page.getPageNumber()).isEqualTo(2);
 		assertThat(page.getTotalPages()).isEqualTo(4);
-		assertThat(result.getContent()).hasSize(10);
+		assertThat(result.getReviews()).hasSize(10);
 	}
 
 	@DisplayName("특정 상품에 달린 모든 리뷰를 도움 점수 순으로 조회 할 수 있다")
@@ -121,12 +121,12 @@ class ReviewServiceImplTest {
 
 		PagedReviewInformation result = reviewService.loadAllProductReviews(pageable, product.getId());
 		PageInformation page = result.getPageInformation();
-		List<ReviewInformation> resultContent = result.getContent();
+		List<ReviewInformation> resultContent = result.getReviews();
 		assertThat(page.getNumberOfElements()).isEqualTo(10);
 		assertThat(page.getTotalElements()).isEqualTo(10);
 		assertThat(page.getPageNumber()).isZero();
 		assertThat(page.getTotalPages()).isEqualTo(1);
-		assertThat(result.getContent()).hasSize(10);
+		assertThat(result.getReviews()).hasSize(10);
 		for (int i = 9; i >= 0; i--) {
 			assertThat(resultContent.get(9 - i).getHelpPoint()).isEqualTo(i * i);
 		}
@@ -147,6 +147,6 @@ class ReviewServiceImplTest {
 		assertThat(page.getTotalElements()).isEqualTo(40);
 		assertThat(page.getPageNumber()).isEqualTo(2);
 		assertThat(page.getTotalPages()).isEqualTo(4);
-		assertThat(result.getContent()).hasSize(10);
+		assertThat(result.getReviews()).hasSize(10);
 	}
 }

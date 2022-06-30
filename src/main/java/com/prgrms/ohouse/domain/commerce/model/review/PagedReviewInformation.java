@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PagedReviewInformation {
 	private PageInformation pageInformation;
-	private List<ReviewInformation> content = new ArrayList<>();
+	private List<ReviewInformation> reviews = new ArrayList<>();
 
 	public static PagedReviewInformation of(PageInformation pageInformation, List<Review> reviews) {
 		PagedReviewInformation instance = new PagedReviewInformation();
 		instance.pageInformation = pageInformation;
-		reviews.forEach(review -> instance.content.add(ReviewInformation.from(review)));
+		reviews.forEach(review -> instance.reviews.add(ReviewInformation.from(review)));
 		return instance;
 	}
 
