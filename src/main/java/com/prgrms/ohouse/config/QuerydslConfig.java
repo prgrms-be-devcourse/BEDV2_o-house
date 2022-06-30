@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.infrastructure.repository.config;
+package com.prgrms.ohouse.config;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Configuration
-public class QuerydslConfiguration {
+public class QuerydslConfig {
 	@PersistenceContext
 	private EntityManager entityManager;
 

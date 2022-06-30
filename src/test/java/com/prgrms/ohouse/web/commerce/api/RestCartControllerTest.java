@@ -19,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.ohouse.web.ApiDocumentUtils;
-import com.prgrms.ohouse.domain.commerce.application.CartService;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
+import com.prgrms.ohouse.web.api.WithMockCustomUser;
 import com.prgrms.ohouse.web.commerce.requests.CartCreateRequest;
 
 @SpringBootTest
@@ -30,9 +30,6 @@ import com.prgrms.ohouse.web.commerce.requests.CartCreateRequest;
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 class RestCartControllerTest {
-	@Mock
-	private CartService cartService;
-
 	@Autowired
 	TestDataProvider fixtureProvider;
 
@@ -42,7 +39,8 @@ class RestCartControllerTest {
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Test
-	void createCartItem() throws Exception {
+	@WithMockCustomUser
+	void createCartItem_정상_테스트() throws Exception {
 		//given
 		var userToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWVzdEBnbWFpbC5jb20iLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE2NTYzMTU3NDQsImV4cCI6MTY1ODA0Mzc0NH0.SN55dE55PSha8BpAFP_J6zd113Tnnk2eDF1Ni2Gd53U";
 		User user = fixtureProvider.insertGuestUser("guest");
