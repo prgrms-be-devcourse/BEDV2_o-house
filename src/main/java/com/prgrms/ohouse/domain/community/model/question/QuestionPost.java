@@ -31,6 +31,13 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 		this.questionImages = questionImages;
 	}
 
+	public QuestionPost(Long id, String content,
+		List<QuestionPostImage> questionImages) {
+		this.id = id;
+		this.content = content;
+		this.questionImages = questionImages;
+	}
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -47,5 +54,11 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 		QuestionPostImage image = new QuestionPostImage(fileName, fileUrl, this);
 		questionImages.add(image);
 		return image;
+	}
+
+	public QuestionPost apply(QuestionPost questionPost) {
+		this.content = questionPost.getContent();
+		this.questionImages = questionPost.getQuestionImages();
+		return this;
 	}
 }

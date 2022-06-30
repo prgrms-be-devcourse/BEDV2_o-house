@@ -8,4 +8,8 @@ public interface FileManager {
 	<T extends ImageAttachable> List<StoredFile> store(List<MultipartFile> multipartFiles, T attached);
 
 	<T extends ImageAttachable> StoredFile store(MultipartFile multipartFile, T attached);
+
+	<T extends StoredFile> void delete(List<T> files);
+
+	<T extends StoredFile> void delete(T file);
 }
