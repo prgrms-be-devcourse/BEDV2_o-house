@@ -132,5 +132,6 @@ public class HousewarmingPost implements ImageAttachable {
 		images.add(image);
 		return image;
 	}
+
 }
 

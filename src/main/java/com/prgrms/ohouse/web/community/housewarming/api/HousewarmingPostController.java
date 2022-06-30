@@ -44,8 +44,8 @@ public class HousewarmingPostController {
 	public ResponseEntity<String> handleCreatePostRequest(
 		@RequestPart("payload") @Valid HousewarmingPostCreateRequest payload,
 		@RequestPart("image") List<MultipartFile> images) {
-
-		Long postId = postService.createPost(payload.toCommand(), images);
+		Long userId = AuthUtils.getAuthUser().getId();
+		Long postId = postService.createPost(userId, payload.toCommand(), images);
 
 		return ResponseEntity.created(URI.create(host + "api/v0/hwpost/" + postId)).body("post creation success");
 	}

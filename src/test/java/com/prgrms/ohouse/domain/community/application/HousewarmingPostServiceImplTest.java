@@ -40,6 +40,7 @@ class HousewarmingPostServiceImplTest {
 		// TODO: 선택 필드 테스트 케이스
 
 		// Given
+		var user = fixtureProvider.insertGuestUser("guest");
 		var command = CreateHousewarmingPostCommand.builder()
 			.title("test1")
 			.content("test1content")
@@ -52,11 +53,12 @@ class HousewarmingPostServiceImplTest {
 			.build();
 
 		// When
-		Long postId = housewarmingPostServiceImpl.createPost(command, Collections.emptyList());
+		Long postId = housewarmingPostServiceImpl.createPost(user.getId(), command, Collections.emptyList());
 
 		// Then
 		var createdPost = housewarmingPostRepository.findById(postId);
 		assertThat(createdPost).isNotEmpty();
+		assertThat(createdPost.get().getUser().getId()).isEqualTo(user.getId());
 		assertThat(createdPost.get()).extracting("title").isEqualTo("test1");
 		assertThat(createdPost.get().getBudget().getTotal()).isEqualTo(250L);
 		assertThat(createdPost.get().getWorkMetadata().getWorkerType()).isEqualTo(WorkerType.SELF);

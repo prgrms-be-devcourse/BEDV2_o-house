@@ -9,7 +9,7 @@ import com.prgrms.ohouse.domain.community.application.command.CreateHousewarming
 
 public interface HousewarmingPostService {
 	@Transactional
-	Long createPost(CreateHousewarmingPostCommand command, List<MultipartFile> images);
+	Long createPost(Long userId, CreateHousewarmingPostCommand command, List<MultipartFile> images);
 
 	//
 	// 삭제
