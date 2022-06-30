@@ -10,4 +10,7 @@ public interface FollowRepository {
 
 	Optional<Follow> findByFromUserAndToUser(User fromUser, User toUser);
 
+	void delete(Follow follow);
+
+	void deleteAll();
 }

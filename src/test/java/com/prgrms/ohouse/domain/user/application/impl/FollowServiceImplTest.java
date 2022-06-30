@@ -6,11 +6,11 @@ import static org.hamcrest.Matchers.*;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
@@ -45,16 +45,37 @@ class FollowServiceImplTest {
 		userRepository.save(to);
 	}
 
+	@AfterEach
+	void teardown() {
+		followRepository.deleteAll();
+		userRepository.deleteAll();
+	}
+
 	@Test
-	@Transactional
 	void followUserTest() {
 		followService.followUser(from.getId(), to.getId());
-		Optional<Follow> follow = followRepository.findByFromUserAndToUser(from, to);
 
-		assertThat(from.getFollowingCount(), is(1));
-		assertThat(to.getFollowerCount(), is(1));
+		Optional<Follow> follow = followRepository.findByFromUserAndToUser(from, to);
+		Optional<User> findByFromUser = userRepository.findById(from.getId());
+		Optional<User> findBytoUser = userRepository.findById(to.getId());
+
+		assertThat(findByFromUser.get().getFollowingCount(), is(1));
+		assertThat(findBytoUser.get().getFollowerCount(), is(1));
 		assertThat(follow.isPresent(), is(true));
-		assertThat(follow.get().getFromUser(), is(equalTo(from)));
-		assertThat(follow.get().getToUser(), is(equalTo(to)));
+	}
+
+	@Test
+	void unfollowUserTest() {
+		followService.followUser(from.getId(), to.getId());
+		followService.unfollowUser(from.getId(), to.getId());
+
+		Optional<Follow> follow = followRepository.findByFromUserAndToUser(from, to);
+		Optional<User> findByFromUser = userRepository.findById(from.getId());
+		Optional<User> findByToUser = userRepository.findById(to.getId());
+
+		assertThat(findByFromUser.get().getFollowingCount(), is(0));
+		assertThat(findByToUser.get().getFollowerCount(), is(0));
+		assertThat(follow.isPresent(), is(false));
+
 	}
 }

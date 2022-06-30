@@ -4,5 +4,5 @@ public interface FollowService {
 
 	void followUser(Long userId, Long toUserId);
 
-	void unFollowUser(Long userId, Long toUserId);
+	void unfollowUser(Long userId, Long toUserId);
 }

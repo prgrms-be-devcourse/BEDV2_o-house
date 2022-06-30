@@ -1,6 +1,8 @@
 package com.prgrms.ohouse.domain.user.model.follow;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@EntityListeners(UnFollowListener.class)
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,10 +28,10 @@ public class Follow {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User fromUser;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User toUser;
 
 	public static Follow create(User fromUser, User toUser) {

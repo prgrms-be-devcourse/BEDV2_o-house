@@ -1,5 +1,7 @@
 package com.prgrms.ohouse.domain.user.application.impl;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +33,17 @@ public class FollowServiceImpl implements FollowService {
 	}
 
 	@Transactional
-	public void unFollowUser(Long userId, Long toUserId) {
+	public void unfollowUser(Long userId, Long toUserId) {
+		User fromUser = userRepository.findById(userId)
+			.orElseThrow(() -> new UserNotFoundException("AuthUser not found. Try Again."));
+
+		User toUser = userRepository.findById(toUserId)
+			.orElseThrow(() -> new UserNotFoundException("User to unfollow not found. Try Again."));
+
+		Optional<Follow> findFollow = followRepository.findByFromUserAndToUser(fromUser, toUser);
+		if (findFollow.isPresent()) {
+			followRepository.delete(findFollow.get());
+		}
 
 	}
 

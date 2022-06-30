@@ -23,7 +23,6 @@ import java.util.Collections;
 
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
-import com.prgrms.ohouse.domain.common.file.UserImage;
 import com.prgrms.ohouse.domain.commerce.model.cart.Cart;
 
 @Getter
@@ -117,8 +116,16 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 		setFollowingCount(++this.followingCount);
 	}
 
+	public void subFollowing() {
+		setFollowingCount(--this.followingCount);
+	}
+
 	public void addFollower() {
 		setFollowerCount(++this.followerCount);
+	}
+
+	public void subFollower() {
+		setFollowerCount(--this.followerCount);
 	}
 
 	private void setImage(StoredFile image) {
