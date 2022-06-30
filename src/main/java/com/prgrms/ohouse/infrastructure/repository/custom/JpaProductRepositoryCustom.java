@@ -1,17 +1,10 @@
-package com.prgrms.ohouse.domain.commerce.model.product;
-
-import java.util.Optional;
+package com.prgrms.ohouse.infrastructure.repository.custom;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import com.prgrms.ohouse.web.commerce.results.ProductViewMainPageResult;
 
-public interface ProductRepository {
+public interface JpaProductRepositoryCustom {
 	Slice<ProductViewMainPageResult> findByIdAtDesc(Pageable pageable);
-
-	Product save(Product product);
-
-	Optional<Product> findById(Long id);
 }
-

@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.infrastructure.repository;
+package com.prgrms.ohouse.infrastructure.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

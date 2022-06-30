@@ -1,5 +1,8 @@
 package com.prgrms.ohouse.domain.commerce.model.product;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,9 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.prgrms.ohouse.domain.commerce.model.cart.CartItem;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.PriceRange;
 
 import lombok.AccessLevel;
@@ -53,6 +58,9 @@ public class Product {
 	@JoinColumn(name = "attribute_id", referencedColumnName = "id")
 	private Attribute attribute;
 
+	@OneToMany(mappedBy = "product")
+	List<CartItem> cartItems = new ArrayList<>();
+
 	public static Product of(String name, int price, String contents,
 		Category category, Attribute attribute) {
 		Product instance = new Product();
@@ -74,5 +82,10 @@ public class Product {
 	private void setPrice(int price) {
 		validPriceRange(price);
 		this.price = price;
+	}
+
+	private void setAttribute(Attribute attribute) {
+		this.attribute = attribute;
+		this.attribute.getProducts().add(this);
 	}
 }
