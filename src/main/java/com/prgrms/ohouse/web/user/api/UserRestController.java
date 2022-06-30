@@ -73,7 +73,7 @@ public class UserRestController {
 		if (errors.hasErrors()) {
 			throw new IllegalArgumentException();
 		}
-		userService.updateUser(AuthUtils.getAuthUser(), request.toCommand(file));
+		userService.updateUser(AuthUtils.getAuthUser().getId(), request.toCommand(file));
 		return ResponseEntity.ok()
 			.body("Update succeed.");
 	}

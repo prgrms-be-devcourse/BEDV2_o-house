@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice(basePackageClasses = UserRestController.class)
-public class ApiExceptionHandler {
+public class UserApiExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<ErrorResult> handleIllegalArgument(IllegalArgumentException e) {

@@ -53,7 +53,7 @@ class UserRestControllerTest {
 		MockitoAnnotations.initMocks(this);
 		objectMapper.registerModule(new JavaTimeModule());
 		mockMvc = MockMvcBuilders.standaloneSetup(userRestController)
-			.setControllerAdvice(ApiExceptionHandler.class)
+			.setControllerAdvice(UserApiExceptionHandler.class)
 			.alwaysDo(print())
 			.build();
 	}
@@ -102,7 +102,7 @@ class UserRestControllerTest {
 			.personalUrl(updateRequest.getPersonalUrl())
 			.build();
 
-		when(userService.updateUser(AuthUtils.getAuthUser(), updateRequest.toCommand(null))).thenReturn(updatedUser);
+		when(userService.updateUser(AuthUtils.getAuthUser().getId(), updateRequest.toCommand(null))).thenReturn(updatedUser);
 
 		mockMvc.perform(multipart("/api/v0/user")
 				.file(jsonRequest))
@@ -133,7 +133,7 @@ class UserRestControllerTest {
 			.personalUrl(updateRequest.getPersonalUrl())
 			.build();
 
-		when(userService.updateUser(AuthUtils.getAuthUser(), updateRequest.toCommand(fileRequest)))
+		when(userService.updateUser(AuthUtils.getAuthUser().getId(), updateRequest.toCommand(fileRequest)))
 			.thenReturn(updatedUser);
 
 		mockMvc.perform(multipart("/api/v0/user")

@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final FileManager fileManager;
 
-	@Override
 	public void signUp(UserCreateCommand command) {
 
 		if (userRepository.findByEmail(command.getEmail()).isPresent()) {
@@ -55,10 +54,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Transactional
-	public User updateUser(User user, UserUpdateCommand command) {
-		User updatedUser = userRepository.findByEmail(user.getEmail())
-			.orElseThrow(() -> new UserNotFoundException("User not found. Try Again."));
-
+	public User updateUser(Long userId, UserUpdateCommand command) {
+		User updatedUser = userRepository.findById(userId)
+			.orElseThrow(() -> new UserNotFoundException("AuthUser not found. Try Again."));
 		Optional<User> findUser = userRepository.findByNickname(command.getNickname());
 		if (findUser.isPresent() && !updatedUser.equals(findUser.get())) {
 			throw new DuplicateNicknameException("Duplicate Nickname. -> " + command.getNickname());

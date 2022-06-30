@@ -29,7 +29,6 @@ public class UserUpdateRequest {
 	@Pattern(regexp = "^((http(s?))\\:\\/\\/)([0-9a-zA-Z\\-]+\\.)+[a-zA-Z]{2,6}(\\:[0-9]+)?(\\/\\S*)?$")
 	private String personalUrl;
 
-	//TODO formatting 확인. null 입력시 확인
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate birth;
 

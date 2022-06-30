@@ -11,6 +11,6 @@ public interface UserService {
 
 	User login(UserLoginCommand command);
 
-	User updateUser(User user, UserUpdateCommand command);
+	User updateUser(Long userId, UserUpdateCommand command);
 
 }

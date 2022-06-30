@@ -1,22 +1,14 @@
 package com.prgrms.ohouse.domain.user.model;
 
+import static com.google.common.base.Strings.*;
+
 public enum GenderType {
-	MALE("M"),
-	FEMALE("F")
-	;
-
-	private final String value;
-
-	GenderType(String value) {
-		this.value = value;
-	}
+	MALE, FEMALE;
 
 	public static GenderType of(String value) {
-		if(value.equals(MALE.value))
-			return MALE;
-		else if(value.equals(FEMALE.value))
-			return FEMALE;
-		else
-			throw new IllegalArgumentException();
+		if(isNullOrEmpty(value))
+			return null;
+		//TODO IllegalArguException 구체화
+		return GenderType.valueOf(value);
 	}
 }
