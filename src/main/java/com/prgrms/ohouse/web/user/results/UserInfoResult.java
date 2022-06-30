@@ -2,7 +2,7 @@ package com.prgrms.ohouse.web.user.results;
 
 import java.time.LocalDate;
 
-import com.prgrms.ohouse.domain.common.file.UserImage;
+import com.prgrms.ohouse.domain.user.model.UserImage;
 import com.prgrms.ohouse.domain.user.model.GenderType;
 import com.prgrms.ohouse.domain.user.model.User;
 
