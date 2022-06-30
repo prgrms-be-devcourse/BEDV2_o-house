@@ -9,6 +9,7 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.Link;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
+import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,8 +33,9 @@ public class CreateHousewarmingPostCommand {
 	private List<Link> links;
 	private District district;
 
-	public HousewarmingPost toPost() {
+	public HousewarmingPost toPost(User user) {
 		return HousewarmingPost.builder()
+			.user(user)
 			.title(title)
 			.content(content)
 			.housingType(housingType)

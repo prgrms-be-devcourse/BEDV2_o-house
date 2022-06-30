@@ -133,8 +133,5 @@ public class HousewarmingPost implements ImageAttachable {
 		return image;
 	}
 
-	public void assignUser(User user) {
-		this.user = user;
-	}
 }
 

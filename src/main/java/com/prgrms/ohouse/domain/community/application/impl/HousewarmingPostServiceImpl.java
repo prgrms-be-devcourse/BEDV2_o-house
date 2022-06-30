@@ -35,8 +35,7 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	@Transactional
 	public Long createPost(Long userId, CreateHousewarmingPostCommand command, List<MultipartFile> images) {
 		User user = userRepository.findById(userId).orElseThrow();
-		HousewarmingPost post = command.toPost();
-		post.assignUser(user);
+		HousewarmingPost post = command.toPost(user);
 		post = housewarmingPostRepository.save(post);
 		post.validateContent(images.size());
 		fileManager.store(images, post);
