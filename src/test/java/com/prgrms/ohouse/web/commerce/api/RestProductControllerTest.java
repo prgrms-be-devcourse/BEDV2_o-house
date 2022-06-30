@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.web.api;
+package com.prgrms.ohouse.web.commerce.api;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -25,10 +25,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.ohouse.domain.commerce.ApiDocumentUtils;
+import com.prgrms.ohouse.web.ApiDocumentUtils;
 import com.prgrms.ohouse.domain.commerce.application.ProductService;
-import com.prgrms.ohouse.domain.commerce.application.command.ProductViewMainPageCommand;
-import com.prgrms.ohouse.domain.commerce.application.command.SliceCommand;
+import com.prgrms.ohouse.web.commerce.results.ProductViewMainPageResult;
+import com.prgrms.ohouse.web.commerce.results.SliceResult;
 import com.prgrms.ohouse.domain.commerce.model.product.Attribute;
 import com.prgrms.ohouse.domain.commerce.model.product.Category;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
@@ -60,12 +60,12 @@ class RestProductControllerTest {
 		Category category = Category.of(RootCategory.FURNITURE, SecondCategory.BED, ThirdCategory.FRAME,
 			FourthCategory.NORMAL);
 		Attribute attribute = Attribute.of(Color.BLUE, Size.NORMAL, "brand", Shipping.NORMAL);
-		List<ProductViewMainPageCommand> arrays = new ArrayList<>();
+		List<ProductViewMainPageResult> arrays = new ArrayList<>();
 		Product product = Product.of("이름입니다.", 234, "내용입니다.", category, attribute);
-		arrays.add(new ProductViewMainPageCommand(product));
+		arrays.add(new ProductViewMainPageResult(product));
 		given(productService.findMainPageOrderByCreatedAtDesc(pageable, "asd")).willReturn(
-			new SliceCommand<ProductViewMainPageCommand>(
-				new SliceImpl<ProductViewMainPageCommand>(arrays, pageable, false)));
+			new SliceResult<ProductViewMainPageResult>(
+				new SliceImpl<ProductViewMainPageResult>(arrays, pageable, false)));
 		//when
 		ResultActions result = this.mockMvc.perform(
 			get("/api/v0/products").param("attribute", "asd").accept(MediaType.APPLICATION_JSON));

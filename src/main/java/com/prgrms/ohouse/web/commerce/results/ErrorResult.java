@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.web;
+package com.prgrms.ohouse.web.commerce.results;
 
 import org.springframework.http.HttpStatus;
 

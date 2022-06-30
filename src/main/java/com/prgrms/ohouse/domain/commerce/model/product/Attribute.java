@@ -1,7 +1,9 @@
 package com.prgrms.ohouse.domain.commerce.model.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,8 +48,8 @@ public class Attribute {
 	@Column(nullable = false)
 	private Shipping shipping;
 
-	@OneToMany(mappedBy = "attribute")
-	private List<Product> products;
+	@OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL)
+	private List<Product> products = new ArrayList<>();
 
 	public static Attribute of(Color color, Size size, String brand, Shipping shipping) {
 		Attribute instance = new Attribute();

@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.application.command;
+package com.prgrms.ohouse.web.commerce.results;
 
 import java.util.List;
 
@@ -7,13 +7,13 @@ import org.springframework.data.domain.Slice;
 import lombok.Getter;
 
 @Getter
-public class SliceCommand<T> {
+public class SliceResult<T> {
 	private final List<T> contents;
 	private final int size;
 	private final boolean isLastPage;
 	private final boolean hasNext;
 
-	public SliceCommand(Slice<T> slice) {
+	public SliceResult(Slice<T> slice) {
 		this.contents = slice.getContent();
 		this.size = slice.getSize();
 		this.isLastPage = slice.isLast();

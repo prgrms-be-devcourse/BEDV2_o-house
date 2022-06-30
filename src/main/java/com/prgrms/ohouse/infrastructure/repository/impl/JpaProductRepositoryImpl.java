@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.infrastructure.repository.impl;
+package com.prgrms.ohouse.infrastructure.repository.impl;
 
 import static com.prgrms.ohouse.domain.commerce.model.product.QProduct.*;
 
@@ -9,10 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
-
-import com.prgrms.ohouse.domain.commerce.application.command.ProductViewMainPageCommand;
-import com.prgrms.ohouse.domain.commerce.infrastructure.repository.custom.JpaProductRepositoryCustom;
+import com.prgrms.ohouse.web.commerce.results.ProductViewMainPageResult;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
+
+import com.prgrms.ohouse.infrastructure.repository.custom.JpaProductRepositoryCustom;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class JpaProductRepositoryImpl implements JpaProductRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public Slice<ProductViewMainPageCommand> findByIdAtDesc(Pageable pageable) {
+	public Slice<ProductViewMainPageResult> findByIdAtDesc(Pageable pageable) {
 		List<Product> products = queryFactory
 			.selectFrom(product)
 			.orderBy(product.id.desc())
@@ -31,9 +32,9 @@ public class JpaProductRepositoryImpl implements JpaProductRepositoryCustom {
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
-		List<ProductViewMainPageCommand> content = new ArrayList<>();
+		List<ProductViewMainPageResult> content = new ArrayList<>();
 		for (Product product : products)
-			content.add(new ProductViewMainPageCommand(product));
+			content.add(new ProductViewMainPageResult(product));
 		boolean hasNext = false;
 		if (content.size() > pageable.getPageSize()) {
 			content.remove(pageable.getPageSize());

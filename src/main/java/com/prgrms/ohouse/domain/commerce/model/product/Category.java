@@ -3,6 +3,7 @@ package com.prgrms.ohouse.domain.commerce.model.product;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,10 +48,11 @@ public class Category {
 	@Column(nullable = false)
 	private FourthCategory fourthCategory;
 
-	@OneToMany(mappedBy = "category")
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	List<Product> products = new ArrayList<>();
 
-	public static Category of(RootCategory rootCategory, SecondCategory secondCategory, ThirdCategory thirdCategory, FourthCategory fourthCategory) {
+	public static Category of(RootCategory rootCategory, SecondCategory secondCategory, ThirdCategory thirdCategory,
+		FourthCategory fourthCategory) {
 		Category instance = new Category();
 		instance.setRootCategory(rootCategory);
 		instance.setSecondCategory(secondCategory);
