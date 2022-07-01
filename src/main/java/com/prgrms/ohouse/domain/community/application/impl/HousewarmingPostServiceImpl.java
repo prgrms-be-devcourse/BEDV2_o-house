@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,10 +59,10 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 		return HousewarmingPostInfoResult.from(post);
 	}
 
-	// @Transactional
-	// public int updateViews(Long postId) {
-	// 	// housewarmingPostRepository.incrementView(postId);
-	// }
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+	public void updateViews(Long postId) {
+		housewarmingPostRepository.incrementViewCount(postId);
+	}
 
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {
 		HousewarmingPost hwPost = housewarmingPostRepository.findById(postId).orElseThrow();

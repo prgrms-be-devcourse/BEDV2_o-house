@@ -62,6 +62,8 @@ public class HousewarmingPostController {
 	@GetMapping("/{postId}")
 	public ResponseEntity<HousewarmingPostInfoResult> handleGetSinglePostRequest(@PathVariable Long postId) {
 		var housewarmingInfoResult = postService.getSinglePost(postId);
+		postService.updateViews(postId);
+		housewarmingInfoResult.incrementViewCount();
 		return ResponseEntity.ok(housewarmingInfoResult);
 	}
 

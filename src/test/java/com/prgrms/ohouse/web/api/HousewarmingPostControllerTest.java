@@ -134,11 +134,13 @@ class HousewarmingPostControllerTest {
 		// When
 		var result = mockMvc.perform(get(HW_URL + "/" + savedPost.getId()));
 
-		// 조회수 1 올라야 한다.
 		// Then
+
+		var expectedPayload = HousewarmingPostInfoResult.from(savedPost);
+		expectedPayload.incrementViewCount();
 		result.andExpectAll(
 			status().is2xxSuccessful(),
-			content().json(json.writeValueAsString(HousewarmingPostInfoResult.from(savedPost)))
+			content().json(json.writeValueAsString(expectedPayload))
 		).andDo(print());
 	}
 

@@ -115,4 +115,20 @@ class HousewarmingPostServiceImplTest {
 
 	}
 
+	@Test
+	@DisplayName("원하는 단일 집들이 게시물의 조회수를 1 증가 시킨다.")
+	void increment_visit_count_by_1() {
+
+		// Given
+		var author = fixtureProvider.insertGuestUser("guest");
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author);
+
+		// When
+		housewarmingPostServiceImpl.updateViews(savedPost.getId());
+
+		// Then
+		assertThat(housewarmingPostRepository.findById(savedPost.getId()).orElseThrow().getVisitCount()).isEqualTo(1);
+
+	}
+
 }

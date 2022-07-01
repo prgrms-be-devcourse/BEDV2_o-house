@@ -51,4 +51,8 @@ public class HousewarmingPostInfoResult {
 		instance.images = post.getImages();
 		return instance;
 	}
+
+	public void incrementViewCount() {
+		this.visitCount++;
+	}
 }
