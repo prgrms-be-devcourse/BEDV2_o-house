@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import org.springframework.data.annotation.CreatedBy;
 
 import com.prgrms.ohouse.domain.common.BaseTimeEntity;
-import com.prgrms.ohouse.domain.common.UserAuditorAware;
+import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.model.User;

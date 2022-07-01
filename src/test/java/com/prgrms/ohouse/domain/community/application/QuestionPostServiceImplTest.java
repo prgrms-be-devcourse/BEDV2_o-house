@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.ohouse.domain.common.UserAuditorAware;
+import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
 import com.prgrms.ohouse.domain.community.application.command.QuestionPostRegisterCommand;
 import com.prgrms.ohouse.domain.community.application.command.QuestionPostUpdateCommand;
 import com.prgrms.ohouse.domain.community.application.impl.QuestionPostServiceImpl;
