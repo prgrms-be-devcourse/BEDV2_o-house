@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 
@@ -119,6 +120,25 @@ class HousewarmingPostControllerTest {
 		assertThat(postRepository.findById(postId)).isNotEmpty();
 		result.andExpectAll(
 			status().isUnauthorized()
+		).andDo(print());
+	}
+
+	@Test
+	@DisplayName("등록된 집들이 게시물의 정보를 조회할 수 있다.")
+	void acquire_information_of_requested_housewarming_post() throws Exception {
+
+		// Given
+		var user = fixtureProvider.insertGuestUser("guest");
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(user);
+
+		// When
+		var result = mockMvc.perform(get(HW_URL + "/" + savedPost.getId()));
+
+		// 조회수 1 올라야 한다.
+		// Then
+		result.andExpectAll(
+			status().is2xxSuccessful(),
+			content().json(json.writeValueAsString(HousewarmingPostInfoResult.from(savedPost)))
 		).andDo(print());
 	}
 

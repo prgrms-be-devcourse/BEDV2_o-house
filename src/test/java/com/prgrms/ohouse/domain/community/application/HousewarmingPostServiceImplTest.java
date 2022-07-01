@@ -111,6 +111,7 @@ class HousewarmingPostServiceImplTest {
 		// Then
 		assertThat(queriedPostResult.getPostId()).isEqualTo(savedPost.getId());
 		assertThat(queriedPostResult.getContent()).isEqualTo(savedPost.getContent());
+		assertThat(queriedPostResult.getImages()).isEqualTo(savedPost.getImages());
 
 	}
 
