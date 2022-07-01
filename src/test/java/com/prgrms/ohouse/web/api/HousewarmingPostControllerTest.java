@@ -1,5 +1,6 @@
 package com.prgrms.ohouse.web.api;
 
+import static com.prgrms.ohouse.infrastructure.TestDataProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -70,7 +71,7 @@ class HousewarmingPostControllerTest {
 			);
 		fixtureProvider.insertGuestUser("guest");
 		MockMultipartHttpServletRequestBuilder multipartRequest = (MockMultipartHttpServletRequestBuilder)multipart(
-			HW_URL).header("Authorization", TestDataProvider.GUEST_TOKEN);
+			HW_URL).header("Authorization", GUEST_TOKEN);
 		images.forEach(multipartRequest::file);
 		multipartRequest.file(payloadPart);
 		// When
@@ -90,11 +91,10 @@ class HousewarmingPostControllerTest {
 	void delete_hwpost_with_proper_authorization() throws Exception {
 
 		// Given
-		var userToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWVzdEBnbWFpbC5jb20iLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE2NTYzMTU3NDQsImV4cCI6MTY1ODA0Mzc0NH0.SN55dE55PSha8BpAFP_J6zd113Tnnk2eDF1Ni2Gd53U";
 		var post = fixtureProvider.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest"));
 		var postId = post.getId();
 		// When
-		var result = mockMvc.perform(delete(HW_URL + "/" + postId).header("Authorization", userToken));
+		var result = mockMvc.perform(delete(HW_URL + "/" + postId).header("Authorization", GUEST_TOKEN));
 
 		// Then
 		assertThat(postRepository.findById(postId)).isEmpty();
@@ -109,12 +109,11 @@ class HousewarmingPostControllerTest {
 
 		// Given
 		fixtureProvider.insertGuestUser("guest");
-		var userToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWVzdEBnbWFpbC5jb20iLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE2NTYzMTU3NDQsImV4cCI6MTY1ODA0Mzc0NH0.SN55dE55PSha8BpAFP_J6zd113Tnnk2eDF1Ni2Gd53U";
 		var savedPost = fixtureProvider
 			.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest2"));
 		var postId = savedPost.getId();
 		// When
-		var result = mockMvc.perform(delete(HW_URL + "/" + postId).header("Authorization", userToken));
+		var result = mockMvc.perform(delete(HW_URL + "/" + postId).header("Authorization", GUEST_TOKEN));
 
 		// Then
 		assertThat(postRepository.findById(postId)).isNotEmpty();

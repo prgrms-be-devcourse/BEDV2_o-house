@@ -96,4 +96,22 @@ class HousewarmingPostServiceImplTest {
 		}).isInstanceOf(UnauthorizedContentAccessException.class);
 
 	}
+
+	@Test
+	@DisplayName("postId를 통해 저장된 집들이 정보를 가져온다.")
+	void query_persisted_housewarming_post_by_post_id() {
+
+		// Given
+		var author = fixtureProvider.insertGuestUser("guest");
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author);
+
+		// When
+		var queriedPostResult = housewarmingPostServiceImpl.getSinglePost(savedPost.getId());
+
+		// Then
+		assertThat(queriedPostResult.getPostId()).isEqualTo(savedPost.getId());
+		assertThat(queriedPostResult.getContent()).isEqualTo(savedPost.getContent());
+
+	}
+
 }
