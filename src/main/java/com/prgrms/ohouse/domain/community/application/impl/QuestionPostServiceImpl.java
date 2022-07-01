@@ -32,7 +32,7 @@ public class QuestionPostServiceImpl implements QuestionPostService {
 	@Override
 	public Long editQuestionPost(QuestionPostUpdateCommand command) {
 		QuestionPost savedPost = questionPostRepository.findById(command.getId()).orElseThrow();
-		fileManager.delete(savedPost.getQuestionImages());
+		fileManager.delete(savedPost.getQuestionImages(), savedPost);
 		fileManager.store(command.getMultipartFiles(), savedPost);
 
 		savedPost.apply(command.getContents());

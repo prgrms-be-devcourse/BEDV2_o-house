@@ -52,17 +52,18 @@ public class MultipartFileManager implements FileManager {
 	}
 
 	@Override
-	public <T extends StoredFile> void delete(List<T> files) {
-		for (T file : files) {
-			delete(file);
+	public <T1 extends StoredFile, T2 extends ImageAttachable> void delete(List<T1> files, T2 attached) {
+		for (T1 file : files) {
+			fileRepository.delete(file);
 		}
+		attached.removeCurrentImage();
 	}
 
 	@Override
-	public <T extends StoredFile> void delete(T file) {
+	public <T1 extends StoredFile, T2 extends ImageAttachable> void delete(T1 file, T2 attached) {
+		attached.removeCurrentImage();
 		fileRepository.delete(file);
 	}
-
 
 	private String generateFileNameOf(String originalFilename) {
 		String uuid = UUID.randomUUID().toString();
