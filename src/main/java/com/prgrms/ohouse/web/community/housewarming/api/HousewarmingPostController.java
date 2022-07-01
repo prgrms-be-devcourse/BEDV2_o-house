@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.prgrms.ohouse.domain.common.security.AuthUtils;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
-import com.prgrms.ohouse.web.requests.HousewarmingPostCreateRequest;
+import com.prgrms.ohouse.web.commerce.requests.HousewarmingPostCreateRequest;
 import com.prgrms.ohouse.web.user.results.ErrorCode;
 import com.prgrms.ohouse.web.user.results.ErrorResult;
 

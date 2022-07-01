@@ -36,8 +36,8 @@ import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
+import com.prgrms.ohouse.web.commerce.requests.ReviewCreateRequest;
 import com.prgrms.ohouse.web.commerce.results.ReviewCreateResult;
-import com.prgrms.ohouse.web.requests.ReviewCreateRequest;
 
 @SpringBootTest(properties = "spring.profiles.active:test")
 @AutoConfigureMockMvc

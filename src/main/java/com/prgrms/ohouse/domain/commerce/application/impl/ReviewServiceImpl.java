@@ -92,7 +92,6 @@ public class ReviewServiceImpl implements ReviewService {
 			.orElseThrow(() -> new ReviewUpdateFailException("invalid review id"));
 		if (command.isPhotoReview()) {
 			try {
-				fileManager.delete();
 				fileManager.store(command.getReviewImage(), review);
 			} catch (FileIOException e) {
 				throw new ReviewUpdateFailException(e.getMessage(), e);

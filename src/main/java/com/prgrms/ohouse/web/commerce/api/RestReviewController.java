@@ -19,9 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.commerce.application.ReviewService;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
+import com.prgrms.ohouse.web.commerce.requests.ReviewCreateRequest;
 import com.prgrms.ohouse.web.commerce.results.ReviewCreateResult;
 import com.prgrms.ohouse.web.commerce.results.ReviewDeleteResult;
-import com.prgrms.ohouse.web.requests.ReviewCreateRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.community.application.QuestionPostService;
 import com.prgrms.ohouse.domain.community.application.command.QuestionPostRegisterCommand;
-import com.prgrms.ohouse.web.requests.QuestionPostCreateRequest;
+import com.prgrms.ohouse.web.commerce.requests.QuestionPostCreateRequest;
 
 import lombok.RequiredArgsConstructor;
 

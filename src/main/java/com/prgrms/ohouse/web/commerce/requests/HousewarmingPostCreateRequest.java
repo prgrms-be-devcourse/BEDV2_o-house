@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.requests;
+package com.prgrms.ohouse.web.commerce.requests;
 
 import java.util.Collections;
 import java.util.List;
