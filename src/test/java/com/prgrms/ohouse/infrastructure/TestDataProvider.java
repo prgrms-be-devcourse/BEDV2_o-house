@@ -34,6 +34,7 @@ import com.prgrms.ohouse.domain.user.model.UserRepository;
 @Component
 @Transactional
 public class TestDataProvider {
+	public static final String GUEST_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWVzdEBnbWFpbC5jb20iLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE2NTYzMTU3NDQsImV4cCI6MTY1ODA0Mzc0NH0.SN55dE55PSha8BpAFP_J6zd113Tnnk2eDF1Ni2Gd53U";
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired

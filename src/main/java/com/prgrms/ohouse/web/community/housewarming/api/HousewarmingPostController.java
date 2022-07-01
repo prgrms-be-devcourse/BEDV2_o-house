@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.common.security.AuthUtils;
+import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.web.requests.HousewarmingPostCreateRequest;
@@ -44,8 +46,8 @@ public class HousewarmingPostController {
 	public ResponseEntity<String> handleCreatePostRequest(
 		@RequestPart("payload") @Valid HousewarmingPostCreateRequest payload,
 		@RequestPart("image") List<MultipartFile> images) {
-
-		Long postId = postService.createPost(payload.toCommand(), images);
+		Long userId = AuthUtils.getAuthUser().getId();
+		Long postId = postService.createPost(userId, payload.toCommand(), images);
 
 		return ResponseEntity.created(URI.create(host + "api/v0/hwpost/" + postId)).body("post creation success");
 	}
@@ -55,6 +57,14 @@ public class HousewarmingPostController {
 		var user = AuthUtils.getAuthUser();
 		postService.deletePost(user.getId(), postId);
 		return ResponseEntity.ok("delete success");
+	}
+
+	@GetMapping("/{postId}")
+	public ResponseEntity<HousewarmingPostInfoResult> handleGetSinglePostRequest(@PathVariable Long postId) {
+		var housewarmingInfoResult = postService.getSinglePost(postId);
+		postService.updateViews(postId);
+		housewarmingInfoResult.incrementViewCount();
+		return ResponseEntity.ok(housewarmingInfoResult);
 	}
 
 	@ExceptionHandler(UnauthorizedContentAccessException.class)
