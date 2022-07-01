@@ -1,11 +1,8 @@
 package com.prgrms.ohouse.web.commerce.results;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter(AccessLevel.PRIVATE)
+@Data
 public class ReviewCreateResult {
 	private String message;
 	private Long id;

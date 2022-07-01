@@ -7,19 +7,16 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.Getter;
 
 @Getter
-public class ReviewRegisterCommand {
-	private final Long productId;
-	private final Long userId;
+public class ReviewUpdateCommand {
+	private final Long id;
 	private final int reviewPoint;
 	private final String contents;
 	private MultipartFile reviewImage;
 
-	public ReviewRegisterCommand(Long productId, Long userId, int reviewPoint, String contents,
-		MultipartFile reviewImage) {
+	public ReviewUpdateCommand(Long id, int reviewPoint, String contents, MultipartFile reviewImage) {
 		checkArgument(reviewPoint > 0 && reviewPoint <= 5, "invalid review point range");
 		checkArgument(contents.length() >= 20, "too short contents for review");
-		this.productId = productId;
-		this.userId = userId;
+		this.id = id;
 		this.reviewPoint = reviewPoint;
 		this.contents = contents;
 		if (reviewImage != null) {
@@ -28,6 +25,6 @@ public class ReviewRegisterCommand {
 	}
 
 	public boolean isPhotoReview() {
-		return this.reviewImage != null;
+		return reviewImage != null;
 	}
 }

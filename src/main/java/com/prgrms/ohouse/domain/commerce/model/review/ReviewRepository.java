@@ -16,4 +16,6 @@ public interface ReviewRepository {
 
 	Page<Review> findByProductAndReviewType(Product product, ReviewType type, Pageable pageable);
 
+	void delete(Review review);
+
 }

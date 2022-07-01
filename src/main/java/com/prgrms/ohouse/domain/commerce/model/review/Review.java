@@ -59,6 +59,11 @@ public class Review implements ImageAttachable {
 		this.helpPoint += value;
 	}
 
+	public void modifyReview(int reviewPoint, String contents) {
+		setReviewPoint(reviewPoint);
+		setContents(contents);
+	}
+
 	private void validReviewPoint(int reviewPoint) {
 		checkArgument(reviewPoint >= 1 && reviewPoint <= 5, "invalid review point range");
 	}
