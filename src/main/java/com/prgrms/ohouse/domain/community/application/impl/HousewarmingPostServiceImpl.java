@@ -54,8 +54,6 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	@Override
 	public HousewarmingPostInfoResult getSinglePost(Long postId) {
 		HousewarmingPost post = housewarmingPostRepository.findById(postId).orElseThrow();
-		// 성공적으로 가져왔을 경우 조회수를 1 증가시킨다.
-		// 트랜잭션이 성공적으로 끝나고 해도 되지 않나? -> 컨트롤러에서 끝내는 케이스
 		return HousewarmingPostInfoResult.from(post);
 	}
 

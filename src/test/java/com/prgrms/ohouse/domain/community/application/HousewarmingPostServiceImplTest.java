@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Collections;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,9 @@ class HousewarmingPostServiceImplTest {
 
 	@Autowired
 	private TestDataProvider fixtureProvider;
+
+	@PersistenceContext
+	private EntityManager em;
 
 	@Test
 	@DisplayName("post 생성 요청을 받아서 post를 생성하고 영속화한다.")
@@ -125,9 +131,12 @@ class HousewarmingPostServiceImplTest {
 
 		// When
 		housewarmingPostServiceImpl.updateViews(savedPost.getId());
+		em.flush();
+		em.clear();
 
 		// Then
-		assertThat(housewarmingPostRepository.findById(savedPost.getId()).orElseThrow().getVisitCount()).isEqualTo(1);
+		var updatedPost = housewarmingPostRepository.findById(savedPost.getId()).orElseThrow();
+		assertThat(updatedPost.getVisitCount()).isEqualTo(1);
 
 	}
 
