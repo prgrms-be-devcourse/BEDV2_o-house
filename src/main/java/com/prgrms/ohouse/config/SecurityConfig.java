@@ -1,11 +1,9 @@
 package com.prgrms.ohouse.config;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,6 +14,9 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import com.prgrms.ohouse.domain.common.security.JwtAuthenticationFilter;
 import com.prgrms.ohouse.domain.common.security.JwtTokenProvider;
 import com.prgrms.ohouse.domain.common.security.TokenProvideService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @EnableWebSecurity
@@ -42,9 +43,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.authorizeRequests()
+			.antMatchers("/h2-console/**").permitAll()
 			.anyRequest().permitAll()
 			.and()
 			.addFilterAfter(new JwtAuthenticationFilter(jwtTokenProvider), SecurityContextPersistenceFilter.class)
 		;
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/h2-console/**");
 	}
 }

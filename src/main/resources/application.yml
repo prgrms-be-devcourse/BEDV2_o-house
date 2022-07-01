@@ -22,6 +22,11 @@ spring:
       max-request-size: 10MB
   profiles:
     active: aws
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
 
 jwt:
   headerName: Authorization
