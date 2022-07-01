@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.common.file.FileManager;
+import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
@@ -39,7 +41,6 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 		post = housewarmingPostRepository.save(post);
 		post.validateContent(images.size());
 		fileManager.store(images, post);
-		housewarmingPostRepository.save(post);
 		return post.getId();
 	}
 
@@ -48,6 +49,17 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	public void deletePost(Long authorId, Long postId) {
 		HousewarmingPost authorizedPost = getAuthorizedPost(authorId, postId);
 		housewarmingPostRepository.delete(authorizedPost);
+	}
+
+	@Override
+	public HousewarmingPostInfoResult getSinglePost(Long postId) {
+		HousewarmingPost post = housewarmingPostRepository.findById(postId).orElseThrow();
+		return HousewarmingPostInfoResult.from(post);
+	}
+
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+	public void updateViews(Long postId) {
+		housewarmingPostRepository.incrementViewCount(postId);
 	}
 
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {
