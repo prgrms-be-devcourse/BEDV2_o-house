@@ -15,7 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.community.application.QuestionPostService;
 import com.prgrms.ohouse.domain.community.application.command.QuestionPostRegisterCommand;
-import com.prgrms.ohouse.web.commerce.requests.QuestionPostCreateRequest;
+import com.prgrms.ohouse.web.requests.QuestionPostCreateRequest;
+
+import com.prgrms.ohouse.domain.community.application.command.QuestionPostUpdateCommand;
+import com.prgrms.ohouse.web.requests.QuestionPostUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +38,16 @@ public class RestQuestionPostControllerV0 {
 		return ResponseEntity
 			.created(URI.create("/api/v0/questions/" + questionPostId))
 			.build();
+	}
+
+	@PostMapping(value = "/api/v0/questions/{id}",
+		consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity editQuestionPost(@RequestPart QuestionPostUpdateRequest request,
+		@RequestPart List<MultipartFile> file, @PathVariable("id") Long questionPostId) {
+		questionPostService.editQuestionPost(
+			new QuestionPostUpdateCommand(request.getId(), request.getContent(), file));
+		return ResponseEntity
+			.ok(URI.create("/api/v0/questions/" + questionPostId));
 	}
 
 	@DeleteMapping("/api/v0/questions/{id}")

@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @Component
 @RequiredArgsConstructor
 public class MultipartFileManager implements FileManager {
@@ -44,6 +46,19 @@ public class MultipartFileManager implements FileManager {
 
 		return savedFile;
 	}
+
+	@Override
+	public <T extends StoredFile> void delete(List<T> files) {
+		for (T file : files) {
+			delete(file);
+		}
+	}
+
+	@Override
+	public <T extends StoredFile> void delete(T file) {
+		fileRepository.delete(file);
+	}
+
 
 	private String generateFileNameOf(String originalFilename) {
 		String uuid = UUID.randomUUID().toString();
