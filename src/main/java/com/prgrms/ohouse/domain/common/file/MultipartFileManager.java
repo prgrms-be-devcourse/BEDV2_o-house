@@ -24,6 +24,10 @@ public class MultipartFileManager implements FileManager {
 
 	@Override
 	public <T extends ImageAttachable> List<StoredFile> store(List<MultipartFile> multipartFiles, T attached) {
+		if (multipartFiles == null || multipartFiles.isEmpty()) {
+			return null;
+		}
+
 		//TODO: 파일 최대 첨부 가능 수에 기반하여 ArrayList의 크기 설정하기
 		List<StoredFile> storedFiles = new ArrayList<>();
 		for (MultipartFile multipartFile : multipartFiles) {

@@ -70,9 +70,8 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 		return image;
 	}
 
-	public QuestionPost apply(QuestionPost questionPost) {
-		this.content = questionPost.getContent();
-		this.questionImages = questionPost.getQuestionImages();
+	public QuestionPost apply(String content) {
+		this.content = content;
 		return this;
 	}
 }

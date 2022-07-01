@@ -35,7 +35,7 @@ public class QuestionPostServiceImpl implements QuestionPostService {
 		fileManager.delete(savedPost.getQuestionImages());
 		fileManager.store(command.getMultipartFiles(), savedPost);
 
-		savedPost = command.apply(savedPost);
+		savedPost.apply(command.getContents());
 		return savedPost.getId();
 	}
 
