@@ -1,7 +1,9 @@
 package com.prgrms.ohouse.infrastructure;
 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,6 +25,13 @@ import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewImage;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
+import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
+import com.prgrms.ohouse.domain.community.model.housewarming.Family;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
+import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
+import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
@@ -30,6 +39,7 @@ import com.prgrms.ohouse.domain.user.model.UserRepository;
 @Component
 @Transactional
 public class TestDataProvider {
+	public static final String GUEST_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWVzdEBnbWFpbC5jb20iLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE2NTYzMTU3NDQsImV4cCI6MTY1ODA0Mzc0NH0.SN55dE55PSha8BpAFP_J6zd113Tnnk2eDF1Ni2Gd53U";
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -40,6 +50,8 @@ public class TestDataProvider {
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private AttributeRepository attributeRepository;
+	@Autowired
+	private HousewarmingPostRepository housewarmingPostRepository;
 
 	public User insertUser() {
 		User user = User.builder()
@@ -118,5 +130,32 @@ public class TestDataProvider {
 			result.add(reviewRepository.save(review));
 		}
 		return result;
+	}
+
+	public User insertGuestUser(String nickname) {
+		User user = User.builder()
+			.email(nickname + "@gmail.com")
+			.nickname(nickname)
+			.password(nickname)
+			.followerCount(0)
+			.defaultAddress(new Address())
+			.build();
+		return userRepository.save(user);
+	}
+
+	public HousewarmingPost insertHousewarmingPostWithAuthor(User author) {
+		return housewarmingPostRepository.save(
+			HousewarmingPost.builder()
+				.title("제목1")
+				.content("내용1{{image}}내용2{{image}}내용3{{image}}")
+				.housingType(HousingType.APARTMENT)
+				.area(2L)
+				.budget(new Budget(100L, 150L))
+				.family(new Family("SINGLE", null, null))
+				.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
+				.links(Collections.emptyList())
+				.user(author)
+				.build()
+		);
 	}
 }

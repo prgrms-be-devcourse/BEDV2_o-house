@@ -35,4 +35,3 @@ file:
   dir: src/test/resources/static/
 app:
   host: http://localhost:8080/
-
