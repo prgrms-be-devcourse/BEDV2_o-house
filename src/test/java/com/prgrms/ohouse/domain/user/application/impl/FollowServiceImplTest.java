@@ -1,13 +1,16 @@
 package com.prgrms.ohouse.domain.user.application.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,10 +60,10 @@ class FollowServiceImplTest {
 
 		Optional<Follow> follow = followRepository.findByFromUserAndToUser(from, to);
 		Optional<User> findByFromUser = userRepository.findById(from.getId());
-		Optional<User> findBytoUser = userRepository.findById(to.getId());
+		Optional<User> findByToUser = userRepository.findById(to.getId());
 
 		assertThat(findByFromUser.get().getFollowingCount(), is(1));
-		assertThat(findBytoUser.get().getFollowerCount(), is(1));
+		assertThat(findByToUser.get().getFollowerCount(), is(1));
 		assertThat(follow.isPresent(), is(true));
 	}
 
@@ -77,5 +80,40 @@ class FollowServiceImplTest {
 		assertThat(findByToUser.get().getFollowerCount(), is(0));
 		assertThat(follow.isPresent(), is(false));
 
+	}
+
+	@Test
+	@DisplayName("카운트 동시성 테스트")
+	void addCountsTest() throws InterruptedException {
+
+		int count =20;
+		ExecutorService service = Executors.newFixedThreadPool(count);
+		ArrayList<User> followedUserList = new ArrayList<>();
+		for (int i = 0; i < count; i++) {
+			User user = User.builder()
+				.nickname("user" + i)
+				.email("user" + i + "@gmail.com")
+				.password("testPassword12")
+				.build();
+			userRepository.save(user);
+			followedUserList.add(user);
+		}
+
+		System.out.println("Thread start=========");
+		for (int i = 0; i < count; i++) {
+			int index = i;
+			service.execute(() -> {
+				try {
+					followService.followUser(from.getId(), followedUserList.get(index).getId());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+		}
+
+		Thread.sleep(1000);
+		User findUser = userRepository.findById(from.getId()).get();
+		System.out.println("Thread end =======");
+		assertThat(findUser.getFollowingCount(), is(count));
 	}
 }

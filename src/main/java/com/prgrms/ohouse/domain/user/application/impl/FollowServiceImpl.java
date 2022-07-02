@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.prgrms.ohouse.domain.user.application.FollowService;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
+import com.prgrms.ohouse.domain.user.model.exception.FollowFailedException;
+import com.prgrms.ohouse.domain.user.model.exception.UnFollowFailedException;
 import com.prgrms.ohouse.domain.user.model.exception.UserNotFoundException;
 import com.prgrms.ohouse.domain.user.model.follow.Follow;
 import com.prgrms.ohouse.domain.user.model.follow.FollowRepository;
@@ -29,7 +31,12 @@ public class FollowServiceImpl implements FollowService {
 		User toUser = userRepository.findById(toUserId)
 			.orElseThrow(() -> new UserNotFoundException("User to follow not found. Try Again."));
 
+		if (fromUser.equals(toUser)) {
+			throw new FollowFailedException("Cannot follow myself.");
+		}
 		followRepository.save(Follow.create(fromUser, toUser));
+		userRepository.addFollowingCount(fromUser);
+		userRepository.addFollowerCount(toUser);
 	}
 
 	@Transactional
@@ -41,10 +48,11 @@ public class FollowServiceImpl implements FollowService {
 			.orElseThrow(() -> new UserNotFoundException("User to unfollow not found. Try Again."));
 
 		Optional<Follow> findFollow = followRepository.findByFromUserAndToUser(fromUser, toUser);
-		if (findFollow.isPresent()) {
-			followRepository.delete(findFollow.get());
+		if (!findFollow.isPresent() || fromUser.equals(toUser)) {
+			throw new UnFollowFailedException("Cannot Unfollow.");
 		}
-
+		followRepository.delete(findFollow.get());
+		userRepository.subFollowingCount(fromUser);
+		userRepository.subFollowerCount(toUser);
 	}
-
 }

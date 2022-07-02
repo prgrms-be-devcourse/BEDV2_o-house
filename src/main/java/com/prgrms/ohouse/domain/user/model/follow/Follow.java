@@ -16,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@EntityListeners(UnFollowListener.class)
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,15 +38,5 @@ public class Follow {
 		follow.setFromUser(fromUser);
 		follow.setToUser(toUser);
 		return follow;
-	}
-
-	private void setFromUser(User fromUser) {
-		this.fromUser = fromUser;
-		fromUser.addFollowing();
-	}
-
-	private void setToUser(User toUser) {
-		this.toUser = toUser;
-		toUser.addFollower();
 	}
 }
