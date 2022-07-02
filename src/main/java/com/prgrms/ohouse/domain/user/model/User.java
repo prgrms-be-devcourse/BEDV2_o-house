@@ -167,4 +167,9 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 		setImage(userImage);
 		return userImage;
 	}
+
+	@Override
+	public void removeCurrentImage() {
+		this.image = null;
+	}
 }
