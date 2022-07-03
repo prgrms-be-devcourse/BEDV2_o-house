@@ -81,12 +81,13 @@ class UserRestControllerTest {
 			.andExpect(status().isOk());
 	}
 
+	//TODO genderType 수정
 	@Test
 	@WithMockCustomUser
 	@DisplayName("개인정보 업데이트 테스트(이미지 x)")
 	void updateUserInformationTest() throws Exception {
 
-		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "F", "http://github.com",
+		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "FEMALE", "http://github.com",
 			LocalDate.now(), null);
 		String body = objectMapper.writeValueAsString(updateRequest);
 		MockMultipartFile jsonRequest = new MockMultipartFile("request", "updateRequest", "application/json",
@@ -115,7 +116,7 @@ class UserRestControllerTest {
 	@DisplayName("개인정보 업데이트 테스트(이미지 o)")
 	void updateUserInformationWithImageTest() throws Exception {
 
-		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "F", "http://github.com",
+		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "FEMALE", "http://github.com",
 			LocalDate.now(), null);
 		String body = objectMapper.writeValueAsString(updateRequest);
 		MockMultipartFile jsonRequest = new MockMultipartFile(

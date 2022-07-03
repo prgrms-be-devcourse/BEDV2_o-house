@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
 import com.prgrms.ohouse.domain.user.model.follow.Follow;
@@ -86,14 +88,16 @@ class FollowServiceImplTest {
 	@DisplayName("카운트 동시성 테스트")
 	void addCountsTest() throws InterruptedException {
 
-		int count =20;
+		int count =15;
 		ExecutorService service = Executors.newFixedThreadPool(count);
+		CountDownLatch latch = new CountDownLatch(count);
 		ArrayList<User> followedUserList = new ArrayList<>();
 		for (int i = 0; i < count; i++) {
 			User user = User.builder()
 				.nickname("user" + i)
 				.email("user" + i + "@gmail.com")
 				.password("testPassword12")
+				.defaultAddress(new Address())
 				.build();
 			userRepository.save(user);
 			followedUserList.add(user);
@@ -105,13 +109,15 @@ class FollowServiceImplTest {
 			service.execute(() -> {
 				try {
 					followService.followUser(from.getId(), followedUserList.get(index).getId());
+					latch.countDown();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			});
 		}
 
-		Thread.sleep(1000);
+		latch.await();
+		service.shutdown();
 		User findUser = userRepository.findById(from.getId()).get();
 		System.out.println("Thread end =======");
 		assertThat(findUser.getFollowingCount(), is(count));
