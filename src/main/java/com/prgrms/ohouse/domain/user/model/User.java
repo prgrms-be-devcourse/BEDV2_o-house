@@ -2,21 +2,12 @@ package com.prgrms.ohouse.domain.user.model;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import org.hibernate.validator.constraints.URL;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,17 +15,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.prgrms.ohouse.domain.commerce.model.cart.Cart;
+import javax.persistence.*;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
-import com.prgrms.ohouse.domain.common.file.UserImage;
-
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.prgrms.ohouse.domain.commerce.model.cart.Cart;
 
 @Getter
 @Setter(value = AccessLevel.PRIVATE)
@@ -80,7 +70,8 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	@Column(name = "follower_count")
 	private int followerCount = 0;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cart_id", referencedColumnName = "id")
 	private Cart cart;
 
 	@Embedded
@@ -143,6 +134,10 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+
+	public Optional<UserImage> getImage() {
+		return Optional.ofNullable(this.image);
 	}
 
 	@Override

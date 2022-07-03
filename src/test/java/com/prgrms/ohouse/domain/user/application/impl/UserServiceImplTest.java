@@ -80,7 +80,7 @@ class UserServiceImplTest {
 		User user = userService.login(loginCommand);
 
 	    //when
-		User updatedUser = userService.updateUser(user, command);
+		User updatedUser = userService.updateUser(user.getId(), command);
 
 	    //then
 		User findUser = userRepository.findByEmail(loginCommand.getEmail()).get();
