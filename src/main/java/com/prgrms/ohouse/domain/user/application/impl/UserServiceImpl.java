@@ -62,12 +62,14 @@ public class UserServiceImpl implements UserService {
 			throw new DuplicateNicknameException("Duplicate Nickname. -> " + command.getNickname());
 		}
 
+		if (updatedUser.getImage().isPresent()) {
+			fileManager.delete(updatedUser.getImage().get(), updatedUser);
+		}
 		if (!command.getImage().isEmpty()) {
 			fileManager.store(command.getImage(), updatedUser);
 		}
 		updatedUser.update(command.getNickname(), command.getGender(), command.getPersonalUrl(),
 			command.getBirth(), command.getIntroductions());
-
 		return updatedUser;
 	}
 }

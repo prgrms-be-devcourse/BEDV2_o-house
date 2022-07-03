@@ -20,6 +20,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
@@ -133,6 +134,10 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+
+	public Optional<UserImage> getImage() {
+		return Optional.ofNullable(this.image);
 	}
 
 	@Override

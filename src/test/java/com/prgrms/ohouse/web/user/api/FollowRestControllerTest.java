@@ -8,30 +8,40 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.prgrms.ohouse.config.WithMockCustomUser;
-import com.prgrms.ohouse.domain.common.security.AuthUtils;
+import com.prgrms.ohouse.domain.common.security.AuthUtility;
 import com.prgrms.ohouse.domain.user.application.FollowService;
+import com.prgrms.ohouse.domain.user.model.User;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 class FollowRestControllerTest {
 
-	@Mock
+	@MockBean
 	private FollowService followService;
+	@MockBean
+	private AuthUtility authUtility;
 
-	@InjectMocks
+	@Autowired
 	private FollowRestController followRestController;
 
 	private MockMvc mockMvc;
 	private Long userId = 1L;
+	Long authUserId = 10L;
+
+	User user = spy(
+		User.builder()
+		.nickname("guest")
+		.email("guest@gmail.com")
+		.password("guestPassword12").build()
+	);
 
 	@BeforeEach
 	void setup() {
@@ -40,22 +50,25 @@ class FollowRestControllerTest {
 			.setControllerAdvice(FollowApiExceptionHandler.class)
 			.alwaysDo(print())
 			.build();
+
+		when(authUtility.getAuthUser()).thenReturn(user);
+		when(user.getId()).thenReturn(Long.valueOf(authUserId));
 	}
 
 	@Test
-	@WithMockCustomUser
 	void followTest() throws Exception {
+		doNothing().when(followService).followUser(authUserId, userId);
 
-		doNothing().when(followService).followUser(AuthUtils.getAuthUser().getId(), userId);
 		mockMvc.perform(post("/api/v0/user/{userId}/follow", userId))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("User Follow Success")));
 	}
 
 	@Test
-	@WithMockCustomUser
 	void unfollowTest() throws Exception {
-		doNothing().when(followService).unfollowUser(AuthUtils.getAuthUser().getId(), userId);
+
+		doNothing().when(followService).unfollowUser(authUserId, userId);
+
 		mockMvc.perform(delete("/api/v0/user/{userId}/follow", userId))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("User Unfollow Success")));

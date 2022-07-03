@@ -12,11 +12,11 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.prgrms.ohouse.config.WithMockCustomUser;
-import com.prgrms.ohouse.domain.common.security.AuthUtils;
+import com.prgrms.ohouse.domain.common.security.AuthUtility;
 import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.model.GenderType;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -36,15 +36,24 @@ import com.prgrms.ohouse.web.user.requests.UserUpdateRequest;
 @AutoConfigureMockMvc
 class UserRestControllerTest {
 
-	@Mock
+	@MockBean
 	private UserService userService;
+	@MockBean
+	private AuthUtility authUtility;
 
-	@InjectMocks
+	@Autowired
 	private UserRestController userRestController;
 
 	private MockMvc mockMvc;
-
 	private ObjectMapper objectMapper = new ObjectMapper();
+	Long authUserId = 10L;
+
+	User user = spy(
+		User.builder()
+			.nickname("guest")
+			.email("guest@gmail.com")
+			.password("guestPassword12").build()
+	);
 
 	UserCreateRequest request = new UserCreateRequest("testUser", "test@gmail.com", "guestPw12");
 
@@ -56,6 +65,9 @@ class UserRestControllerTest {
 			.setControllerAdvice(UserApiExceptionHandler.class)
 			.alwaysDo(print())
 			.build();
+
+		when(authUtility.getAuthUser()).thenReturn(user);
+		when(user.getId()).thenReturn(Long.valueOf(authUserId));
 	}
 
 	@Test
@@ -73,7 +85,6 @@ class UserRestControllerTest {
 	}
 
 	@Test
-	@WithMockCustomUser
 	@DisplayName("개인정보 열람 테스트")
 	void getUserInformationTest() throws Exception {
 
@@ -81,9 +92,7 @@ class UserRestControllerTest {
 			.andExpect(status().isOk());
 	}
 
-	//TODO genderType 수정
 	@Test
-	@WithMockCustomUser
 	@DisplayName("개인정보 업데이트 테스트(이미지 x)")
 	void updateUserInformationTest() throws Exception {
 
@@ -103,7 +112,7 @@ class UserRestControllerTest {
 			.personalUrl(updateRequest.getPersonalUrl())
 			.build();
 
-		when(userService.updateUser(AuthUtils.getAuthUser().getId(), updateRequest.toCommand(null))).thenReturn(updatedUser);
+		when(userService.updateUser(authUserId, updateRequest.toCommand(null))).thenReturn(updatedUser);
 
 		mockMvc.perform(multipart("/api/v0/user")
 				.file(jsonRequest))
@@ -134,7 +143,7 @@ class UserRestControllerTest {
 			.personalUrl(updateRequest.getPersonalUrl())
 			.build();
 
-		when(userService.updateUser(AuthUtils.getAuthUser().getId(), updateRequest.toCommand(fileRequest)))
+		when(userService.updateUser(authUserId, updateRequest.toCommand(fileRequest)))
 			.thenReturn(updatedUser);
 
 		mockMvc.perform(multipart("/api/v0/user")

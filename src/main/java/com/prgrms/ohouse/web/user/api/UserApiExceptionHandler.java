@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.prgrms.ohouse.domain.user.model.exception.DuplicateEmailException;
 import com.prgrms.ohouse.domain.user.model.exception.DuplicateNicknameException;
 import com.prgrms.ohouse.domain.user.model.exception.FailedLoginException;
+import com.prgrms.ohouse.domain.user.model.exception.UserNotFoundException;
 import com.prgrms.ohouse.web.user.results.ErrorCode;
 import com.prgrms.ohouse.web.user.results.ErrorResult;
 
@@ -43,5 +44,12 @@ public class UserApiExceptionHandler {
 		log.warn(e.getMessage(), e);
 		ErrorResult body = ErrorResult.build(ErrorCode.FAILED_LOGIN);
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ErrorResult> handleUserNotFound(UserNotFoundException e) {
+		log.warn(e.getMessage(), e);
+		ErrorResult body = ErrorResult.build(ErrorCode.INTERNAL_ERROR);
+		return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
