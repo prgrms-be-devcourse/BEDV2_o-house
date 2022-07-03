@@ -145,6 +145,18 @@ public class TestDataProvider {
 		return result;
 	}
 
+	public List<Review> insert40NormalReviewWithUser(User user) {
+		Product product = insertProduct();
+		userRepository.save(user);
+		List<Review> result = new ArrayList<>();
+		for (int i = 0; i < 40; i++) {
+			Review review = Review.createReview(product, user, 4,
+				i + "content content content content content content");
+			result.add(reviewRepository.save(review));
+		}
+		return result;
+	}
+
 	public User insertGuestUser(String nickname) {
 		User user = User.builder()
 			.email(nickname + "@gmail.com")

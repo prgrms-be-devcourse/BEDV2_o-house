@@ -72,6 +72,14 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
+	public PagedReviewInformation loadMyAllReviews(Pageable pageable) {
+		User authUser = authUtility.getAuthUser();
+		Page<Review> reviewPage = reviewRepository.findByUser(authUser, pageable);
+		PageInformation pageInformation = PageInformation.createNewPageInformation(reviewPage);
+		return PagedReviewInformation.of(pageInformation, reviewPage.getContent());
+	}
+
+	@Override
 	public PagedPhotoReviewInformation loadOnlyPhotoReviews(Pageable pageable, Long productId) {
 		Product product = productRepository.findById(productId)
 			.orElseThrow(() -> new ReviewInquiryFailException(INVALID_PRODUCT_MESSAGE));

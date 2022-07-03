@@ -177,4 +177,25 @@ class ReviewServiceImplTest {
 		assertThrows(AccessDeniedException.class, () -> reviewService.deleteReview(review.getId()));
 	}
 
+	@DisplayName("리뷰 작성자는 자신이 작성한 모든 리뷰를 확인할 수 있다.")
+	@Test
+	@WithMockCustomUser
+	void testMyReviews() {
+		User user = authUtility.getAuthUser();
+		dataProvider.insert40NormalReviewWithUser(user);
+		Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createdAt");
+
+		PagedReviewInformation pagedReviewInformation = reviewService.loadMyAllReviews(pageable);
+
+		PageInformation page = pagedReviewInformation.getPageInformation();
+		List<ReviewInformation> reviews = pagedReviewInformation.getReviews();
+		for (ReviewInformation review : reviews) {
+			assertThat(review.getUser().getUsername()).isEqualTo(user.getUsername());
+		}
+		assertThat(page.getTotalPages()).isEqualTo(4);
+		assertThat(page.getPageSize()).isEqualTo(10);
+		assertThat(page.getTotalElements()).isEqualTo(40);
+		assertThat(page.getNumberOfElements()).isEqualTo(10);
+	}
+
 }

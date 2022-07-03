@@ -18,4 +18,6 @@ public interface ReviewService {
 	void deleteReview(Long reviewId);
 
 	void updateReview(ReviewUpdateCommand command);
+
+	PagedReviewInformation loadMyAllReviews(Pageable pageable);
 }
