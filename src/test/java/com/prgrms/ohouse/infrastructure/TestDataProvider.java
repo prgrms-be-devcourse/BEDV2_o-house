@@ -108,6 +108,16 @@ public class TestDataProvider {
 		return review;
 	}
 
+	public Review insertPhotoReviewWithUser(User user) {
+		userRepository.save(user);
+		Product product = insertProduct();
+		Review review = Review.createReview(product, user, 4, "content content content content content content");
+		review = reviewRepository.save(review);
+		ReviewImage reviewImage = new ReviewImage("testFile", "testUrl", review);
+		review.attach("reviewImage", "src/test/resources/static/");
+		return review;
+	}
+
 	public List<Review> insert40PhotoReview() {
 		Product product = insertProduct();
 		User user = insertUser();

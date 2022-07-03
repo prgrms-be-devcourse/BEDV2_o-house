@@ -15,8 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.ohouse.config.WithMockCustomUser;
 import com.prgrms.ohouse.domain.commerce.application.command.ReviewRegisterCommand;
 import com.prgrms.ohouse.domain.commerce.application.impl.ReviewServiceImpl;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
@@ -27,6 +29,7 @@ import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewInformation;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
+import com.prgrms.ohouse.domain.common.security.AuthUtility;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 import com.prgrms.ohouse.infrastructure.file.LocalFileUploader;
@@ -42,6 +45,8 @@ class ReviewServiceImplTest {
 	private ReviewServiceImpl reviewService;
 	@Autowired
 	private TestDataProvider dataProvider;
+	@Autowired
+	AuthUtility authUtility;
 
 	@AfterEach
 	void deleteAllFile() throws IOException {
@@ -151,14 +156,25 @@ class ReviewServiceImplTest {
 		assertThat(result.getReviews()).hasSize(10);
 	}
 
-	@DisplayName("리뷰를 삭제할 수 있다")
+	@DisplayName("리뷰 작성자는 자신의 리뷰를 삭제할 수 있다")
 	@Test
+	@WithMockCustomUser
 	void testReviewDelete() {
-		Review review = dataProvider.insertPhotoReview();
+		User authUser = authUtility.getAuthUser();
+		Review review = dataProvider.insertPhotoReviewWithUser(authUser);
 
 		reviewService.deleteReview(review.getId());
 
 		assertTrue(reviewRepository.findById(review.getId()).isEmpty());
+	}
+
+	@DisplayName("리뷰 작성자가 아닌 사용자가 리뷰 삭제를 요청할 경우 예외를 발생시킨다")
+	@Test
+	@WithMockCustomUser
+	void testReviewDeleteFail() {
+		Review review = dataProvider.insertPhotoReview();
+
+		assertThrows(AccessDeniedException.class, () -> reviewService.deleteReview(review.getId()));
 	}
 
 }
