@@ -80,4 +80,9 @@ public class Review implements ImageAttachable {
 		this.reviewImage = reviewImage;
 		return reviewImage;
 	}
+
+	@Override
+	public void removeCurrentImage() {
+		this.reviewImage = null;
+	}
 }

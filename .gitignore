@@ -41,3 +41,4 @@ application-aws.yml
 
 ## ETC
 /spy.log
+/src/test/resources/static/*.png

@@ -8,4 +8,6 @@ public interface HousewarmingPostRepository {
 	Optional<HousewarmingPost> findById(Long postId);
 
 	void delete(HousewarmingPost hwPost);
+
+	void incrementViewCount(Long postId);
 }

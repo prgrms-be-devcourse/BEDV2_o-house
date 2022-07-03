@@ -5,11 +5,13 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public final class QuestionPostCreateRequest {
+public final class QuestionPostUpdateRequest {
 
-	public QuestionPostCreateRequest(String content) {
+	public QuestionPostUpdateRequest(Long id, String content) {
+		this.id = id;
 		this.content = content;
 	}
 
+	private Long id;
 	private String content;
 }

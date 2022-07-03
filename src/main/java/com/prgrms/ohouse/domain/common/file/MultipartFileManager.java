@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @Component
 @RequiredArgsConstructor
 public class MultipartFileManager implements FileManager {
@@ -22,6 +24,10 @@ public class MultipartFileManager implements FileManager {
 
 	@Override
 	public <T extends ImageAttachable> List<StoredFile> store(List<MultipartFile> multipartFiles, T attached) {
+		if (multipartFiles == null || multipartFiles.isEmpty()) {
+			return null;
+		}
+
 		//TODO: 파일 최대 첨부 가능 수에 기반하여 ArrayList의 크기 설정하기
 		List<StoredFile> storedFiles = new ArrayList<>();
 		for (MultipartFile multipartFile : multipartFiles) {
@@ -43,6 +49,20 @@ public class MultipartFileManager implements FileManager {
 		StoredFile savedFile = fileRepository.save(attached.attach(originalFilename, fileUrl));
 
 		return savedFile;
+	}
+
+	@Override
+	public <T1 extends StoredFile, T2 extends ImageAttachable> void delete(List<T1> files, T2 attached) {
+		for (T1 file : files) {
+			fileRepository.delete(file);
+		}
+		attached.removeCurrentImage();
+	}
+
+	@Override
+	public <T1 extends StoredFile, T2 extends ImageAttachable> void delete(T1 file, T2 attached) {
+		attached.removeCurrentImage();
+		fileRepository.delete(file);
 	}
 
 	private String generateFileNameOf(String originalFilename) {
