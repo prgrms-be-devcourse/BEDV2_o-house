@@ -1,6 +1,7 @@
 package com.prgrms.ohouse.domain.commerce.application;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -149,4 +150,15 @@ class ReviewServiceImplTest {
 		assertThat(page.getTotalPages()).isEqualTo(4);
 		assertThat(result.getReviews()).hasSize(10);
 	}
+
+	@DisplayName("리뷰를 삭제할 수 있다")
+	@Test
+	void testReviewDelete() {
+		Review review = dataProvider.insertPhotoReview();
+
+		reviewService.deleteReview(review.getId());
+
+		assertTrue(reviewRepository.findById(review.getId()).isEmpty());
+	}
+
 }

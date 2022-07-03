@@ -1,9 +1,8 @@
 package com.prgrms.ohouse.infrastructure;
 
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -99,10 +98,14 @@ public class TestDataProvider {
 		return reviewRepository.save(review);
 	}
 
-	public Review insertPhotoReview(Product product, User user, int reviewPoint, String contents, int helpPoint) {
-		Review review = Review.createReview(product, user, reviewPoint, contents);
-
-		return reviewRepository.save(review);
+	public Review insertPhotoReview() {
+		Product product = insertProduct();
+		User user = insertUser();
+		Review review = Review.createReview(product, user, 4, "content content content content content content");
+		review = reviewRepository.save(review);
+		ReviewImage reviewImage = new ReviewImage("testFile", "testUrl", review);
+		review.attach("reviewImage", "src/test/resources/static/");
+		return review;
 	}
 
 	public List<Review> insert40PhotoReview() {
