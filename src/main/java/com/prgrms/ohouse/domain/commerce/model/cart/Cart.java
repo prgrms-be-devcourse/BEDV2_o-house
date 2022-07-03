@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -29,7 +30,8 @@ public class Cart {
 	private Long id;
 
 	@NotNull
-	@OneToOne(mappedBy = "cart")
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 
 	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
