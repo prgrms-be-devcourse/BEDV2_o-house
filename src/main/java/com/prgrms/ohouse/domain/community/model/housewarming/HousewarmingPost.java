@@ -133,5 +133,9 @@ public class HousewarmingPost implements ImageAttachable {
 		return image;
 	}
 
+	@Override
+	public void removeCurrentImage() {
+		this.images.clear();
+	}
 }
 

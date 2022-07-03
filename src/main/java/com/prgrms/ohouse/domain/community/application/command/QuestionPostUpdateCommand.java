@@ -22,8 +22,4 @@ public final class QuestionPostUpdateCommand {
 		this.contents = contents;
 		this.multipartFiles = multipartFiles;
 	}
-
-	public QuestionPost apply(QuestionPost savedPost) {
-		return savedPost.apply(new QuestionPost(this.id, this.contents, savedPost.getQuestionImages()));
-	}
 }

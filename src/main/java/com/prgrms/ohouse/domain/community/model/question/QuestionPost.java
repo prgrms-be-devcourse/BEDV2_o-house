@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import org.springframework.data.annotation.CreatedBy;
 
 import com.prgrms.ohouse.domain.common.BaseTimeEntity;
-import com.prgrms.ohouse.domain.common.UserAuditorAware;
+import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -47,6 +47,13 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 		this.questionImages = questionImages;
 	}
 
+	public QuestionPost(String content,
+		List<QuestionPostImage> questionImages, User author) {
+		this.content = content;
+		this.questionImages = questionImages;
+		this.author = author;
+	}
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -70,9 +77,13 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 		return image;
 	}
 
-	public QuestionPost apply(QuestionPost questionPost) {
-		this.content = questionPost.getContent();
-		this.questionImages = questionPost.getQuestionImages();
+	@Override
+	public void removeCurrentImage() {
+		this.questionImages.clear();
+	}
+
+	public QuestionPost apply(String content) {
+		this.content = content;
 		return this;
 	}
 }

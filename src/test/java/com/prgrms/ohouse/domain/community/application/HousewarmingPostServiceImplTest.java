@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Collections;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,9 @@ class HousewarmingPostServiceImplTest {
 
 	@Autowired
 	private TestDataProvider fixtureProvider;
+
+	@PersistenceContext
+	private EntityManager em;
 
 	@Test
 	@DisplayName("post 생성 요청을 받아서 post를 생성하고 영속화한다.")
@@ -96,4 +102,42 @@ class HousewarmingPostServiceImplTest {
 		}).isInstanceOf(UnauthorizedContentAccessException.class);
 
 	}
+
+	@Test
+	@DisplayName("postId를 통해 저장된 집들이 정보를 가져온다.")
+	void query_persisted_housewarming_post_by_post_id() {
+
+		// Given
+		var author = fixtureProvider.insertGuestUser("guest");
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author);
+
+		// When
+		var queriedPostResult = housewarmingPostServiceImpl.getSinglePost(savedPost.getId());
+
+		// Then
+		assertThat(queriedPostResult.getPostId()).isEqualTo(savedPost.getId());
+		assertThat(queriedPostResult.getContent()).isEqualTo(savedPost.getContent());
+		assertThat(queriedPostResult.getImages()).isEqualTo(savedPost.getImages());
+
+	}
+
+	@Test
+	@DisplayName("원하는 단일 집들이 게시물의 조회수를 1 증가 시킨다.")
+	void increment_visit_count_by_1() {
+
+		// Given
+		var author = fixtureProvider.insertGuestUser("guest");
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author);
+
+		// When
+		housewarmingPostServiceImpl.updateViews(savedPost.getId());
+		em.flush();
+		em.clear();
+
+		// Then
+		var updatedPost = housewarmingPostRepository.findById(savedPost.getId()).orElseThrow();
+		assertThat(updatedPost.getVisitCount()).isEqualTo(1);
+
+	}
+
 }

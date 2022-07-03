@@ -8,11 +8,13 @@ import javax.persistence.OneToOne;
 import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserImage extends StoredFile{
+public class UserImage extends StoredFile {
 
 	public UserImage(String originalFileName, String url, User user) {
 		super(originalFileName, url);

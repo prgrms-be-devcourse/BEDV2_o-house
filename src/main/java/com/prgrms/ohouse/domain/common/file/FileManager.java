@@ -9,7 +9,7 @@ public interface FileManager {
 
 	<T extends ImageAttachable> StoredFile store(MultipartFile multipartFile, T attached);
 
-	<T extends StoredFile> void delete(List<T> files);
+	<T1 extends StoredFile, T2 extends ImageAttachable> void delete(List<T1> files, T2 attached);
 
-	<T extends StoredFile> void delete(T file);
+	<T1 extends StoredFile, T2 extends ImageAttachable> void delete(T1 file, T2 attached);
 }
