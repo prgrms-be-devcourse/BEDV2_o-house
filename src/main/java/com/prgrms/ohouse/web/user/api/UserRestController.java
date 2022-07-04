@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.prgrms.ohouse.domain.common.security.AuthUtility;
 import com.prgrms.ohouse.domain.common.security.JwtAuthentication;
 import com.prgrms.ohouse.domain.common.security.JwtAuthenticationProvider;
 import com.prgrms.ohouse.domain.common.security.JwtAuthenticationToken;
 import com.prgrms.ohouse.domain.user.application.UserService;
 import com.prgrms.ohouse.domain.user.model.User;
-import com.prgrms.ohouse.domain.common.security.AuthUtils;
 import com.prgrms.ohouse.web.user.requests.UserCreateRequest;
 import com.prgrms.ohouse.web.user.requests.UserLoginRequest;
 import com.prgrms.ohouse.web.user.requests.UserUpdateRequest;
@@ -35,6 +35,7 @@ public class UserRestController {
 
 	private final UserService userService;
 	private final JwtAuthenticationProvider authenticationProvider;
+	private final AuthUtility authUtility;
 
 	@PostMapping("/signup")
 	public ResponseEntity<String> signUp(@RequestBody @Valid UserCreateRequest request, Errors errors) {
@@ -61,7 +62,7 @@ public class UserRestController {
 
 	@GetMapping("/user")
 	public ResponseEntity<UserInfoResult> getUserInformation() {
-		User user = AuthUtils.getAuthUser();
+		User user = authUtility.getAuthUser();
 		return ResponseEntity.ok()
 			.body(UserInfoResult.build(user));
 	}
@@ -73,7 +74,7 @@ public class UserRestController {
 		if (errors.hasErrors()) {
 			throw new IllegalArgumentException();
 		}
-		userService.updateUser(AuthUtils.getAuthUser(), request.toCommand(file));
+		userService.updateUser(authUtility.getAuthUser().getId(), request.toCommand(file));
 		return ResponseEntity.ok()
 			.body("Update succeed.");
 	}

@@ -18,7 +18,7 @@ import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.user.application.commands.UserCreateCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserLoginCommand;
 import com.prgrms.ohouse.domain.user.application.commands.UserUpdateCommand;
-import com.prgrms.ohouse.domain.user.model.GenderType;
+import com.prgrms.ohouse.domain.user.model.Gender;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
 
@@ -75,12 +75,12 @@ class UserServiceImplTest {
 		);
 
 		UserLoginCommand loginCommand = new UserLoginCommand(createCommand.getEmail(), createCommand.getPassword());
-		UserUpdateCommand command = new UserUpdateCommand(createCommand.getNickname(), GenderType.FEMALE,
+		UserUpdateCommand command = new UserUpdateCommand(createCommand.getNickname(), Gender.FEMALE,
 			"http://naver.com", LocalDate.now(), file, null);
 		User user = userService.login(loginCommand);
 
 	    //when
-		User updatedUser = userService.updateUser(user, command);
+		User updatedUser = userService.updateUser(user.getId(), command);
 
 	    //then
 		User findUser = userRepository.findByEmail(loginCommand.getEmail()).get();

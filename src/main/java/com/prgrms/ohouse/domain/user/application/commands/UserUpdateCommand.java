@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.ohouse.domain.user.model.GenderType;
+import com.prgrms.ohouse.domain.user.model.Gender;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class UserUpdateCommand {
 	@NotBlank(message = "닉네임 값은 필수로 입력해야 합니다.")
 	private String nickname;
 
-	private GenderType gender;
+	private Gender gender;
 
 	@Pattern(regexp = "^((http(s?))\\:\\/\\/)([0-9a-zA-Z\\-]+\\.)+[a-zA-Z]{2,6}(\\:[0-9]+)?(\\/\\S*)?$")
 	private String personalUrl;
