@@ -1,8 +1,10 @@
 package com.prgrms.ohouse.domain.community.application;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +26,7 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRep
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
+import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 
 @SpringBootTest
@@ -42,13 +46,16 @@ class HousewarmingPostServiceImplTest {
 	@PersistenceContext
 	private EntityManager em;
 
+	@MockBean
+	private UserAuditorAware userAuditorAware;
+
 	@Test
 	@DisplayName("post 생성 요청을 받아서 post를 생성하고 영속화한다.")
 	void persist_post_entity_to_database() {
 		// TODO: 선택 필드 테스트 케이스
 
 		// Given
-		var user = fixtureProvider.insertGuestUser("guest");
+		var author = fixtureProvider.insertGuestUser("guest");
 		var command = CreateHousewarmingPostCommand.builder()
 			.title("test1")
 			.content("test1content")
@@ -59,14 +66,15 @@ class HousewarmingPostServiceImplTest {
 			.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
 			.links(Collections.emptyList())
 			.build();
+		when(userAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(author));
 
 		// When
-		Long postId = housewarmingPostServiceImpl.createPost(user.getId(), command, Collections.emptyList());
+		Long postId = housewarmingPostServiceImpl.createPost(author.getId(), command, Collections.emptyList());
 
 		// Then
 		var createdPost = housewarmingPostRepository.findById(postId);
 		assertThat(createdPost).isNotEmpty();
-		assertThat(createdPost.get().getUser().getId()).isEqualTo(user.getId());
+		assertThat(createdPost.get().getUser().getId()).isEqualTo(author.getId());
 		assertThat(createdPost.get()).extracting("title").isEqualTo("test1");
 		assertThat(createdPost.get().getBudget().getTotal()).isEqualTo(250L);
 		assertThat(createdPost.get().getWorkMetadata().getWorkerType()).isEqualTo(WorkerType.SELF);
@@ -79,7 +87,8 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var persistedUserWithToken = fixtureProvider.insertGuestUser("guest");
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken, 1);
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(
+			userAuditorAware, persistedUserWithToken, 1);
 		var postId = persistedPost.getId();
 		var authorId = persistedPost.getUser().getId();
 
@@ -96,7 +105,8 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var persistedUserWithToken = fixtureProvider.insertGuestUser("guest");
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken, 1);
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, persistedUserWithToken,
+			1);
 		var postId = persistedPost.getId();
 		var unauthorizedId = persistedPost.getUser().getId() + 4123;
 
@@ -112,7 +122,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var author = fixtureProvider.insertGuestUser("guest");
-		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author, 1);
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, author, 1);
 
 		// When
 		var queriedPostResult = housewarmingPostServiceImpl.getSinglePost(savedPost.getId());
@@ -130,7 +140,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var author = fixtureProvider.insertGuestUser("guest");
-		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author, 1);
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, author, 1);
 
 		// When
 		housewarmingPostServiceImpl.updateViews(savedPost.getId());
@@ -146,9 +156,10 @@ class HousewarmingPostServiceImplTest {
 	@Test
 	@DisplayName("사용자가 요청에 맞춘 액수의 집들이 컨텐츠와 반환해야 한다. ")
 	void return_proper_post_with_proper_size_page() {
-		var author = fixtureProvider.insertGuestUser("guest");
 		for (int i = 1; i <= 20; i++) {
-			fixtureProvider.insertHousewarmingPostWithAuthor(author, i);
+			var author = fixtureProvider.insertGuestUser("guest" + i);
+			fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, author, i);
+			reset(userAuditorAware);
 		}
 
 		// Given

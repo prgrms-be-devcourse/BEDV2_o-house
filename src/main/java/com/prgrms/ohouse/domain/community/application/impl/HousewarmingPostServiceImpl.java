@@ -17,8 +17,6 @@ import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessE
 import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
-import com.prgrms.ohouse.domain.user.model.User;
-import com.prgrms.ohouse.domain.user.model.UserRepository;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,20 +24,16 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 
 	private final HousewarmingPostRepository housewarmingPostRepository;
 	private final FileManager fileManager;
-	private final UserRepository userRepository;
 
-	public HousewarmingPostServiceImpl(HousewarmingPostRepository housewarmingPostRepository, FileManager fileManager,
-		UserRepository userRepository) {
+	public HousewarmingPostServiceImpl(HousewarmingPostRepository housewarmingPostRepository, FileManager fileManager) {
 		this.housewarmingPostRepository = housewarmingPostRepository;
 		this.fileManager = fileManager;
-		this.userRepository = userRepository;
 	}
 
 	@Override
 	@Transactional
 	public Long createPost(Long userId, CreateHousewarmingPostCommand command, List<MultipartFile> images) {
-		User user = userRepository.findById(userId).orElseThrow();
-		HousewarmingPost post = command.toPost(user);
+		HousewarmingPost post = command.toPost();
 		post = housewarmingPostRepository.save(post);
 		post.validateContent(images.size());
 		fileManager.store(images, post);

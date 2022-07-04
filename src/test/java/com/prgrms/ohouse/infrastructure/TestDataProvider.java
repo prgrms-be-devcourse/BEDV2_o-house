@@ -1,6 +1,9 @@
 package com.prgrms.ohouse.infrastructure;
 
+import static org.mockito.Mockito.*;
+
 import java.util.Collections;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +32,7 @@ import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
+import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
 
 @Component
@@ -93,10 +97,10 @@ public class TestDataProvider {
 		return userRepository.save(user);
 	}
 
-	public HousewarmingPost insertHousewarmingPostWithAuthor(User author, int index) {
-		return housewarmingPostRepository.save(
+	public HousewarmingPost insertHousewarmingPostWithAuthor(UserAuditorAware aware, User author, int index) {
+		when(aware.getCurrentAuditor()).thenReturn(Optional.of(author));
+		var savedPost = housewarmingPostRepository.save(
 			HousewarmingPost.builder()
-				.user(author)
 				.title("제목" + index)
 				.content("내용1{{image}}내용2{{image}}내용3{{image}}")
 				.housingType(HousingType.APARTMENT)
@@ -106,6 +110,7 @@ public class TestDataProvider {
 				.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
 				.links(Collections.emptyList())
 				.build());
-
+		reset(aware);
+		return savedPost;
 	}
 }

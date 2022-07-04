@@ -18,6 +18,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.data.annotation.CreatedBy;
+
+import com.prgrms.ohouse.domain.common.BaseTimeEntity;
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -30,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class HousewarmingPost implements ImageAttachable {
+public class HousewarmingPost extends BaseTimeEntity implements ImageAttachable {
 
 	/**
 	 * "{{image}}" 이미지의 위치를 지정한 문자열
@@ -43,6 +46,7 @@ public class HousewarmingPost implements ImageAttachable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
+	@CreatedBy
 	private User user;
 
 	@Column(name = "title", nullable = false)
@@ -96,10 +100,9 @@ public class HousewarmingPost implements ImageAttachable {
 	@Builder
 	public HousewarmingPost(String title, String content, HousingType housingType, String housingDescription,
 		Long area, Budget budget, Family family, String company, WorkMetadata workMetadata, String copyrightHolder,
-		List<Link> links, District district, User user) {
+		List<Link> links, District district) {
 		this.title = title;
 		this.content = content;
-		this.user = user;
 		this.housingType = housingType;
 		this.housingDescription = housingDescription;
 		this.area = area;
