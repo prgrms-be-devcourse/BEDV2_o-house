@@ -7,6 +7,8 @@ import java.util.NoSuchElementException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +24,7 @@ import com.prgrms.ohouse.domain.common.security.AuthUtility;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
+import com.prgrms.ohouse.web.commerce.results.SliceResult;
 import com.prgrms.ohouse.web.requests.HousewarmingPostCreateRequest;
 import com.prgrms.ohouse.web.user.results.ErrorCode;
 import com.prgrms.ohouse.web.user.results.ErrorResult;
@@ -67,6 +70,13 @@ public class HousewarmingPostController {
 		postService.updateViews(postId);
 		housewarmingInfoResult.incrementViewCount();
 		return ResponseEntity.ok(housewarmingInfoResult);
+	}
+
+	@GetMapping("")
+	public ResponseEntity<SliceResult<HousewarmingPostInfoResult>> handleGetPostSliceRequest(
+		@PageableDefault Pageable pageable) {
+		var result = postService.getPosts(pageable);
+		return ResponseEntity.ok(new SliceResult<>(result));
 	}
 
 	@ExceptionHandler(UnauthorizedContentAccessException.class)

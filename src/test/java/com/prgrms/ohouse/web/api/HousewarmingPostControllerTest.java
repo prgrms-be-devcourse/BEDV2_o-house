@@ -144,15 +144,30 @@ class HousewarmingPostControllerTest {
 	}
 
 	@Test
-	@DisplayName("원하는 개수 만큼의 집들이 컨텐츠 들과 페이지에 대한 메타 데이터를 반환한다.")
-	void return_posts_with_correct_metadata() {
+	@DisplayName("원하는 개수 만큼의 집들이 컨텐츠 목록과 목록에 대한 메타 데이터를 반환한다.")
+	void return_posts_with_correct_metadata() throws Exception {
+		int page = 0;
+		int queriedSize = 19;
+		int storedSize = 20;
 
 		// Given
-
+		var author = fixtureProvider.insertGuestUser("guest");
+		for (int i = 1; i <= storedSize; i++) {
+			fixtureProvider.insertHousewarmingPostWithAuthor(author, i);
+		}
 		// When
+		var result = mockMvc.perform(
+			get(HW_URL).param("page", String.valueOf(page))
+				.param("size", String.valueOf(queriedSize)));
 
 		// Then
+		result
+			.andDo(print())
+			.andExpectAll(
+				jsonPath("size").value(queriedSize),
+				jsonPath("hasNext").value(true),
+				jsonPath("contents").exists()
+			);
 
 	}
-
 }

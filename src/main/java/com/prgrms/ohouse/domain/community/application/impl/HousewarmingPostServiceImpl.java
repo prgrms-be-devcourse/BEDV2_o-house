@@ -61,7 +61,7 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	}
 
 	@Override
-	public Slice<HousewarmingPost> getPosts(Pageable pageRequest) {
+	public Slice<HousewarmingPostInfoResult> getPosts(Pageable pageRequest) {
 		return housewarmingPostRepository.findSliceBy(pageRequest);
 	}
 

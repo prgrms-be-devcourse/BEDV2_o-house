@@ -19,7 +19,6 @@ import com.prgrms.ohouse.domain.community.application.command.CreateHousewarming
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
-import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
@@ -156,7 +155,7 @@ class HousewarmingPostServiceImplTest {
 		PageRequest pageRequest = PageRequest.of(0, 19);
 
 		// When
-		Slice<HousewarmingPost> result = housewarmingPostServiceImpl.getPosts(pageRequest);
+		Slice<HousewarmingPostInfoResult> result = housewarmingPostServiceImpl.getPosts(pageRequest);
 
 		// Then
 		assertThat(result.getSize()).isEqualTo(19);
