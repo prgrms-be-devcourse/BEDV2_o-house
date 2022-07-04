@@ -27,7 +27,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.prgrms.ohouse.config.WithMockCustomUser;
 import com.prgrms.ohouse.domain.common.security.AuthUtility;
 import com.prgrms.ohouse.domain.user.application.UserService;
-import com.prgrms.ohouse.domain.user.model.GenderType;
+import com.prgrms.ohouse.domain.user.model.Gender;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.web.user.requests.UserCreateRequest;
 import com.prgrms.ohouse.web.user.requests.UserUpdateRequest;
@@ -52,7 +52,9 @@ class UserRestControllerTest {
 		User.builder()
 			.nickname("guest")
 			.email("guest@gmail.com")
-			.password("guestPassword12").build()
+			.password("guestPassword12")
+			.gender(Gender.FEMALE)
+			.build()
 	);
 
 	UserCreateRequest request = new UserCreateRequest("testUser", "test@gmail.com", "guestPw12");
@@ -108,7 +110,7 @@ class UserRestControllerTest {
 			.birth(updateRequest.getBirth())
 			.email("guest@gmail.com")
 			.password("guestPassword12")
-			.gender(GenderType.FEMALE)
+			.gender(Gender.FEMALE)
 			.personalUrl(updateRequest.getPersonalUrl())
 			.build();
 
@@ -139,7 +141,7 @@ class UserRestControllerTest {
 			.birth(updateRequest.getBirth())
 			.email("guest@gmail.com")
 			.password("guestPassword12")
-			.gender(GenderType.FEMALE)
+			.gender(Gender.FEMALE)
 			.personalUrl(updateRequest.getPersonalUrl())
 			.build();
 

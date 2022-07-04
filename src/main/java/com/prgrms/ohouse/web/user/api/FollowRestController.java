@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.ohouse.domain.common.security.AuthUtility;
-import com.prgrms.ohouse.domain.common.security.AuthUtils;
 import com.prgrms.ohouse.domain.user.application.FollowService;
 
 import lombok.RequiredArgsConstructor;

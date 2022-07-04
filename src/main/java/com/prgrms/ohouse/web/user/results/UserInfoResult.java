@@ -3,7 +3,7 @@ package com.prgrms.ohouse.web.user.results;
 import java.time.LocalDate;
 
 import com.prgrms.ohouse.domain.user.model.UserImage;
-import com.prgrms.ohouse.domain.user.model.GenderType;
+import com.prgrms.ohouse.domain.user.model.Gender;
 import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.Data;
@@ -13,7 +13,7 @@ public class UserInfoResult {
 
 	private String nickname;
 
-	private GenderType gender;
+	private Gender gender;
 
 	private String personalUrl;
 
@@ -28,7 +28,7 @@ public class UserInfoResult {
 			user.getImage().isPresent() ? user.getImage().get() : null, user.getIntroductions());
 	}
 
-	private UserInfoResult(String nickname, GenderType gender, String personalUrl, LocalDate birth, UserImage image,
+	private UserInfoResult(String nickname, Gender gender, String personalUrl, LocalDate birth, UserImage image,
 		String introductions) {
 		this.nickname = nickname;
 		this.gender = gender;

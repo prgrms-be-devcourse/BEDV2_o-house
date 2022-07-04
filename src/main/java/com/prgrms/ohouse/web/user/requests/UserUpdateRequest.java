@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prgrms.ohouse.domain.user.application.commands.UserUpdateCommand;
-import com.prgrms.ohouse.domain.user.model.GenderType;
+import com.prgrms.ohouse.domain.user.model.Gender;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +36,6 @@ public class UserUpdateRequest {
 	private String introductions;
 
 	public UserUpdateCommand toCommand(MultipartFile image) {
-		return new UserUpdateCommand(nickname, GenderType.of(gender), personalUrl, birth, image, introductions);
+		return new UserUpdateCommand(nickname, Gender.of(gender), personalUrl, birth, image, introductions);
 	}
 }
