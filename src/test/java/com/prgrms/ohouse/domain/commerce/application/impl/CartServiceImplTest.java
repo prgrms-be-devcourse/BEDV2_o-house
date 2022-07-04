@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.commerce.application.CartService;
 import com.prgrms.ohouse.domain.commerce.application.command.CartCreateCommand;
-import com.prgrms.ohouse.domain.user.model.UserRepository;
-import com.prgrms.ohouse.web.commerce.results.CartCreateResult;
 import com.prgrms.ohouse.domain.commerce.model.cart.Cart;
 import com.prgrms.ohouse.domain.commerce.model.product.Attribute;
 import com.prgrms.ohouse.domain.commerce.model.product.AttributeRepository;
@@ -26,6 +24,8 @@ import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
 import com.prgrms.ohouse.domain.user.model.User;
+import com.prgrms.ohouse.domain.user.model.UserRepository;
+import com.prgrms.ohouse.web.commerce.results.CartCreateResult;
 
 @Transactional
 @SpringBootTest
@@ -50,13 +50,15 @@ class CartServiceImplTest {
 		Attribute attribute = Attribute.of(Color.BLUE, Size.NORMAL, "brand", Shipping.NORMAL);
 		attributeRepository.save(attribute);
 		Product product = Product.of("이름입니다.", 234, "내용입니다.", category, attribute);
+
 		User user = User.builder()
 			.nickname("guestUser")
 			.email("guest@gmail.com")
 			.password("testPassword12")
 			.build();
 		userRepository.save(user);
-		Cart cart = Cart.of(user);
+		Cart cart = Cart.of();
+
 		productRepository.save(product);
 		//when
 		CartCreateResult selectedCartItem = cartService.insertCartItem(new CartCreateCommand(product.getId(), 1, user));
