@@ -35,6 +35,7 @@ import lombok.NoArgsConstructor;
 public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 
 	public QuestionPost(String title, String contents) {
+		isValidTitle(title);
 		this.title = title;
 		this.contents = contents;
 	}

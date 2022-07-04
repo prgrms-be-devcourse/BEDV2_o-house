@@ -16,8 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.prgrms.ohouse.domain.community.application.QuestionPostService;
 import com.prgrms.ohouse.domain.community.application.command.QuestionPostRegisterCommand;
 import com.prgrms.ohouse.domain.community.application.command.QuestionPostUpdateCommand;
-import com.prgrms.ohouse.web.requests.QuestionPostCreateRequest;
-import com.prgrms.ohouse.web.requests.QuestionPostUpdateRequest;
+import com.prgrms.ohouse.web.community.question.requests.QuestionPostCreateRequest;
+import com.prgrms.ohouse.web.community.question.requests.QuestionPostUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +44,7 @@ public class RestQuestionPostControllerV0 {
 	public ResponseEntity editQuestionPost(@RequestPart QuestionPostUpdateRequest request,
 		@RequestPart List<MultipartFile> file, @PathVariable("id") Long questionPostId) {
 		questionPostService.editQuestionPost(
-			new QuestionPostUpdateCommand(request.getId(), request.getTitle(), request.getContent(), file));
+			new QuestionPostUpdateCommand(questionPostId, request.getTitle(), request.getContent(), file));
 		return ResponseEntity
 			.ok(URI.create("/api/v0/questions/" + questionPostId));
 	}
