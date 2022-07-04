@@ -121,11 +121,12 @@ class ReviewServiceImplTest {
 		String content = "content content content content content content content content";
 		Product product = dataProvider.insertProduct();
 		for (int i = 9; i >= 0; i--) {
-			dataProvider.insertNormalReview(product, user, 4, content, i * i);
+			dataProvider.insertNormalReview(product, user, 3, content, i * i);
 		}
 		Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "helpPoint");
 
 		PagedReviewInformation result = reviewService.loadAllProductReviews(pageable, product.getId());
+
 		PageInformation page = result.getPageInformation();
 		List<ReviewInformation> resultContent = result.getReviews();
 		assertThat(page.getNumberOfElements()).isEqualTo(10);
@@ -172,6 +173,7 @@ class ReviewServiceImplTest {
 	@Test
 	@WithMockCustomUser
 	void testReviewDeleteFail() {
+		User user = User.builder().nickname("user").email("test@naver.com").password("test pass").build();
 		Review review = dataProvider.insertPhotoReview();
 
 		assertThrows(AccessDeniedException.class, () -> reviewService.deleteReview(review.getId()));

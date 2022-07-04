@@ -58,6 +58,7 @@ class CartServiceImplTest {
 			.build();
 		userRepository.save(user);
 		Cart cart = Cart.of();
+
 		productRepository.save(product);
 		//when
 		CartCreateResult selectedCartItem = cartService.insertCartItem(new CartCreateCommand(product.getId(), 1, user));

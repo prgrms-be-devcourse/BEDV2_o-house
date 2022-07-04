@@ -197,7 +197,6 @@ class RestReviewControllerTest {
 	void testPhotoReviewPagingTest() throws Exception {
 		List<Review> reviews = dataProvider.insert40PhotoReview();
 		Product product = reviews.get(0).getProduct();
-		int pageSize = 10;
 
 		MvcResult mvcResult = mockMvc.perform(get("/api/v0/reviews/" + product.getId())
 				.param("page", "0")
