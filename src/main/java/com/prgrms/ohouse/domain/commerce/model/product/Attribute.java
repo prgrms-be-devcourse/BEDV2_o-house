@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,10 +35,12 @@ public class Attribute {
 	private Long id;
 
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Color color;
 
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Size size;
 
@@ -45,6 +49,7 @@ public class Attribute {
 	private String brand;
 
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Shipping shipping;
 

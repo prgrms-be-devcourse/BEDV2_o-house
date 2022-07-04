@@ -57,7 +57,7 @@ class CartServiceImplTest {
 			.password("testPassword12")
 			.build();
 		userRepository.save(user);
-		Cart cart = Cart.of(user);
+		Cart cart = Cart.of();
 		productRepository.save(product);
 		//when
 		CartCreateResult selectedCartItem = cartService.insertCartItem(new CartCreateCommand(product.getId(), 1, user));
