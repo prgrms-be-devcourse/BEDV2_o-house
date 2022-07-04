@@ -77,6 +77,11 @@ public class TestDataProvider {
 		return productRepository.save(product);
 	}
 
+	/**
+	 * 영속화된 사용자 픽스처 반환
+	 * @param nickname : 현정님 jwt 토큰의 nickname은 guest
+	 * @return DB에 저장된 User 엔티티(detached)
+	 */
 	public User insertGuestUser(String nickname) {
 		User user = User.builder()
 			.email(nickname + "@gmail.com")
@@ -88,18 +93,19 @@ public class TestDataProvider {
 		return userRepository.save(user);
 	}
 
-	public HousewarmingPost insertHousewarmingPostWithAuthor(User author) {
+	public HousewarmingPost insertHousewarmingPostWithAuthor(User author, int index) {
 		return housewarmingPostRepository.save(
 			HousewarmingPost.builder()
-				.title("제목1")
+				.user(author)
+				.title("제목" + index)
 				.content("내용1{{image}}내용2{{image}}내용3{{image}}")
 				.housingType(HousingType.APARTMENT)
 				.area(2L)
-				.budget(new Budget(100L, 150L))
+				.budget(new Budget(100, 150))
 				.family(new Family("SINGLE", null, null))
 				.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
 				.links(Collections.emptyList())
-				.user(author)
 				.build());
+
 	}
 }

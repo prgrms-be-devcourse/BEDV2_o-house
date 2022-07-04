@@ -32,7 +32,6 @@ public class CreateHousewarmingPostCommand {
 	private String copyrightHolder;
 	private List<Link> links;
 	private District district;
-	private Long userId;
 
 	public HousewarmingPost toPost(User user) {
 		return HousewarmingPost.builder()

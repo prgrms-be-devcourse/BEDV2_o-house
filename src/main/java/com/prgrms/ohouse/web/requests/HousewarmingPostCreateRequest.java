@@ -41,10 +41,10 @@ public class HousewarmingPostCreateRequest {
 	private Long area;
 
 	@NotNull
-	private Long constructionFee;
+	private Integer constructionFee;
 
 	@NotNull
-	private Long stylingFee;
+	private Integer stylingFee;
 
 	@NotNull
 	private String familyType;

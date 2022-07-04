@@ -3,6 +3,8 @@ package com.prgrms.ohouse.domain.community.application.impl;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +50,7 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	@Transactional
 	public void deletePost(Long authorId, Long postId) {
 		HousewarmingPost authorizedPost = getAuthorizedPost(authorId, postId);
+		fileManager.delete(authorizedPost.getImages(), authorizedPost);
 		housewarmingPostRepository.delete(authorizedPost);
 	}
 
@@ -55,6 +58,11 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	public HousewarmingPostInfoResult getSinglePost(Long postId) {
 		HousewarmingPost post = housewarmingPostRepository.findById(postId).orElseThrow();
 		return HousewarmingPostInfoResult.from(post);
+	}
+
+	@Override
+	public Slice<HousewarmingPost> getPosts(Pageable pageRequest) {
+		return housewarmingPostRepository.findSliceBy(pageRequest);
 	}
 
 	@Transactional(isolation = Isolation.READ_COMMITTED)

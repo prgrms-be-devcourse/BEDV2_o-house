@@ -2,9 +2,12 @@ package com.prgrms.ohouse.domain.community.application;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 
 public interface HousewarmingPostService {
 	Long createPost(Long userId, CreateHousewarmingPostCommand command, List<MultipartFile> images);
@@ -13,4 +16,7 @@ public interface HousewarmingPostService {
 
 	HousewarmingPostInfoResult getSinglePost(Long postId);
 
+	Slice<HousewarmingPost> getPosts(Pageable pageRequest);
+
+	void updateViews(Long postId);
 }

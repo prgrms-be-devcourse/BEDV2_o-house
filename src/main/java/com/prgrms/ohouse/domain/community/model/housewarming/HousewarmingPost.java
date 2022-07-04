@@ -94,12 +94,12 @@ public class HousewarmingPost implements ImageAttachable {
 	private District district;
 
 	@Builder
-	public HousewarmingPost(User user, String title, String content, HousingType housingType, String housingDescription,
+	public HousewarmingPost(String title, String content, HousingType housingType, String housingDescription,
 		Long area, Budget budget, Family family, String company, WorkMetadata workMetadata, String copyrightHolder,
-		List<Link> links, District district) {
-		this.user = user;
+		List<Link> links, District district, User user) {
 		this.title = title;
 		this.content = content;
+		this.user = user;
 		this.housingType = housingType;
 		this.housingDescription = housingDescription;
 		this.area = area;

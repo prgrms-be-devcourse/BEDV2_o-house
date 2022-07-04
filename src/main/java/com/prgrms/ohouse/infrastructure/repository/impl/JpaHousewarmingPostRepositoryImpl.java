@@ -22,8 +22,6 @@ public class JpaHousewarmingPostRepositoryImpl implements QueryDSLHousewarmingPo
 			.update(qHwPost)
 			.set(qHwPost.visitCount, qHwPost.visitCount.add(1))
 			.where(qHwPost.id.eq(postId))
-			.execute()
-		;
-
+			.execute();
 	}
 }

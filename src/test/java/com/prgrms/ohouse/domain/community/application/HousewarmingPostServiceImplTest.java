@@ -11,12 +11,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
@@ -52,7 +55,7 @@ class HousewarmingPostServiceImplTest {
 			.content("test1content")
 			.housingType(HousingType.APARTMENT)
 			.area(2L)
-			.budget(new Budget(100L, 150L))
+			.budget(new Budget(100, 150))
 			.family(new Family("SINGLE", null, null))
 			.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
 			.links(Collections.emptyList())
@@ -77,9 +80,10 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var persistedUserWithToken = fixtureProvider.insertGuestUser("guest");
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken);
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken, 1);
 		var postId = persistedPost.getId();
 		var authorId = persistedPost.getUser().getId();
+
 		// When
 		housewarmingPostServiceImpl.deletePost(authorId, postId);
 
@@ -93,7 +97,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var persistedUserWithToken = fixtureProvider.insertGuestUser("guest");
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken);
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken, 1);
 		var postId = persistedPost.getId();
 		var unauthorizedId = persistedPost.getUser().getId() + 4123;
 
@@ -109,7 +113,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var author = fixtureProvider.insertGuestUser("guest");
-		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author);
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author, 1);
 
 		// When
 		var queriedPostResult = housewarmingPostServiceImpl.getSinglePost(savedPost.getId());
@@ -127,7 +131,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var author = fixtureProvider.insertGuestUser("guest");
-		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author);
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author, 1);
 
 		// When
 		housewarmingPostServiceImpl.updateViews(savedPost.getId());
@@ -140,4 +144,24 @@ class HousewarmingPostServiceImplTest {
 
 	}
 
+	@Test
+	@DisplayName("사용자가 요청에 맞춘 액수의 집들이 컨텐츠와 반환해야 한다. ")
+	void return_proper_post_with_proper_size_page() {
+		var author = fixtureProvider.insertGuestUser("guest");
+		for (int i = 1; i <= 20; i++) {
+			fixtureProvider.insertHousewarmingPostWithAuthor(author, i);
+		}
+
+		// Given
+		PageRequest pageRequest = PageRequest.of(0, 19);
+
+		// When
+		Slice<HousewarmingPost> result = housewarmingPostServiceImpl.getPosts(pageRequest);
+
+		// Then
+		assertThat(result.getSize()).isEqualTo(19);
+		assertThat(result.getContent()).hasSize(19);
+		assertThat(result.hasNext()).isTrue();
+
+	}
 }

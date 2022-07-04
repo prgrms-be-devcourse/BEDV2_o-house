@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.prgrms.ohouse.domain.common.security.AuthUtils;
+import com.prgrms.ohouse.domain.common.security.AuthUtility;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
+import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
-import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.web.requests.HousewarmingPostCreateRequest;
 import com.prgrms.ohouse.web.user.results.ErrorCode;
 import com.prgrms.ohouse.web.user.results.ErrorResult;
@@ -33,12 +33,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HousewarmingPostController {
 
-	private final HousewarmingPostServiceImpl postService;
+	private final HousewarmingPostService postService;
+	private final AuthUtility authUtility;
 	@Value("${app.host}")
 	private String host;
 
-	public HousewarmingPostController(HousewarmingPostServiceImpl postService) {
+	public HousewarmingPostController(HousewarmingPostService postService, AuthUtility authUtility) {
 		this.postService = postService;
+		this.authUtility = authUtility;
 	}
 
 	// multipart 요청은 반드시 POST (PUT 안 된다.)
@@ -46,7 +48,7 @@ public class HousewarmingPostController {
 	public ResponseEntity<String> handleCreatePostRequest(
 		@RequestPart("payload") @Valid HousewarmingPostCreateRequest payload,
 		@RequestPart("image") List<MultipartFile> images) {
-		Long userId = AuthUtils.getAuthUser().getId();
+		Long userId = authUtility.getAuthUser().getId();
 		Long postId = postService.createPost(userId, payload.toCommand(), images);
 
 		return ResponseEntity.created(URI.create(host + "api/v0/hwpost/" + postId)).body("post creation success");
@@ -54,7 +56,7 @@ public class HousewarmingPostController {
 
 	@DeleteMapping("/{postId}")
 	public ResponseEntity<String> handleDeletePostRequest(@PathVariable Long postId) {
-		var user = AuthUtils.getAuthUser();
+		var user = authUtility.getAuthUser();
 		postService.deletePost(user.getId(), postId);
 		return ResponseEntity.ok("delete success");
 	}
