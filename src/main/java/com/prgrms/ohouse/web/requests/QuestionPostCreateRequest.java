@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @Getter
 public final class QuestionPostCreateRequest {
 
-	public QuestionPostCreateRequest(String content) {
+	public QuestionPostCreateRequest(String title, String content) {
+		this.title = title;
 		this.content = content;
 	}
 
+	private String title;
 	private String content;
 }

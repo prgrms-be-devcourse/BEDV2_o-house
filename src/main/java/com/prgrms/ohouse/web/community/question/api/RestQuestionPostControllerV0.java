@@ -33,7 +33,7 @@ public class RestQuestionPostControllerV0 {
 	public ResponseEntity registerNewQuestionPost(@RequestPart QuestionPostCreateRequest request,
 		@RequestPart List<MultipartFile> file) {
 		Long questionPostId = questionPostService.createQuestionPost(
-			new QuestionPostRegisterCommand(request.getContent(), file));
+			new QuestionPostRegisterCommand(request.getTitle(), request.getContent(), file));
 		return ResponseEntity
 			.created(URI.create("/api/v0/questions/" + questionPostId))
 			.build();
@@ -44,7 +44,7 @@ public class RestQuestionPostControllerV0 {
 	public ResponseEntity editQuestionPost(@RequestPart QuestionPostUpdateRequest request,
 		@RequestPart List<MultipartFile> file, @PathVariable("id") Long questionPostId) {
 		questionPostService.editQuestionPost(
-			new QuestionPostUpdateCommand(request.getId(), request.getContent(), file));
+			new QuestionPostUpdateCommand(request.getId(), request.getTitle(), request.getContent(), file));
 		return ResponseEntity
 			.ok(URI.create("/api/v0/questions/" + questionPostId));
 	}

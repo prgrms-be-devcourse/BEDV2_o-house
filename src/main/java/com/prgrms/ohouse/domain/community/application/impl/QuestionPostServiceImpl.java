@@ -23,7 +23,7 @@ public class QuestionPostServiceImpl implements QuestionPostService {
 	@Transactional
 	@Override
 	public Long createQuestionPost(QuestionPostRegisterCommand command) {
-		QuestionPost savedPost = questionPostRepository.save(new QuestionPost(command.getContents()));
+		QuestionPost savedPost = questionPostRepository.save(new QuestionPost(command.getTitle(), command.getContents()));
 		fileManager.store(command.getMultipartFiles(), savedPost);
 		return savedPost.getId();
 	}
@@ -35,7 +35,7 @@ public class QuestionPostServiceImpl implements QuestionPostService {
 		fileManager.delete(savedPost.getQuestionImages(), savedPost);
 		fileManager.store(command.getMultipartFiles(), savedPost);
 
-		savedPost.apply(command.getContents());
+		savedPost.apply(command.getTitle(), command.getContents());
 		return savedPost.getId();
 	}
 

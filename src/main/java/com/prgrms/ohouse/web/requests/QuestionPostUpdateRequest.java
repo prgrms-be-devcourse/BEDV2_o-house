@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 @Getter
 public final class QuestionPostUpdateRequest {
 
-	public QuestionPostUpdateRequest(Long id, String content) {
+	public QuestionPostUpdateRequest(Long id, String title, String content) {
 		this.id = id;
+		this.title = title;
 		this.content = content;
 	}
 
 	private Long id;
+	private String title;
 	private String content;
 }

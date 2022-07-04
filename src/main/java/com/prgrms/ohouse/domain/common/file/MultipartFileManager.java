@@ -24,7 +24,7 @@ public class MultipartFileManager implements FileManager {
 
 	@Override
 	public <T extends ImageAttachable> List<StoredFile> store(List<MultipartFile> multipartFiles, T attached) {
-		if (multipartFiles == null || multipartFiles.isEmpty()) {
+		if (isFilesNotPresent(multipartFiles)) {
 			return null;
 		}
 
@@ -38,7 +38,7 @@ public class MultipartFileManager implements FileManager {
 
 	@Override
 	public <T extends ImageAttachable> StoredFile store(MultipartFile multipartFile, T attached) {
-		if (multipartFile == null || multipartFile.isEmpty()) {
+		if (isFileNotPresent(multipartFile)) {
 			return null;
 		}
 
@@ -53,14 +53,28 @@ public class MultipartFileManager implements FileManager {
 
 	@Override
 	public <T1 extends StoredFile, T2 extends ImageAttachable> void delete(List<T1> files, T2 attached) {
+		if (isFilesNotPresent(files)) {
+			return;
+		}
 		for (T1 file : files) {
 			fileRepository.delete(file);
 		}
 		attached.removeCurrentImage();
 	}
 
+	private boolean isFilesNotPresent(List files) {
+		return files == null || files.isEmpty();
+	}
+
+	private boolean isFileNotPresent(MultipartFile multipartFile) {
+		return multipartFile == null || multipartFile.isEmpty();
+	}
+
 	@Override
 	public <T1 extends StoredFile, T2 extends ImageAttachable> void delete(T1 file, T2 attached) {
+		if (file == null) {
+			return;
+		}
 		attached.removeCurrentImage();
 		fileRepository.delete(file);
 	}
