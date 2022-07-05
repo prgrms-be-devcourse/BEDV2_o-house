@@ -7,7 +7,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
-import com.prgrms.ohouse.domain.community.application.command.UpdateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 
 public interface HousewarmingPostService {
 	Long createPost(HousewarmingPostCreateCommand command, List<MultipartFile> images);
@@ -20,5 +20,5 @@ public interface HousewarmingPostService {
 
 	void updateViews(Long postId);
 
-	void updatePost(Long authorId, Long postId, UpdateHousewarmingPostCommand command, List<MultipartFile> images);
+	void updatePost(Long authorId, Long postId, HousewarmingPostUpdateCommand command, List<MultipartFile> images);
 }

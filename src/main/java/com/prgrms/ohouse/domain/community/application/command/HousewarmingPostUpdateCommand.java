@@ -10,7 +10,7 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.Link;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 
-public class UpdateHousewarmingPostCommand {
+public class HousewarmingPostUpdateCommand {
 	private String title;
 	private String content;
 	private HousingType housingType;

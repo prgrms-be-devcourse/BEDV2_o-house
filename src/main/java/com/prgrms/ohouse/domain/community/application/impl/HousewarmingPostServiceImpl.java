@@ -15,7 +15,7 @@ import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
-import com.prgrms.ohouse.domain.community.application.command.UpdateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 
@@ -66,7 +66,7 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	}
 
 	@Override
-	public void updatePost(Long postId, Long authorId, UpdateHousewarmingPostCommand command,
+	public void updatePost(Long postId, Long authorId, HousewarmingPostUpdateCommand command,
 		List<MultipartFile> images) {
 		HousewarmingPost post = getAuthorizedPost(authorId, postId);
 		command.updatePost(post);
