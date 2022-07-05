@@ -18,15 +18,15 @@ import lombok.NoArgsConstructor;
 public class Budget {
 
 	@Column(nullable = false)
-	private long constructionFee;
+	private int constructionFee;
 
 	@Column(nullable = false)
-	private long stylingFee;
+	private int stylingFee;
 
 	@Column(nullable = false)
-	private long total;
+	private int total;
 
-	public Budget(long constructionFee, long stylingFee) {
+	public Budget(int constructionFee, int stylingFee) {
 		checkArgument(constructionFee >= 0, "건축 비용은 0 이상이어야 합니다.");
 		checkArgument(stylingFee >= 0, "홈 스타일링 비용은 0 이상이어야 합니다.");
 		this.constructionFee = constructionFee;

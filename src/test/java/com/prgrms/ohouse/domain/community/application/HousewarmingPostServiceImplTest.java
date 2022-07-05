@@ -1,8 +1,10 @@
 package com.prgrms.ohouse.domain.community.application;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,9 +13,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
@@ -21,6 +26,7 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRep
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
+import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 
 @SpringBootTest
@@ -40,31 +46,35 @@ class HousewarmingPostServiceImplTest {
 	@PersistenceContext
 	private EntityManager em;
 
+	@MockBean
+	private UserAuditorAware userAuditorAware;
+
 	@Test
 	@DisplayName("post 생성 요청을 받아서 post를 생성하고 영속화한다.")
 	void persist_post_entity_to_database() {
 		// TODO: 선택 필드 테스트 케이스
 
 		// Given
-		var user = fixtureProvider.insertGuestUser("guest");
-		var command = CreateHousewarmingPostCommand.builder()
+		var author = fixtureProvider.insertGuestUser("guest");
+		var command = HousewarmingPostCreateCommand.builder()
 			.title("test1")
 			.content("test1content")
 			.housingType(HousingType.APARTMENT)
 			.area(2L)
-			.budget(new Budget(100L, 150L))
+			.budget(new Budget(100, 150))
 			.family(new Family("SINGLE", null, null))
 			.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
 			.links(Collections.emptyList())
 			.build();
+		when(userAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(author));
 
 		// When
-		Long postId = housewarmingPostServiceImpl.createPost(user.getId(), command, Collections.emptyList());
+		Long postId = housewarmingPostServiceImpl.createPost(command, Collections.emptyList());
 
 		// Then
 		var createdPost = housewarmingPostRepository.findById(postId);
 		assertThat(createdPost).isNotEmpty();
-		assertThat(createdPost.get().getUser().getId()).isEqualTo(user.getId());
+		assertThat(createdPost.get().getUser().getId()).isEqualTo(author.getId());
 		assertThat(createdPost.get()).extracting("title").isEqualTo("test1");
 		assertThat(createdPost.get().getBudget().getTotal()).isEqualTo(250L);
 		assertThat(createdPost.get().getWorkMetadata().getWorkerType()).isEqualTo(WorkerType.SELF);
@@ -77,9 +87,11 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var persistedUserWithToken = fixtureProvider.insertGuestUser("guest");
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken);
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(
+			userAuditorAware, persistedUserWithToken, 1);
 		var postId = persistedPost.getId();
 		var authorId = persistedPost.getUser().getId();
+
 		// When
 		housewarmingPostServiceImpl.deletePost(authorId, postId);
 
@@ -93,7 +105,8 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var persistedUserWithToken = fixtureProvider.insertGuestUser("guest");
-		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(persistedUserWithToken);
+		var persistedPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, persistedUserWithToken,
+			1);
 		var postId = persistedPost.getId();
 		var unauthorizedId = persistedPost.getUser().getId() + 4123;
 
@@ -109,7 +122,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var author = fixtureProvider.insertGuestUser("guest");
-		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author);
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, author, 1);
 
 		// When
 		var queriedPostResult = housewarmingPostServiceImpl.getSinglePost(savedPost.getId());
@@ -127,7 +140,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var author = fixtureProvider.insertGuestUser("guest");
-		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(author);
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, author, 1);
 
 		// When
 		housewarmingPostServiceImpl.updateViews(savedPost.getId());
@@ -137,6 +150,40 @@ class HousewarmingPostServiceImplTest {
 		// Then
 		var updatedPost = housewarmingPostRepository.findById(savedPost.getId()).orElseThrow();
 		assertThat(updatedPost.getVisitCount()).isEqualTo(1);
+
+	}
+
+	@Test
+	@DisplayName("사용자가 요청한 크기 만큼의 집들이 컨텐츠들을 반환해야 한다. ")
+	void return_proper_post_with_proper_size_page() {
+		for (int i = 1; i <= 20; i++) {
+			var author = fixtureProvider.insertGuestUser("guest" + i);
+			fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, author, i);
+			reset(userAuditorAware);
+		}
+
+		// Given
+		PageRequest pageRequest = PageRequest.of(0, 19);
+
+		// When
+		Slice<HousewarmingPostInfoResult> result = housewarmingPostServiceImpl.getPosts(pageRequest);
+
+		// Then
+		assertThat(result.getSize()).isEqualTo(19);
+		assertThat(result.getContent()).hasSize(19);
+		assertThat(result.hasNext()).isTrue();
+
+	}
+
+	@Test
+	@DisplayName("사용자는 본인이 작성한 집들이 게시물을 수정 요청에 맞춰서 수정한다. - 권한이 있을 경우 성공")
+	void authorized_user_update_post_with_information() {
+
+		// Given
+
+		// When
+
+		// Then
 
 	}
 
