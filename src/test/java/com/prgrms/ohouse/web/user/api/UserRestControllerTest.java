@@ -12,11 +12,11 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,9 +25,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.prgrms.ohouse.config.WithMockCustomUser;
-import com.prgrms.ohouse.domain.common.security.AuthUtils;
+import com.prgrms.ohouse.domain.common.security.AuthUtility;
 import com.prgrms.ohouse.domain.user.application.UserService;
-import com.prgrms.ohouse.domain.user.model.GenderType;
+import com.prgrms.ohouse.domain.user.model.Gender;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.web.user.requests.UserCreateRequest;
 import com.prgrms.ohouse.web.user.requests.UserUpdateRequest;
@@ -36,15 +36,26 @@ import com.prgrms.ohouse.web.user.requests.UserUpdateRequest;
 @AutoConfigureMockMvc
 class UserRestControllerTest {
 
-	@Mock
+	@MockBean
 	private UserService userService;
+	@MockBean
+	private AuthUtility authUtility;
 
-	@InjectMocks
+	@Autowired
 	private UserRestController userRestController;
 
 	private MockMvc mockMvc;
-
 	private ObjectMapper objectMapper = new ObjectMapper();
+	Long authUserId = 10L;
+
+	User user = spy(
+		User.builder()
+			.nickname("guest")
+			.email("guest@gmail.com")
+			.password("guestPassword12")
+			.gender(Gender.FEMALE)
+			.build()
+	);
 
 	UserCreateRequest request = new UserCreateRequest("testUser", "test@gmail.com", "guestPw12");
 
@@ -53,9 +64,12 @@ class UserRestControllerTest {
 		MockitoAnnotations.initMocks(this);
 		objectMapper.registerModule(new JavaTimeModule());
 		mockMvc = MockMvcBuilders.standaloneSetup(userRestController)
-			.setControllerAdvice(ApiExceptionHandler.class)
+			.setControllerAdvice(UserApiExceptionHandler.class)
 			.alwaysDo(print())
 			.build();
+
+		when(authUtility.getAuthUser()).thenReturn(user);
+		when(user.getId()).thenReturn(Long.valueOf(authUserId));
 	}
 
 	@Test
@@ -73,7 +87,6 @@ class UserRestControllerTest {
 	}
 
 	@Test
-	@WithMockCustomUser
 	@DisplayName("개인정보 열람 테스트")
 	void getUserInformationTest() throws Exception {
 
@@ -82,11 +95,10 @@ class UserRestControllerTest {
 	}
 
 	@Test
-	@WithMockCustomUser
 	@DisplayName("개인정보 업데이트 테스트(이미지 x)")
 	void updateUserInformationTest() throws Exception {
 
-		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "F", "http://github.com",
+		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "FEMALE", "http://github.com",
 			LocalDate.now(), null);
 		String body = objectMapper.writeValueAsString(updateRequest);
 		MockMultipartFile jsonRequest = new MockMultipartFile("request", "updateRequest", "application/json",
@@ -98,11 +110,11 @@ class UserRestControllerTest {
 			.birth(updateRequest.getBirth())
 			.email("guest@gmail.com")
 			.password("guestPassword12")
-			.gender(GenderType.FEMALE)
+			.gender(Gender.FEMALE)
 			.personalUrl(updateRequest.getPersonalUrl())
 			.build();
 
-		when(userService.updateUser(AuthUtils.getAuthUser(), updateRequest.toCommand(null))).thenReturn(updatedUser);
+		when(userService.updateUser(authUserId, updateRequest.toCommand(null))).thenReturn(updatedUser);
 
 		mockMvc.perform(multipart("/api/v0/user")
 				.file(jsonRequest))
@@ -115,7 +127,7 @@ class UserRestControllerTest {
 	@DisplayName("개인정보 업데이트 테스트(이미지 o)")
 	void updateUserInformationWithImageTest() throws Exception {
 
-		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "F", "http://github.com",
+		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "FEMALE", "http://github.com",
 			LocalDate.now(), null);
 		String body = objectMapper.writeValueAsString(updateRequest);
 		MockMultipartFile jsonRequest = new MockMultipartFile(
@@ -129,11 +141,11 @@ class UserRestControllerTest {
 			.birth(updateRequest.getBirth())
 			.email("guest@gmail.com")
 			.password("guestPassword12")
-			.gender(GenderType.FEMALE)
+			.gender(Gender.FEMALE)
 			.personalUrl(updateRequest.getPersonalUrl())
 			.build();
 
-		when(userService.updateUser(AuthUtils.getAuthUser(), updateRequest.toCommand(fileRequest)))
+		when(userService.updateUser(authUserId, updateRequest.toCommand(fileRequest)))
 			.thenReturn(updatedUser);
 
 		mockMvc.perform(multipart("/api/v0/user")

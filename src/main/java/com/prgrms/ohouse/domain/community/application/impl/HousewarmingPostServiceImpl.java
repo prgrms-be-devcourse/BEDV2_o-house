@@ -3,6 +3,8 @@ package com.prgrms.ohouse.domain.community.application.impl;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +14,10 @@ import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
-import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
-import com.prgrms.ohouse.domain.user.model.User;
-import com.prgrms.ohouse.domain.user.model.UserRepository;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,22 +25,18 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 
 	private final HousewarmingPostRepository housewarmingPostRepository;
 	private final FileManager fileManager;
-	private final UserRepository userRepository;
 
-	public HousewarmingPostServiceImpl(HousewarmingPostRepository housewarmingPostRepository, FileManager fileManager,
-		UserRepository userRepository) {
+	public HousewarmingPostServiceImpl(HousewarmingPostRepository housewarmingPostRepository, FileManager fileManager) {
 		this.housewarmingPostRepository = housewarmingPostRepository;
 		this.fileManager = fileManager;
-		this.userRepository = userRepository;
 	}
 
 	@Override
 	@Transactional
-	public Long createPost(Long userId, CreateHousewarmingPostCommand command, List<MultipartFile> images) {
-		User user = userRepository.findById(userId).orElseThrow();
-		HousewarmingPost post = command.toPost(user);
+	public Long createPost(HousewarmingPostCreateCommand command, List<MultipartFile> images) {
+		HousewarmingPost post = command.toPost();
 		post = housewarmingPostRepository.save(post);
-		post.validateContent(images.size());
+		post.validateImagesInContent(images.size());
 		fileManager.store(images, post);
 		return post.getId();
 	}
@@ -48,6 +45,7 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	@Transactional
 	public void deletePost(Long authorId, Long postId) {
 		HousewarmingPost authorizedPost = getAuthorizedPost(authorId, postId);
+		fileManager.delete(authorizedPost.getImages(), authorizedPost);
 		housewarmingPostRepository.delete(authorizedPost);
 	}
 
@@ -57,9 +55,21 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 		return HousewarmingPostInfoResult.from(post);
 	}
 
+	@Override
+	public Slice<HousewarmingPostInfoResult> getPosts(Pageable pageRequest) {
+		return housewarmingPostRepository.findSliceBy(pageRequest);
+	}
+
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public void updateViews(Long postId) {
 		housewarmingPostRepository.incrementViewCount(postId);
+	}
+
+	@Override
+	public void updatePost(Long postId, Long authorId, HousewarmingPostUpdateCommand command,
+		List<MultipartFile> images) {
+		HousewarmingPost post = getAuthorizedPost(authorId, postId);
+		command.updatePost(post);
 	}
 
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {
@@ -69,4 +79,5 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 		}
 		return hwPost;
 	}
+
 }
