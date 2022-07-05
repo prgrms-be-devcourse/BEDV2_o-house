@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -16,9 +17,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
@@ -176,14 +180,36 @@ class HousewarmingPostServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("사용자는 본인이 작성한 집들이 게시물을 수정 요청에 맞춰서 수정한다. - 권한이 있을 경우 성공")
+	@DisplayName("사용자는 본인이 작성한 집들이 게시물을 수정 요청에 맞춰서 수정한다. - 권한이 있을 경우")
 	void authorized_user_update_post_with_information() {
 
 		// Given
+		var author = fixtureProvider.insertGuestUser("guest");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, author, 1);
+		var updatedContent = "updated1내용1{{image}}내용2{{image}}";
+		var updatedTitle = "updatedTitle";
+		var command = HousewarmingPostUpdateCommand
+			.builder()
+			.title(updatedTitle)
+			.content(updatedContent).housingType(HousingType.APARTMENT)
+			.area(2L)
+			.budget(new Budget(100, 150))
+			.family(new Family("SINGLE", null, null))
+			.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
+			.links(Collections.emptyList())
+			.build();
+		List<MultipartFile> imagesToUpdate = List.of(
+			new MockMultipartFile("update1", "update1.jpg", "image/jpg", "asdf".getBytes()),
+			new MockMultipartFile("updated2", "update2.jpg", "image/jpg", "asdfzxcvc".getBytes())
+		);
 
 		// When
+		housewarmingPostServiceImpl.updatePost(targetPost.getId(), author.getId(), command, imagesToUpdate);
 
 		// Then
+		assertThat(targetPost.getTitle()).isEqualTo(updatedTitle);
+		assertThat(targetPost.getContent()).isEqualTo(updatedContent);
+		assertThat(targetPost.getImages()).hasSize(2);
 
 	}
 

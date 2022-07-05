@@ -67,9 +67,14 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 
 	@Override
 	public void updatePost(Long postId, Long authorId, HousewarmingPostUpdateCommand command,
-		List<MultipartFile> images) {
+		List<MultipartFile> newImages) {
 		HousewarmingPost post = getAuthorizedPost(authorId, postId);
 		command.updatePost(post);
+		if (!newImages.isEmpty()) {
+			post.validateImagesInContent(newImages.size());
+			fileManager.delete(post.getImages(), post);
+			fileManager.store(newImages, post);
+		}
 	}
 
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {
