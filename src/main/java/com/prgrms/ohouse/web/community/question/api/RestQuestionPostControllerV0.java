@@ -49,7 +49,7 @@ public class RestQuestionPostControllerV0 {
 			new QuestionPostUpdateCommand(questionPostId, request.getTitle(), request.getContent(), file)
 		, authUtility.getAuthUser().getId());
 		return ResponseEntity
-			.ok(URI.create("/api/v0/questions/" + questionPostId));
+			.ok().build();
 	}
 
 	@DeleteMapping("/api/v0/questions/{id}")

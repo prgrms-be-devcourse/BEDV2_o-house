@@ -30,6 +30,10 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRep
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
+import com.prgrms.ohouse.domain.community.model.question.QuestionComment;
+import com.prgrms.ohouse.domain.community.model.question.QuestionCommentRepository;
+import com.prgrms.ohouse.domain.community.model.question.QuestionPost;
+import com.prgrms.ohouse.domain.community.model.question.QuestionPostRepository;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
@@ -51,6 +55,10 @@ public class TestDataProvider {
 	private AttributeRepository attributeRepository;
 	@Autowired
 	private HousewarmingPostRepository housewarmingPostRepository;
+	@Autowired
+	private QuestionPostRepository questionPostRepository;
+	@Autowired
+	private QuestionCommentRepository questionCommentRepository;
 
 	public User insertUser() {
 		User user = User.builder()
@@ -112,5 +120,27 @@ public class TestDataProvider {
 				.build());
 		reset(aware);
 		return savedPost;
+	}
+
+	public QuestionPost insertQuestionPostWithUser(UserAuditorAware aware, User author) {
+		return insertQuestionPostWithUser(aware, author, "제목", "내용");
+	}
+
+	public QuestionPost insertQuestionPostWithUser(UserAuditorAware aware, User author, String title, String contents) {
+		when(aware.getCurrentAuditor()).thenReturn(Optional.of(author));
+		QuestionPost savedPost = questionPostRepository.save(new QuestionPost(title, contents));
+		reset(aware);
+		return savedPost;
+	}
+
+	public QuestionComment insertQuestionCommentWithUser(UserAuditorAware aware, User author, QuestionPost post) {
+		return insertQuestionCommentWithUser(aware, author, post, "댓글 내용");
+	}
+
+	public QuestionComment insertQuestionCommentWithUser(UserAuditorAware aware, User author, QuestionPost post, String contents) {
+		when(aware.getCurrentAuditor()).thenReturn(Optional.of(author));
+		QuestionComment savedComment = questionCommentRepository.save(new QuestionComment(contents, post));
+		reset(aware);
+		return savedComment;
 	}
 }
