@@ -106,7 +106,7 @@ class QuestionCommentServiceTest {
 					new QuestionCommentRegisterCommand(contents, post.getId(), null));
 
 				commentService.editQuestionComment(
-					new QuestionCommentUpdateCommand(commentId, changedContents, post.getId(), null));
+					new QuestionCommentUpdateCommand(commentId, changedContents, post.getId(), null), user.getId());
 				QuestionComment comment = commentRepository.findById(commentId).get();
 
 				assertThat(comment.getContents()).isEqualTo(changedContents);
@@ -137,7 +137,8 @@ class QuestionCommentServiceTest {
 					"<<png data>>".getBytes());
 
 				commentService.editQuestionComment(
-					new QuestionCommentUpdateCommand(commentId, changedContents, post.getId(), updatedFile));
+					new QuestionCommentUpdateCommand(commentId, changedContents, post.getId(), updatedFile),
+					user.getId());
 				QuestionComment comment = commentRepository.findById(commentId).get();
 
 				assertThat(comment.getContents()).isEqualTo(changedContents);

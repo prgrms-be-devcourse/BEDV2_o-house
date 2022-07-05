@@ -99,7 +99,7 @@ class QuestionPostServiceTest {
 					new QuestionPostRegisterCommand(title, contents, null));
 
 				questionPostService.editQuestionPost(
-					new QuestionPostUpdateCommand(questionPostId, changedTitle, changedContents, null));
+					new QuestionPostUpdateCommand(questionPostId, changedTitle, changedContents, null), user.getId());
 				QuestionPost questionPost = questionPostRepository.findById(questionPostId).get();
 
 				assertThat(questionPost.getTitle()).isEqualTo(changedTitle);
@@ -135,7 +135,7 @@ class QuestionPostServiceTest {
 
 				questionPostService.editQuestionPost(
 					new QuestionPostUpdateCommand(questionPostId, changedTitle, changedContents,
-						List.of(updatedFile1, updatedFile2)));
+						List.of(updatedFile1, updatedFile2)), user.getId());
 				QuestionPost questionPost = questionPostRepository.findById(questionPostId).get();
 
 				assertThat(questionPost.getTitle()).isEqualTo(changedTitle);

@@ -6,7 +6,7 @@ import com.prgrms.ohouse.domain.community.application.command.QuestionCommentUpd
 public interface QuestionCommentService {
 	Long createQuestionComment(QuestionCommentRegisterCommand command);
 
-	Long editQuestionComment(QuestionCommentUpdateCommand command);
+	Long editQuestionComment(QuestionCommentUpdateCommand command, Long userId);
 
-	void deleteComment(Long id);
+	void deleteComment(Long commentId, Long userId);
 }

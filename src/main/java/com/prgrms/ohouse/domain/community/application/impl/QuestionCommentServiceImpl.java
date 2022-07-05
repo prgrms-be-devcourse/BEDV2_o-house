@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.community.application.QuestionCommentService;
+import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.domain.community.application.command.QuestionCommentRegisterCommand;
 import com.prgrms.ohouse.domain.community.application.command.QuestionCommentUpdateCommand;
 import com.prgrms.ohouse.domain.community.model.question.QuestionComment;
@@ -34,18 +35,28 @@ public class QuestionCommentServiceImpl implements QuestionCommentService {
 
 	@Transactional
 	@Override
-	public Long editQuestionComment(QuestionCommentUpdateCommand command) {
-		QuestionComment savedComment = commentRepository.findById(command.getCommentId()).orElseThrow();
-		fileManager.delete(savedComment.getCommentImage(), savedComment);
-		fileManager.store(command.getMultipartFile(), savedComment);
+	public Long editQuestionComment(QuestionCommentUpdateCommand command, Long userId) {
+		QuestionComment comment = getAuthorized(command.getCommentId(), userId);
+		fileManager.delete(comment.getCommentImage(), comment);
+		fileManager.store(command.getMultipartFile(), comment);
 
-		savedComment.apply(command.getContents());
-		return savedComment.getId();
+		comment.apply(command.getContents());
+		return comment.getId();
 	}
 
 	@Transactional
 	@Override
-	public void deleteComment(Long id) {
-		commentRepository.deleteById(id);
+	public void deleteComment(Long commentId, Long userId) {
+		QuestionComment comment = getAuthorized(commentId, userId);
+		fileManager.delete(comment.getCommentImage(), comment);
+		commentRepository.deleteById(commentId);
+	}
+
+	private QuestionComment getAuthorized(Long commentId, Long userId) {
+		QuestionComment comment = commentRepository.findById(commentId).orElseThrow();
+		if (comment.getAuthor().getId() != userId) {
+			throw new UnauthorizedContentAccessException(commentId, userId);
+		}
+		return comment;
 	}
 }

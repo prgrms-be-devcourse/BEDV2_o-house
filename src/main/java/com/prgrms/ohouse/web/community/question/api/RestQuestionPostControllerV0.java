@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.prgrms.ohouse.domain.common.security.AuthUtility;
 import com.prgrms.ohouse.domain.community.application.QuestionPostService;
 import com.prgrms.ohouse.domain.community.application.command.QuestionPostRegisterCommand;
 import com.prgrms.ohouse.domain.community.application.command.QuestionPostUpdateCommand;
@@ -27,6 +28,7 @@ public class RestQuestionPostControllerV0 {
 
 	//TODO: 한 계층 더 감싸주기
 	private final QuestionPostService questionPostService;
+	private final AuthUtility authUtility;
 
 	@PostMapping(value = "/api/v0/questions",
 		consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
@@ -44,14 +46,15 @@ public class RestQuestionPostControllerV0 {
 	public ResponseEntity editQuestionPost(@RequestPart QuestionPostUpdateRequest request,
 		@RequestPart List<MultipartFile> file, @PathVariable("id") Long questionPostId) {
 		questionPostService.editQuestionPost(
-			new QuestionPostUpdateCommand(questionPostId, request.getTitle(), request.getContent(), file));
+			new QuestionPostUpdateCommand(questionPostId, request.getTitle(), request.getContent(), file)
+		, authUtility.getAuthUser().getId());
 		return ResponseEntity
 			.ok(URI.create("/api/v0/questions/" + questionPostId));
 	}
 
 	@DeleteMapping("/api/v0/questions/{id}")
 	public ResponseEntity deleteQuestionPost(@PathVariable("id") Long postId) {
-		questionPostService.deletePost(postId);
+		questionPostService.deletePost(postId, authUtility.getAuthUser().getId());
 		return ResponseEntity.ok().build();
 	}
 }
