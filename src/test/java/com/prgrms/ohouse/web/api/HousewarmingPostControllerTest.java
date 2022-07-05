@@ -176,4 +176,51 @@ class HousewarmingPostControllerTest {
 			);
 
 	}
+
+	@Test
+	@DisplayName("사용자는 자신이 작성한 집들이 게시글을 수정한다.")
+	void authorized_user_update_its_post() throws Exception {
+
+		// Given
+		var author = fixtureProvider.insertGuestUser("guest");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(auditorAware, author, 1);
+		var payload = json.writeValueAsBytes(Map.of(
+			"title", "updated",
+			"content", "updated content{{image}}content1{{image}}content2{{image}}",
+			"housingTypeCode", "PRIVATE_ROOM",
+			"area", 2,
+			"constructionFee", 200,
+			"stylingFee", "200",
+			"familyType", "SINGLE",
+			"workerType", "SELF"
+		));
+		var payloadPart = new MockMultipartFile(
+			"payload",
+			"asdf",
+			"application/json",
+			payload);
+		var images =
+			List.of(
+				new MockMultipartFile("image", "fav.png", "image/png", "chunk1".getBytes()),
+				new MockMultipartFile("image", "fav2.png", "image/png", "chunk2".getBytes()),
+				new MockMultipartFile("image", "fav3.png", "image/png", "chunk3".getBytes())
+			);
+		MockMultipartHttpServletRequestBuilder multipartRequest = (MockMultipartHttpServletRequestBuilder)multipart(
+			HW_URL + "/" + targetPost.getId()).header("Authorization", GUEST_TOKEN);
+		images.forEach(multipartRequest::file);
+		multipartRequest.file(payloadPart);
+
+		// When
+		var result = mockMvc.perform(multipartRequest);
+
+		// Then
+		result.andExpectAll(
+			status().is2xxSuccessful(),
+			header().string("Location", host + "api/v0/hwpost" + "/" + targetPost.getId())
+		);
+		assertThat(targetPost.getTitle()).isEqualTo("updated");
+		assertThat(targetPost.getImages()).hasSize(3);
+
+	}
+
 }
