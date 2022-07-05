@@ -14,7 +14,8 @@ import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
-import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
+import com.prgrms.ohouse.domain.community.application.command.UpdateHousewarmingPostCommand;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 
@@ -32,10 +33,10 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 
 	@Override
 	@Transactional
-	public Long createPost(Long userId, CreateHousewarmingPostCommand command, List<MultipartFile> images) {
+	public Long createPost(HousewarmingPostCreateCommand command, List<MultipartFile> images) {
 		HousewarmingPost post = command.toPost();
 		post = housewarmingPostRepository.save(post);
-		post.validateContent(images.size());
+		post.validateImagesInContent(images.size());
 		fileManager.store(images, post);
 		return post.getId();
 	}
@@ -64,6 +65,13 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 		housewarmingPostRepository.incrementViewCount(postId);
 	}
 
+	@Override
+	public void updatePost(Long postId, Long authorId, UpdateHousewarmingPostCommand command,
+		List<MultipartFile> images) {
+		HousewarmingPost post = getAuthorizedPost(authorId, postId);
+		command.updatePost(post);
+	}
+
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {
 		HousewarmingPost hwPost = housewarmingPostRepository.findById(postId).orElseThrow();
 		if (!Objects.equals(hwPost.getUser().getId(), authorId)) {
@@ -71,4 +79,5 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 		}
 		return hwPost;
 	}
+
 }

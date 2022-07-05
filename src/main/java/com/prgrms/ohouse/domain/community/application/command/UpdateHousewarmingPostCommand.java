@@ -10,15 +10,7 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.Link;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
-@Getter
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CreateHousewarmingPostCommand {
+public class UpdateHousewarmingPostCommand {
 	private String title;
 	private String content;
 	private HousingType housingType;
@@ -32,20 +24,19 @@ public class CreateHousewarmingPostCommand {
 	private List<Link> links;
 	private District district;
 
-	public HousewarmingPost toPost() {
-		return HousewarmingPost.builder()
-			.title(title)
-			.content(content)
-			.housingType(housingType)
-			.housingDescription(housingDescription)
-			.area(area)
-			.budget(budget)
-			.family(family)
-			.company(company)
-			.workMetadata(workMetadata)
-			.copyrightHolder(copyrightHolder)
-			.district(district)
-			.links(links)
-			.build();
+	public void updatePost(HousewarmingPost post) {
+		post.updateMainContent(title, content);
+		post.updateExtraDescription(
+			housingType,
+			housingDescription,
+			area,
+			budget,
+			family,
+			company,
+			workMetadata,
+			copyrightHolder,
+			links,
+			district);
 	}
+
 }

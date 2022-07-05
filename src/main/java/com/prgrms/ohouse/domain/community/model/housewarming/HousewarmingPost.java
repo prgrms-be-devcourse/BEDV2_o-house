@@ -118,7 +118,7 @@ public class HousewarmingPost extends BaseTimeEntity implements ImageAttachable 
 		this.links = links;
 	}
 
-	public void validateContent(int imageCount) {
+	public void validateImagesInContent(int imageCount) {
 		int matchedSequenceCount = 0;
 		var matcher = IMAGE_ESCAPE_PATTERN.matcher(content);
 		while (matcher.find()) {
@@ -139,6 +139,16 @@ public class HousewarmingPost extends BaseTimeEntity implements ImageAttachable 
 	@Override
 	public void removeCurrentImage() {
 		this.images.clear();
+	}
+
+	public void updateMainContent(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
+
+	public void updateExtraDescription(HousingType housingType, String housingDescription, Long area, Budget budget,
+		Family family, String company, WorkMetadata workMetadata, String copyrightHolder, List<Link> links,
+		District district) {
 	}
 }
 

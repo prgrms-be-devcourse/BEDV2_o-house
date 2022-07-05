@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.requests;
+package com.prgrms.ohouse.web.community.requests;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.District;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
@@ -74,7 +74,7 @@ public class HousewarmingPostCreateRequest {
 
 	private String districtDescription;
 
-	public CreateHousewarmingPostCommand toCommand() {
+	public HousewarmingPostCreateCommand toCommand() {
 		HousingType housingType = HousingType.from(housingTypeCode);
 		Budget budget = new Budget(constructionFee, stylingFee);
 		Family family = new Family(familyType, familyDescription, familyCount);
@@ -87,8 +87,7 @@ public class HousewarmingPostCreateRequest {
 			.workerType(WorkerType.valueOf(workerType))
 			.build();
 		List<Link> links = convertToLinks();
-
-		return CreateHousewarmingPostCommand.builder()
+		return HousewarmingPostCreateCommand.builder()
 			.title(title)
 			.content(content)
 			.housingType(housingType)

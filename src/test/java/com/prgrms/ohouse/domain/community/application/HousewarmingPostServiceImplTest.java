@@ -18,7 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.ohouse.domain.community.application.command.CreateHousewarmingPostCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
@@ -56,7 +56,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var author = fixtureProvider.insertGuestUser("guest");
-		var command = CreateHousewarmingPostCommand.builder()
+		var command = HousewarmingPostCreateCommand.builder()
 			.title("test1")
 			.content("test1content")
 			.housingType(HousingType.APARTMENT)
@@ -69,7 +69,7 @@ class HousewarmingPostServiceImplTest {
 		when(userAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(author));
 
 		// When
-		Long postId = housewarmingPostServiceImpl.createPost(author.getId(), command, Collections.emptyList());
+		Long postId = housewarmingPostServiceImpl.createPost(command, Collections.emptyList());
 
 		// Then
 		var createdPost = housewarmingPostRepository.findById(postId);
@@ -154,7 +154,7 @@ class HousewarmingPostServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("사용자가 요청에 맞춘 액수의 집들이 컨텐츠와 반환해야 한다. ")
+	@DisplayName("사용자가 요청한 크기 만큼의 집들이 컨텐츠들을 반환해야 한다. ")
 	void return_proper_post_with_proper_size_page() {
 		for (int i = 1; i <= 20; i++) {
 			var author = fixtureProvider.insertGuestUser("guest" + i);
@@ -174,4 +174,17 @@ class HousewarmingPostServiceImplTest {
 		assertThat(result.hasNext()).isTrue();
 
 	}
+
+	@Test
+	@DisplayName("사용자는 본인이 작성한 집들이 게시물을 수정 요청에 맞춰서 수정한다. - 권한이 있을 경우 성공")
+	void authorized_user_update_post_with_information() {
+
+		// Given
+
+		// When
+
+		// Then
+
+	}
+
 }

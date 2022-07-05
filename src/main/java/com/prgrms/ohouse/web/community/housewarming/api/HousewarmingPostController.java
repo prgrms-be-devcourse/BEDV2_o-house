@@ -25,7 +25,7 @@ import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.web.commerce.results.SliceResult;
-import com.prgrms.ohouse.web.requests.HousewarmingPostCreateRequest;
+import com.prgrms.ohouse.web.community.requests.HousewarmingPostCreateRequest;
 import com.prgrms.ohouse.web.user.results.ErrorCode;
 import com.prgrms.ohouse.web.user.results.ErrorResult;
 
@@ -51,8 +51,7 @@ public class HousewarmingPostController {
 	public ResponseEntity<String> handleCreatePostRequest(
 		@RequestPart("payload") @Valid HousewarmingPostCreateRequest payload,
 		@RequestPart("image") List<MultipartFile> images) {
-		Long userId = authUtility.getAuthUser().getId();
-		Long postId = postService.createPost(userId, payload.toCommand(), images);
+		Long postId = postService.createPost(payload.toCommand(), images);
 
 		return ResponseEntity.created(URI.create(host + "api/v0/hwpost/" + postId)).body("post creation success");
 	}
