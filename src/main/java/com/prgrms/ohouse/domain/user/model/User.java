@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.*;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +19,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
@@ -29,20 +29,17 @@ import com.prgrms.ohouse.domain.commerce.model.cart.Cart;
 @Getter
 @Setter(value = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails, ImageAttachable {
 
 	@Id
-	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
 	@Column(name = "nickname", nullable = false, unique = true, length = 10)
 	private String nickname;
 
-	@EqualsAndHashCode.Include
 	@Column(name = "email", nullable = false, unique = true, length = 300)
 	private String email;
 
@@ -131,6 +128,21 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 
 	private void setCart(Cart cart) {
 		this.cart = cart;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof User))
+			return false;
+		User user = (User)o;
+		return email.equals(user.getEmail());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email);
 	}
 
 	@Override
