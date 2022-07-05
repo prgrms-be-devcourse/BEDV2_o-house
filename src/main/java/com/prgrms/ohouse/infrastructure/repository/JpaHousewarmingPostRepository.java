@@ -8,4 +8,5 @@ import com.prgrms.ohouse.infrastructure.repository.custom.QueryDSLHousewarmingPo
 
 public interface JpaHousewarmingPostRepository extends JpaRepository<HousewarmingPost, Long>,
 	HousewarmingPostRepository, QueryDSLHousewarmingPostRepository {
+
 }

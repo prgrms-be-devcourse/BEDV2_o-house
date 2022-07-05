@@ -41,10 +41,10 @@ import com.prgrms.ohouse.web.ApiDocumentUtils;
 import com.prgrms.ohouse.web.commerce.results.ProductViewMainPageResult;
 import com.prgrms.ohouse.web.commerce.results.SliceResult;
 
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "docs.api.com")
-@Transactional
 class RestProductControllerTest {
 	@Autowired
 	private MockMvc mockMvc;

@@ -42,6 +42,7 @@ class RestOrderControllerTest {
 
 	@Autowired
 	TestDataProvider fixtureProvider;
+
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -77,7 +78,9 @@ class RestOrderControllerTest {
 				ApiDocumentUtils.getDocumentResponse(),
 				PayloadDocumentation.requestFields(
 					PayloadDocumentation.fieldWithPath("shipper").type(JsonFieldType.STRING).description("배송인 명"),
-					PayloadDocumentation.fieldWithPath("shippingAddress").type(JsonFieldType.STRING).description("배송지 명"),
+					PayloadDocumentation.fieldWithPath("shippingAddress")
+						.type(JsonFieldType.STRING)
+						.description("배송지 명"),
 					PayloadDocumentation.fieldWithPath("recipient").type(JsonFieldType.STRING).description("수령인"),
 					PayloadDocumentation.fieldWithPath("city").type(JsonFieldType.STRING).description("배송지 도시"),
 					PayloadDocumentation.fieldWithPath("street").type(JsonFieldType.STRING).description("배송지 지번"),
@@ -85,13 +88,16 @@ class RestOrderControllerTest {
 					PayloadDocumentation.fieldWithPath("zipcode").type(JsonFieldType.STRING).description("우편번호"),
 					PayloadDocumentation.fieldWithPath("lotNumberAddress").type(JsonFieldType.STRING).description("지번"),
 					PayloadDocumentation.fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-					PayloadDocumentation.fieldWithPath("orderItemAddRequests[].productId").type(JsonFieldType.NUMBER).description("주문 상품 상품 아이디"),
-					PayloadDocumentation.fieldWithPath("orderItemAddRequests[].quantity").type(JsonFieldType.NUMBER).description("주문 상품 상품 개수")
-					),
+					PayloadDocumentation.fieldWithPath("orderItemAddRequests[].productId")
+						.type(JsonFieldType.NUMBER)
+						.description("주문 상품 상품 아이디"),
+					PayloadDocumentation.fieldWithPath("orderItemAddRequests[].quantity")
+						.type(JsonFieldType.NUMBER)
+						.description("주문 상품 상품 개수")
+				),
 				PayloadDocumentation.responseFields(
 					PayloadDocumentation.fieldWithPath("orderId").type(JsonFieldType.NUMBER).description("등록 오더 아이디")
 				)
 			));
-
 	}
 }

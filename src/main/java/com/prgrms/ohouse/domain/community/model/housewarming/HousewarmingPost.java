@@ -18,6 +18,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.data.annotation.CreatedBy;
+
+import com.prgrms.ohouse.domain.common.BaseTimeEntity;
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
 import com.prgrms.ohouse.domain.user.model.User;
@@ -30,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class HousewarmingPost implements ImageAttachable {
+public class HousewarmingPost extends BaseTimeEntity implements ImageAttachable {
 
 	/**
 	 * "{{image}}" 이미지의 위치를 지정한 문자열
@@ -43,6 +46,7 @@ public class HousewarmingPost implements ImageAttachable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
+	@CreatedBy
 	private User user;
 
 	@Column(name = "title", nullable = false)
@@ -94,10 +98,9 @@ public class HousewarmingPost implements ImageAttachable {
 	private District district;
 
 	@Builder
-	public HousewarmingPost(User user, String title, String content, HousingType housingType, String housingDescription,
+	public HousewarmingPost(String title, String content, HousingType housingType, String housingDescription,
 		Long area, Budget budget, Family family, String company, WorkMetadata workMetadata, String copyrightHolder,
 		List<Link> links, District district) {
-		this.user = user;
 		this.title = title;
 		this.content = content;
 		this.housingType = housingType;
@@ -115,7 +118,7 @@ public class HousewarmingPost implements ImageAttachable {
 		this.links = links;
 	}
 
-	public void validateContent(int imageCount) {
+	public void validateImagesInContent(int imageCount) {
 		int matchedSequenceCount = 0;
 		var matcher = IMAGE_ESCAPE_PATTERN.matcher(content);
 		while (matcher.find()) {
@@ -136,6 +139,16 @@ public class HousewarmingPost implements ImageAttachable {
 	@Override
 	public void removeCurrentImage() {
 		this.images.clear();
+	}
+
+	public void updateMainContent(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
+
+	public void updateExtraDescription(HousingType housingType, String housingDescription, Long area, Budget budget,
+		Family family, String company, WorkMetadata workMetadata, String copyrightHolder, List<Link> links,
+		District district) {
 	}
 }
 
