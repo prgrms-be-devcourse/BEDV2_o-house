@@ -108,8 +108,7 @@ public class HousewarmingPostUpdateRequest {
 			? Collections.emptyList()
 			: linkPayloads.stream()
 			.map(linkPayload -> new Link(linkPayload.url, linkPayload.urlDesc))
-			.collect(
-				Collectors.toUnmodifiableList());
+			.collect(Collectors.toUnmodifiableList());
 	}
 
 	private <T extends Enum<T>> T mapToEnumOrNull(Class<T> enumType, String name) {

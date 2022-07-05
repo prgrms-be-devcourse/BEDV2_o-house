@@ -35,14 +35,14 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/v0/hwpost")
 @Slf4j
-public class HousewarmingPostController {
+public class RestHousewarmingPostController {
 
 	private final HousewarmingPostService postService;
 	private final AuthUtility authUtility;
 	@Value("${app.host}")
 	private String host;
 
-	public HousewarmingPostController(HousewarmingPostService postService, AuthUtility authUtility) {
+	public RestHousewarmingPostController(HousewarmingPostService postService, AuthUtility authUtility) {
 		this.postService = postService;
 		this.authUtility = authUtility;
 	}
