@@ -1,8 +1,4 @@
-<<<<<<< HEAD:src/main/java/com/prgrms/ohouse/web/commerce/requests/HousewarmingPostCreateRequest.java
-package com.prgrms.ohouse.web.commerce.requests;
-=======
 package com.prgrms.ohouse.web.community.requests;
->>>>>>> dc1f6afedbdaef209465f20689ebba798a562adb:src/main/java/com/prgrms/ohouse/web/community/requests/HousewarmingPostCreateRequest.java
 
 import java.util.Collections;
 import java.util.List;

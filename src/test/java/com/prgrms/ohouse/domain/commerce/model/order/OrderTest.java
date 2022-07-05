@@ -31,13 +31,6 @@ class OrderTest {
 	@Test
 	void Order_totalPrice_정상_테스트() {
 		//given
-		User user = User.builder()
-			.email("test@email.com")
-			.nickname("nickname")
-			.password("password")
-			.followerCount(0)
-			.defaultAddress(new Address())
-			.build();
 		Order order = Order.of(new Address());
 		Category category = Category.of(RootCategory.FURNITURE, SecondCategory.BED, ThirdCategory.FRAME,
 			FourthCategory.NORMAL);

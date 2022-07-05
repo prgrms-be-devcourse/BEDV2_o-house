@@ -34,7 +34,6 @@ public class Cart {
 	private List<CartItem> cartItems = new ArrayList<>();
 
 	public static Cart of() {
-		Cart instance = new Cart();
-		return instance;
+		return new Cart();
 	}
 }

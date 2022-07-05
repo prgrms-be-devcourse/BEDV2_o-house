@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
+import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 
 @SpringBootTest
@@ -42,6 +44,9 @@ class HousewarmingPostControllerTest {
 
 	@Autowired
 	TestDataProvider fixtureProvider;
+
+	@MockBean
+	UserAuditorAware auditorAware;
 
 	@Value("${app.host}")
 	private String host;
@@ -92,7 +97,8 @@ class HousewarmingPostControllerTest {
 	void delete_hwpost_with_proper_authorization() throws Exception {
 
 		// Given
-		var post = fixtureProvider.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest"));
+		var post = fixtureProvider.insertHousewarmingPostWithAuthor(auditorAware,
+			fixtureProvider.insertGuestUser("guest"), 1);
 		var postId = post.getId();
 		// When
 		var result = mockMvc.perform(delete(HW_URL + "/" + postId).header("Authorization", GUEST_TOKEN));
@@ -111,7 +117,7 @@ class HousewarmingPostControllerTest {
 		// Given
 		fixtureProvider.insertGuestUser("guest");
 		var savedPost = fixtureProvider
-			.insertHousewarmingPostWithAuthor(fixtureProvider.insertGuestUser("guest2"));
+			.insertHousewarmingPostWithAuthor(auditorAware, fixtureProvider.insertGuestUser("guest2"), 2);
 		var postId = savedPost.getId();
 		// When
 		var result = mockMvc.perform(delete(HW_URL + "/" + postId).header("Authorization", GUEST_TOKEN));
@@ -129,13 +135,12 @@ class HousewarmingPostControllerTest {
 
 		// Given
 		var user = fixtureProvider.insertGuestUser("guest");
-		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(user);
+		var savedPost = fixtureProvider.insertHousewarmingPostWithAuthor(auditorAware, user, 2);
 
 		// When
 		var result = mockMvc.perform(get(HW_URL + "/" + savedPost.getId()));
 
 		// Then
-
 		var expectedPayload = HousewarmingPostInfoResult.from(savedPost);
 		expectedPayload.incrementViewCount();
 		result.andExpectAll(
@@ -144,4 +149,31 @@ class HousewarmingPostControllerTest {
 		).andDo(print());
 	}
 
+	@Test
+	@DisplayName("원하는 개수 만큼의 집들이 컨텐츠 목록과 목록에 대한 메타 데이터를 반환한다.")
+	void return_posts_with_correct_metadata() throws Exception {
+		int page = 0;
+		int queriedSize = 19;
+		int storedSize = 20;
+
+		// Given
+		var author = fixtureProvider.insertGuestUser("guest");
+		for (int i = 1; i <= storedSize; i++) {
+			fixtureProvider.insertHousewarmingPostWithAuthor(auditorAware, author, i);
+		}
+		// When
+		var result = mockMvc.perform(
+			get(HW_URL).param("page", String.valueOf(page))
+				.param("size", String.valueOf(queriedSize)));
+
+		// Then
+		result
+			.andDo(print())
+			.andExpectAll(
+				jsonPath("size").value(queriedSize),
+				jsonPath("hasNext").value(true),
+				jsonPath("contents").exists()
+			);
+
+	}
 }

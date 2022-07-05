@@ -29,18 +29,20 @@ import com.prgrms.ohouse.domain.commerce.model.cart.Cart;
 @Getter
 @Setter(value = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails, ImageAttachable {
 
 	@Id
+	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
 	@Column(name = "nickname", nullable = false, unique = true, length = 10)
 	private String nickname;
 
+	@EqualsAndHashCode.Include
 	@Column(name = "email", nullable = false, unique = true, length = 300)
 	private String email;
 
@@ -49,7 +51,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "gender", length = 10)
-	private GenderType gender;
+	private Gender gender;
 
 	@URL
 	@Column(name = "personal_url", length = 500)
@@ -83,7 +85,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 
 	@Builder
 	public User(String nickname, String email, String password,
-		GenderType gender, String personalUrl, LocalDate birth, StoredFile image, String introductions,
+		Gender gender, String personalUrl, LocalDate birth, StoredFile image, String introductions,
 		int followingCount, int followerCount,
 		Address defaultAddress) {
 		setNickname(nickname);
@@ -102,7 +104,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 		setCart(Cart.of());
 	}
 
-	public User update(String nickname, GenderType gender, String personalUrl, LocalDate birth,
+	public User update(String nickname, Gender gender, String personalUrl, LocalDate birth,
 		String introductions) {
 
 		setNickname(nickname);

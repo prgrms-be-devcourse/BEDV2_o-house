@@ -3,6 +3,9 @@ package com.prgrms.ohouse.infrastructure;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,6 +36,7 @@ import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
+import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
 import com.prgrms.ohouse.domain.user.model.UserRepository;
 
 @Component
@@ -157,6 +161,11 @@ public class TestDataProvider {
 		return result;
 	}
 
+	/**
+	 * 영속화된 사용자 픽스처 반환
+	 * @param nickname : 현정님 jwt 토큰의 nickname은 guest
+	 * @return DB에 저장된 User 엔티티(detached)
+	 */
 	public User insertGuestUser(String nickname) {
 		User user = User.builder()
 			.email(nickname + "@gmail.com")
@@ -168,20 +177,21 @@ public class TestDataProvider {
 		return userRepository.save(user);
 	}
 
-	public HousewarmingPost insertHousewarmingPostWithAuthor(User author) {
-		return housewarmingPostRepository.save(
+	public HousewarmingPost insertHousewarmingPostWithAuthor(UserAuditorAware aware, User author, int index) {
+		when(aware.getCurrentAuditor()).thenReturn(Optional.of(author));
+		var savedPost = housewarmingPostRepository.save(
 			HousewarmingPost.builder()
-				.title("제목1")
+				.title("제목" + index)
 				.content("내용1{{image}}내용2{{image}}내용3{{image}}")
 				.housingType(HousingType.APARTMENT)
 				.area(2L)
-				.budget(new Budget(100L, 150L))
+				.budget(new Budget(100, 150))
 				.family(new Family("SINGLE", null, null))
 				.workMetadata(WorkMetadata.builder().workerType(WorkerType.valueOf("SELF")).build())
 				.links(Collections.emptyList())
-				.user(author)
-				.build()
-		);
+				.build());
+		reset(aware);
+		return savedPost;
 	}
 }
 
