@@ -42,7 +42,6 @@ public class ReviewServiceImpl implements ReviewService {
 	private final FileManager fileManager;
 	private final AuthUtility authUtility;
 
-	//TODO: 로그인 된 사용자만 이용할 수 있도록 검증. Security 설정 변경?
 	@Transactional
 	@Override
 	public Long registerReview(ReviewRegisterCommand command) {

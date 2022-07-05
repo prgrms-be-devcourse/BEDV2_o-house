@@ -2,6 +2,7 @@ package com.prgrms.ohouse.web.api;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.ohouse.domain.commerce.application.ReviewService;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.prgrms.ohouse.domain.commerce.model.review.PageInformation;
 import com.prgrms.ohouse.domain.commerce.model.review.PagedPhotoReviewInformation;
@@ -38,6 +41,7 @@ import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 import com.prgrms.ohouse.web.commerce.requests.ReviewCreateRequest;
 import com.prgrms.ohouse.web.commerce.results.ReviewCreateResult;
+import com.prgrms.ohouse.web.commerce.results.ReviewUpdateRequest;
 
 @SpringBootTest(properties = "spring.profiles.active:test")
 @AutoConfigureMockMvc
@@ -52,6 +56,11 @@ class RestReviewControllerTest {
 	private MockMvc mockMvc;
 	@Autowired
 	private ObjectMapper mapper;
+	@Autowired
+	private ReviewService reviewService;
+
+	@Value("${jwt.headerName}")
+	private String tokenHeaderName;
 
 	@DisplayName("일반 리뷰 생성 테스트")
 	@Test
@@ -112,7 +121,7 @@ class RestReviewControllerTest {
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				requestParts(
-					partWithName("review-image").description("리뷰 이미지 파일"),
+					partWithName("review-image").optional().description("리뷰 이미지 파일"),
 					partWithName("request").description("생성할 리뷰 정보")
 				),
 				requestPartFields("request",
@@ -244,5 +253,71 @@ class RestReviewControllerTest {
 		assertThat(page.getPageNumber()).isZero();
 		assertThat(page.getTotalPages()).isEqualTo(4);
 		assertThat(result.getReviews()).hasSize(10);
+	}
+
+	@DisplayName("리뷰 삭제")
+	@Test
+	void testReviewDelete() throws Exception {
+		Product product = dataProvider.insertProduct();
+		User user = dataProvider.insertGuestUser("guest");
+		Review review = dataProvider.insertNormalReview(product, user, 5,
+			"review review review review review review review review review", 0);
+		MvcResult mvcResult = mockMvc.perform(delete("/api/v0/reviews/" + review.getId())
+				.header(tokenHeaderName, TestDataProvider.GUEST_TOKEN)
+			)
+			.andDo(print())
+			.andDo(document("review-delete",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				requestHeaders(
+					headerWithName(tokenHeaderName).description("JWT 토큰")
+				),
+				responseFields(
+					fieldWithPath("message").type(JsonFieldType.STRING).description("작업 결과"),
+					fieldWithPath("id").type(JsonFieldType.NUMBER).description("삭제된 리뷰 id")
+				)
+			))
+			.andExpect(status().isOk())
+			.andReturn();
+	}
+
+	@DisplayName("리뷰 수정")
+	@Test
+	void testReviewUpdate() throws Exception {
+		Product product = dataProvider.insertProduct();
+		User user = dataProvider.insertGuestUser("guest");
+		Review review = dataProvider.insertNormalReview(product, user, 5,
+			"review review review review review review review review review", 0);
+
+		ReviewUpdateRequest request = new ReviewUpdateRequest(review.getId(), 5,
+			"reviewupdate reviewupdate reviewupdate reviewupdate reviewupdate");
+		String json = mapper.writeValueAsString(request);
+
+		MvcResult mvcResult = mockMvc.perform(multipart("/api/v0/reviews/" + review.getId())
+				.part(new MockPart("request", json.getBytes(StandardCharsets.UTF_8)))
+				.header(tokenHeaderName, TestDataProvider.GUEST_TOKEN))
+			.andExpect(status().isOk())
+			.andDo(document("photo-review-create",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				requestHeaders(
+					headerWithName(tokenHeaderName).description("JWT 토큰")
+				),
+				requestParts(
+					partWithName("review-image").optional().description("수정할 이미지 파일"),
+					partWithName("request").description("수정할 리뷰 정보")
+				),
+				requestPartFields("request",
+					fieldWithPath("id").type(JsonFieldType.NUMBER).description("수정할 리뷰 id"),
+					fieldWithPath("reviewPoint").type(JsonFieldType.NUMBER).description("리뷰 점수"),
+					fieldWithPath("contents").type(JsonFieldType.STRING).description("리뷰 내용")
+				),
+				responseFields(
+					fieldWithPath("id").type(JsonFieldType.NUMBER).description("수정된 리뷰 아이디"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("작업 결과 메세지")
+				)
+			))
+			.andDo(print())
+			.andReturn();
 	}
 }

@@ -45,7 +45,6 @@ import com.prgrms.ohouse.web.commerce.results.SliceResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "docs.api.com")
-@Transactional
 class RestProductControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
