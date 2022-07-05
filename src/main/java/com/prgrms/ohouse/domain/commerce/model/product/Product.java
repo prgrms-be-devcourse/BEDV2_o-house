@@ -16,6 +16,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.prgrms.ohouse.domain.commerce.model.cart.CartItem;
+import com.prgrms.ohouse.domain.commerce.model.order.OrderItem;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.PriceRange;
 
 import lombok.AccessLevel;
@@ -57,6 +58,9 @@ public class Product {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "attribute_id", referencedColumnName = "id")
 	private Attribute attribute;
+
+	@OneToMany(mappedBy = "product")
+	private List<OrderItem> orderItems = new ArrayList<>();
 
 	@OneToMany(mappedBy = "product")
 	List<CartItem> cartItems = new ArrayList<>();

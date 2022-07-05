@@ -101,7 +101,7 @@ public class User extends BaseEntity implements UserDetails, ImageAttachable {
 		setFollowerCount(followerCount);
 		setFollowingCount(followingCount);
 		setDefaultAddress(defaultAddress);
-		setCart(Cart.of(this));
+		setCart(Cart.of());
 	}
 
 	public User update(String nickname, Gender gender, String personalUrl, LocalDate birth,
