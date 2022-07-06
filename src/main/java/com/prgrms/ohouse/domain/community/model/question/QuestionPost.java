@@ -54,7 +54,7 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 
 	@Column(nullable = false, length = 50)
 	private String title;
-	//TODO: 검증
+	@Column(nullable = false)
 	private String contents;
 
 	//TODO: 컬렉션 getter로 인한 불변성 붕괴 문제 수정
@@ -79,6 +79,7 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 	}
 
 	public QuestionPost apply(String title, String contents) {
+		isValidTitle(title);
 		this.title = title;
 		this.contents = contents;
 		return this;

@@ -1,6 +1,7 @@
 package com.prgrms.ohouse.domain.community.model.question;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -37,7 +38,7 @@ public class QuestionComment extends BaseTimeEntity implements ImageAttachable {
 	@GeneratedValue
 	private Long id;
 
-	//TODO: 검증
+	@Column(nullable = false, length = 255)
 	private String contents;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -49,7 +50,7 @@ public class QuestionComment extends BaseTimeEntity implements ImageAttachable {
 
 	@CreatedBy
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "author_id")
+	@JoinColumn(name = "author_id", nullable = false)
 	private User author;
 
 	@Override
