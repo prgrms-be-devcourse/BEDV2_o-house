@@ -21,7 +21,9 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -72,11 +74,10 @@ class RestHousewarmingPostControllerTest {
 			"workerType", "SELF"
 		));
 		// Given
-		var payloadPart = new MockMultipartFile(
+		var payloadPart = new MockPart(
 			"payload",
-			"asdf",
-			"application/json",
 			payload);
+		payloadPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 		var images =
 			List.of(
 				new MockMultipartFile("image", "fav.png", "image/png", "chunk1".getBytes()),
@@ -86,7 +87,7 @@ class RestHousewarmingPostControllerTest {
 		MockMultipartHttpServletRequestBuilder multipartRequest = (MockMultipartHttpServletRequestBuilder)multipart(
 			HW_URL).header("Authorization", GUEST_TOKEN);
 		images.forEach(multipartRequest::file);
-		multipartRequest.file(payloadPart);
+		multipartRequest.part(payloadPart);
 		// When
 		var result = mockMvc.perform(multipartRequest);
 
@@ -327,11 +328,10 @@ class RestHousewarmingPostControllerTest {
 			"familyType", "SINGLE",
 			"workerType", "SELF"
 		));
-		var payloadPart = new MockMultipartFile(
+		var payloadPart = new MockPart(
 			"payload",
-			"asdf",
-			"application/json",
 			payload);
+		payloadPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 		var images =
 			List.of(
 				new MockMultipartFile("image", "fav.png", "image/png", "chunk1".getBytes()),
@@ -341,7 +341,7 @@ class RestHousewarmingPostControllerTest {
 		MockMultipartHttpServletRequestBuilder multipartRequest = (MockMultipartHttpServletRequestBuilder)multipart(
 			HW_URL + "/" + targetPost.getId()).header("Authorization", GUEST_TOKEN);
 		images.forEach(multipartRequest::file);
-		multipartRequest.file(payloadPart);
+		multipartRequest.part(payloadPart);
 
 		// When
 		var result = mockMvc.perform(multipartRequest);
