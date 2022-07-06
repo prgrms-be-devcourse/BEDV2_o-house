@@ -9,9 +9,7 @@ import com.prgrms.ohouse.domain.commerce.application.OrderService;
 import com.prgrms.ohouse.domain.commerce.application.command.OrderAddCommand;
 import com.prgrms.ohouse.domain.commerce.application.command.OrderViewCommand;
 import com.prgrms.ohouse.domain.commerce.model.order.Order;
-import com.prgrms.ohouse.domain.commerce.model.order.OrderItemRepository;
 import com.prgrms.ohouse.domain.commerce.model.order.OrderRepository;
-import com.prgrms.ohouse.domain.commerce.model.product.ProductRepository;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.commerce.application.converter.OrderConverter;
 import com.prgrms.ohouse.web.commerce.results.OrderAddResult;
@@ -23,9 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class OrderServiceImpl implements OrderService {
-	private final OrderItemRepository orderItemRepository;
 	private final OrderRepository orderRepository;
-	private final ProductRepository productRepository;
 
 	@Override
 	public OrderAddResult addOrder(OrderAddCommand orderAddCommand) {
