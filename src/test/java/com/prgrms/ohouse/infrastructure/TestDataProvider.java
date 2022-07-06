@@ -1,8 +1,10 @@
 package com.prgrms.ohouse.infrastructure;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import static org.mockito.Mockito.*;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import com.prgrms.ohouse.domain.commerce.model.product.enums.SecondCategory;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
+import com.prgrms.ohouse.domain.commerce.model.review.Review;
+import com.prgrms.ohouse.domain.commerce.model.review.ReviewImage;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
@@ -81,6 +85,82 @@ public class TestDataProvider {
 		return productRepository.save(product);
 	}
 
+	public List<Product> insert40Product() {
+		Category category = insertCategory();
+		Attribute attribute = insertAttribute();
+		List<Product> result = new ArrayList<>();
+		for (int i = 0; i < 40; i++) {
+			Product product = Product.of("product" + i, 2000, "content" + 1, category, attribute);
+			result.add(productRepository.save(product));
+		}
+		return result;
+	}
+
+	public Review insertNormalReview(Product product, User user, int reviewPoint, String contents, int helpPoint) {
+		Review review = Review.createReview(product, user, reviewPoint, contents);
+		review.increaseHelpPoint(helpPoint);
+		return reviewRepository.save(review);
+	}
+
+	public Review insertPhotoReview() {
+		Product product = insertProduct();
+		User user = insertUser();
+		Review review = Review.createReview(product, user, 4, "content content content content content content");
+		review = reviewRepository.save(review);
+		ReviewImage reviewImage = new ReviewImage("testFile", "testUrl", review);
+		review.attach("reviewImage", "src/test/resources/static/");
+		return review;
+	}
+
+	public Review insertPhotoReviewWithUser(User user) {
+		userRepository.save(user);
+		Product product = insertProduct();
+		Review review = Review.createReview(product, user, 4, "content content content content content content");
+		review = reviewRepository.save(review);
+		ReviewImage reviewImage = new ReviewImage("testFile", "testUrl", review);
+		review.attach("reviewImage", "src/test/resources/static/");
+		return review;
+	}
+
+	public List<Review> insert40PhotoReview() {
+		Product product = insertProduct();
+		User user = insertUser();
+		List<Review> result = new ArrayList<>();
+		for (int i = 0; i < 40; i++) {
+			Review review = Review.createReview(product, user, 4,
+				i + "content content content content content content");
+			Review entity = reviewRepository.save(review);
+			ReviewImage reviewImage = new ReviewImage("testFile", "testUrl", entity);
+			entity.attach("reviewImage","src/test/resources/static/");
+			result.add(entity);
+		}
+		return result;
+	}
+
+	public List<Review> insert40NormalReview() {
+		Product product = insertProduct();
+		User user = insertUser();
+		List<Review> result = new ArrayList<>();
+		for (int i = 0; i < 40; i++) {
+			Review review = Review.createReview(product, user, 4,
+				i + "content content content content content content");
+			result.add(reviewRepository.save(review));
+		}
+		return result;
+	}
+
+	public List<Review> insert40NormalReviewWithUser(User user) {
+		Product product = insertProduct();
+		userRepository.save(user);
+		List<Review> result = new ArrayList<>();
+		for (int i = 0; i < 40; i++) {
+			Review review = Review.createReview(product, user, 4,
+				i + "content content content content content content");
+			result.add(reviewRepository.save(review));
+		}
+		return result;
+	}
+
 	/**
 	 * 영속화된 사용자 픽스처 반환
 	 * @param nickname : 현정님 jwt 토큰의 nickname은 guest
@@ -114,3 +194,4 @@ public class TestDataProvider {
 		return savedPost;
 	}
 }
+

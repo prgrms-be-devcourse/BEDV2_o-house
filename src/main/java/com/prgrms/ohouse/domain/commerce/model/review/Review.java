@@ -13,9 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import org.springframework.data.annotation.CreatedBy;
+
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.prgrms.ohouse.domain.common.file.ImageAttachable;
 import com.prgrms.ohouse.domain.common.file.StoredFile;
+import com.prgrms.ohouse.domain.user.model.BaseEntity;
 import com.prgrms.ohouse.domain.user.model.User;
 
 import lombok.AccessLevel;
@@ -27,13 +30,14 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Setter(AccessLevel.PRIVATE)
 @Getter
-public class Review implements ImageAttachable {
+public class Review extends BaseEntity implements ImageAttachable {
 	@Id
 	@GeneratedValue
 	private Long id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id")
 	private Product product;
+	@CreatedBy
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -48,15 +52,24 @@ public class Review implements ImageAttachable {
 	public static Review createReview(Product product, User user, int reviewPoint, String contents) {
 		Review instance = new Review();
 		instance.setProduct(product);
-		instance.setUser(user);
 		instance.setReviewPoint(reviewPoint);
 		instance.setContents(contents);
 		instance.setCreatedAt(LocalDateTime.now());
+		instance.setUser(user);
 		return instance;
 	}
 
+	public void increaseHelpPoint(int value) {
+		this.helpPoint += value;
+	}
+
+	public void modifyReview(int reviewPoint, String contents) {
+		setReviewPoint(reviewPoint);
+		setContents(contents);
+	}
+
 	private void validReviewPoint(int reviewPoint) {
-		checkArgument(reviewPoint >= 0 && reviewPoint <= 5, "invalid review point range");
+		checkArgument(reviewPoint >= 1 && reviewPoint <= 5, "invalid review point range");
 	}
 
 	private void validContentLength(String contents) {
