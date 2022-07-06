@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.domain.commerce.model.review;
+package com.prgrms.ohouse.domain.commerce.model.review.exception;
 
 public class ReviewRegisterFailException extends RuntimeException {
 	public ReviewRegisterFailException(String message) {
