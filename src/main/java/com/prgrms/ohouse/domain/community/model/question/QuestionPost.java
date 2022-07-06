@@ -54,7 +54,6 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 
 	@Column(nullable = false, length = 50)
 	private String title;
-	//TODO: 검증
 	@Column(nullable = false)
 	private String contents;
 
@@ -64,7 +63,7 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 
 	@CreatedBy
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "author_id", nullable = false, updatable = false)
+	@JoinColumn(name = "author_id", nullable = false)
 	private User author;
 
 	@Override
@@ -80,6 +79,7 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 	}
 
 	public QuestionPost apply(String title, String contents) {
+		isValidTitle(title);
 		this.title = title;
 		this.contents = contents;
 		return this;

@@ -38,12 +38,11 @@ public class QuestionComment extends BaseTimeEntity implements ImageAttachable {
 	@GeneratedValue
 	private Long id;
 
-	//TODO: 검증
-	@Column(nullable = false)
+	@Column(nullable = false, length = 255)
 	private String contents;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "question_id", nullable = false, updatable = false)
+	@JoinColumn(name = "question_id", nullable = false)
 	private QuestionPost questionPost;
 
 	@OneToOne(mappedBy = "questionComment", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -51,7 +50,7 @@ public class QuestionComment extends BaseTimeEntity implements ImageAttachable {
 
 	@CreatedBy
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "author_id", nullable = false, updatable = false)
+	@JoinColumn(name = "author_id", nullable = false)
 	private User author;
 
 	@Override
