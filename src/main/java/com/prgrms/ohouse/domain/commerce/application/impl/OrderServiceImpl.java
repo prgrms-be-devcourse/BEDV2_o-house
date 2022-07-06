@@ -1,10 +1,14 @@
 package com.prgrms.ohouse.domain.commerce.application.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.ohouse.domain.commerce.application.OrderService;
 import com.prgrms.ohouse.domain.commerce.application.command.OrderAddCommand;
+import com.prgrms.ohouse.domain.commerce.application.command.OrderViewCommand;
 import com.prgrms.ohouse.domain.commerce.model.order.Order;
 import com.prgrms.ohouse.domain.commerce.model.order.OrderItem;
 import com.prgrms.ohouse.domain.commerce.model.order.OrderItemRepository;
@@ -12,8 +16,9 @@ import com.prgrms.ohouse.domain.commerce.model.order.OrderRepository;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.prgrms.ohouse.domain.commerce.model.product.ProductRepository;
 import com.prgrms.ohouse.domain.user.model.Address;
-import com.prgrms.ohouse.domain.user.model.UserRepository;
 import com.prgrms.ohouse.web.commerce.results.OrderAddResult;
+import com.prgrms.ohouse.web.commerce.results.OrderViewItemResult;
+import com.prgrms.ohouse.web.commerce.results.OrderViewProductResult;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +29,6 @@ public class OrderServiceImpl implements OrderService {
 	private final OrderItemRepository orderItemRepository;
 	private final OrderRepository orderRepository;
 	private final ProductRepository productRepository;
-	private final UserRepository userRepository;
 
 	@Override
 	public OrderAddResult addOrder(OrderAddCommand orderAddCommand) {
@@ -40,5 +44,21 @@ public class OrderServiceImpl implements OrderService {
 				.build());
 		});
 		return new OrderAddResult(orderRepository.save(order).getId());
+	}
+
+	@Override
+	public List<OrderViewItemResult> viewAllOrder(OrderViewCommand orderViewCommand) {
+		List<Order> orders = orderRepository.findByUserId(orderViewCommand.getUserId());
+		List<OrderViewItemResult> orderViewItemResults = new ArrayList<>();
+		List<OrderViewProductResult> orderViewProductResults = new ArrayList<>();
+		orders.forEach(order -> {
+				orderViewItemResults.add(
+					new OrderViewItemResult(order.getId(), order.getCreatedAt(), orderViewProductResults));
+				order.getOrderItems().forEach(orderItem -> orderViewProductResults
+					.add(new OrderViewProductResult(orderItem.getProduct().getName(), orderItem.getPrice(),
+						orderItem.getQuantity(), orderItem.getDeliveryType())));
+			}
+		);
+		return orderViewItemResults;
 	}
 }
