@@ -113,6 +113,16 @@ public class RestHousewarmingPostController {
 		return ResponseEntity.ok("update success");
 	}
 
+	@DeleteMapping("/comment/{commentId}")
+	public ResponseEntity<String> handleDeleteCommentRequest(
+		@PathVariable("commentId") Long commentId
+	) {
+		Long userId = authUtility.getAuthUser().getId();
+		postService.deleteComment(userId, commentId);
+
+		return ResponseEntity.ok("delete success");
+	}
+
 	@ExceptionHandler(UnauthorizedContentAccessException.class)
 	public ResponseEntity<ErrorResult> handleUnauthorizedException(UnauthorizedContentAccessException exception) {
 		log.error(exception.getMessage(), exception);

@@ -24,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -460,6 +461,39 @@ class RestHousewarmingPostControllerTest {
 				)
 			));
 
+	}
+
+	@Test
+	@DisplayName("자신이 작성한 집들이 댓글을 삭제한다.")
+	void user_remove_its_comment() throws Exception {
+
+		// Given
+		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("guest");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(auditorAware, postAuthor, 1);
+		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
+			auditorAware,
+			commentAuthor,
+			targetPost,
+			1);
+
+		// When
+		var result = mockMvc.perform(
+			RestDocumentationRequestBuilders.delete(HW_URL + "/comment/{commentId}", targetComment.getId())
+				.header("Authorization", GUEST_TOKEN)
+		);
+
+		// Then
+		result.andExpectAll(
+				status().isOk()
+			)
+			.andDo(document("hwpost-comment-delete",
+				ApiDocumentUtils.getDocumentRequest(),
+				ApiDocumentUtils.getDocumentResponse(),
+				pathParameters(
+					parameterWithName("commentId").description("삭제 대상 집들이 댓글 ID")
+				)
+			));
 	}
 
 }
