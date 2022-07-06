@@ -14,9 +14,12 @@ import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentCreateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostComment;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostCommentRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 
 @Service
@@ -24,10 +27,13 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRep
 public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 
 	private final HousewarmingPostRepository housewarmingPostRepository;
+	private final HousewarmingPostCommentRepository commentRepository;
 	private final FileManager fileManager;
 
-	public HousewarmingPostServiceImpl(HousewarmingPostRepository housewarmingPostRepository, FileManager fileManager) {
+	public HousewarmingPostServiceImpl(HousewarmingPostRepository housewarmingPostRepository,
+		HousewarmingPostCommentRepository commentRepository, FileManager fileManager) {
 		this.housewarmingPostRepository = housewarmingPostRepository;
+		this.commentRepository = commentRepository;
 		this.fileManager = fileManager;
 	}
 
@@ -66,6 +72,7 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	}
 
 	@Override
+	@Transactional
 	public void updatePost(Long postId, Long authorId, HousewarmingPostUpdateCommand command,
 		List<MultipartFile> newImages) {
 		HousewarmingPost post = getAuthorizedPost(authorId, postId);
@@ -75,6 +82,15 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 			fileManager.delete(post.getImages(), post);
 			fileManager.store(newImages, post);
 		}
+	}
+
+	@Override
+	@Transactional
+	public Long addComment(HousewarmingPostCommentCreateCommand command) {
+		var post = housewarmingPostRepository.findById(command.getPostId()).orElseThrow();
+		var postComment = new HousewarmingPostComment(command.getComment(), post);
+		postComment = commentRepository.save(postComment);
+		return postComment.getId();
 	}
 
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {

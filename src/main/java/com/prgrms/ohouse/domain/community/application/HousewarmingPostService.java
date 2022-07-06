@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentCreateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 
@@ -21,4 +22,6 @@ public interface HousewarmingPostService {
 	void updateViews(Long postId);
 
 	void updatePost(Long postId, Long authorId, HousewarmingPostUpdateCommand command, List<MultipartFile> images);
+
+	Long addComment(HousewarmingPostCommentCreateCommand command);
 }

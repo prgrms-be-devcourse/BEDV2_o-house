@@ -21,6 +21,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentCreateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
@@ -210,6 +211,24 @@ class HousewarmingPostServiceImplTest {
 		assertThat(targetPost.getTitle()).isEqualTo(updatedTitle);
 		assertThat(targetPost.getContent()).isEqualTo(updatedContent);
 		assertThat(targetPost.getImages()).hasSize(2);
+
+	}
+
+	@Test
+	@DisplayName("사용자는 게시물에 대한 댓글을 추가한다.")
+	void user_append_comment_in_housewarming_post() {
+
+		// Given
+		var commentAuthor = fixtureProvider.insertGuestUser("guest");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, commentAuthor, 1);
+		var command = new HousewarmingPostCommentCreateCommand("댓글1", targetPost.getId());
+		when(userAuditorAware.getCurrentAuditor()).thenReturn(Optional.of(commentAuthor));
+
+		// When
+		var result = housewarmingPostServiceImpl.addComment(command);
+
+		// Then
+		assertThat(result).isPositive();
 
 	}
 
