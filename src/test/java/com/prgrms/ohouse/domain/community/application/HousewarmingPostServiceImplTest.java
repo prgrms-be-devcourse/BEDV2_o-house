@@ -29,6 +29,7 @@ import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServi
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostComment;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostCommentRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
@@ -46,6 +47,9 @@ class HousewarmingPostServiceImplTest {
 
 	@Autowired
 	private HousewarmingPostRepository housewarmingPostRepository;
+
+	@Autowired
+	private HousewarmingPostCommentRepository commentRepository;
 
 	@Autowired
 	private TestDataProvider fixtureProvider;
@@ -253,7 +257,8 @@ class HousewarmingPostServiceImplTest {
 		housewarmingPostServiceImpl.updateComment(command);
 
 		// Then
-		assertThat(targetComment.getComment()).isEqualTo("updated");
+		var updatedComment = commentRepository.findById(targetComment.getId()).orElseThrow();
+		assertThat(updatedComment.getComment()).isEqualTo("updated");
 
 	}
 
@@ -279,6 +284,50 @@ class HousewarmingPostServiceImplTest {
 		assertThatThrownBy(() -> {
 			housewarmingPostServiceImpl.updateComment(command);
 		}).isInstanceOf(UnauthorizedContentAccessException.class);
+
+	}
+
+	@Test
+	@DisplayName("집들이 댓글의 작성자는 자신의 댓글을 삭제한다. - 권한이 있어서 성공")
+	void author_of_housewarmingpost_delete_its_comment() {
+
+		// Given
+		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("commentAuthor");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, postAuthor, 1);
+		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
+			userAuditorAware,
+			commentAuthor,
+			targetPost,
+			1);
+
+		// When
+		housewarmingPostServiceImpl.deleteComment(commentAuthor.getId(), targetComment.getId());
+
+		// Then
+		assertThat(commentRepository.findById(targetComment.getId())).isEmpty();
+	}
+
+	@Test
+	@DisplayName("사용자는 다른 사용자가 작성한 댓글을 삭제할 수 없다.")
+	void user_get_denied_when_request_removal_of_other_user_comment() {
+
+		// Given
+		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("commentAuthor");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, postAuthor, 1);
+		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
+			userAuditorAware,
+			commentAuthor,
+			targetPost,
+			1);
+		var otherUser = commentAuthor.getId() + 4444;
+
+		// when & then
+		assertThatThrownBy(() -> {
+			housewarmingPostServiceImpl.deleteComment(otherUser, targetComment.getId());
+		}).isInstanceOf(UnauthorizedContentAccessException.class);
+		assertThat(commentRepository.findById(targetComment.getId())).isNotEmpty();
 
 	}
 }

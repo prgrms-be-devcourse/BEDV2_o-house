@@ -429,7 +429,6 @@ class RestHousewarmingPostControllerTest {
 	void user_update_its_comment() throws Exception {
 
 		// Given
-
 		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
 		var commentAuthor = fixtureProvider.insertGuestUser("guest");
 		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(auditorAware, postAuthor, 1);

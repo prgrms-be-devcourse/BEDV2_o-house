@@ -102,7 +102,18 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 			throw new UnauthorizedContentAccessException();
 		}
 		comment.updateContent(command.getComment());
+		commentRepository.save(comment);
 
+	}
+
+	@Override
+	@Transactional
+	public void deleteComment(Long userId, Long commentId) {
+		var comment = commentRepository.findById(commentId).orElseThrow();
+		if (!Objects.equals(comment.getAuthor().getId(), userId)) {
+			throw new UnauthorizedContentAccessException();
+		}
+		commentRepository.delete(comment);
 	}
 
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {

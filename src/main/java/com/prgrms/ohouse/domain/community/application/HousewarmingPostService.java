@@ -27,4 +27,6 @@ public interface HousewarmingPostService {
 	Long addComment(HousewarmingPostCommentCreateCommand command);
 
 	void updateComment(HousewarmingPostCommentUpdateCommand command);
+
+	void deleteComment(Long userId, Long commentId);
 }

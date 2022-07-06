@@ -6,4 +6,6 @@ public interface HousewarmingPostCommentRepository {
 	HousewarmingPostComment save(HousewarmingPostComment comment);
 
 	Optional<HousewarmingPostComment> findById(Long commentId);
+
+	void delete(HousewarmingPostComment comment);
 }
