@@ -26,10 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.ohouse.web.ApiDocumentUtils;
 import com.prgrms.ohouse.domain.commerce.application.ProductService;
-import com.prgrms.ohouse.web.commerce.results.ProductViewMainPageResult;
-import com.prgrms.ohouse.web.commerce.results.SliceResult;
 import com.prgrms.ohouse.domain.commerce.model.product.Attribute;
 import com.prgrms.ohouse.domain.commerce.model.product.Category;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
@@ -40,6 +37,9 @@ import com.prgrms.ohouse.domain.commerce.model.product.enums.SecondCategory;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Shipping;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.Size;
 import com.prgrms.ohouse.domain.commerce.model.product.enums.ThirdCategory;
+import com.prgrms.ohouse.web.ApiDocumentUtils;
+import com.prgrms.ohouse.web.commerce.results.ProductViewMainPageResult;
+import com.prgrms.ohouse.web.commerce.results.SliceResult;
 
 @Transactional
 @SpringBootTest
