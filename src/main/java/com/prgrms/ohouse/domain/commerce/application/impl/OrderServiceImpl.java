@@ -2,6 +2,7 @@ package com.prgrms.ohouse.domain.commerce.application.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import com.prgrms.ohouse.domain.commerce.model.order.OrderRepository;
 import com.prgrms.ohouse.domain.commerce.model.product.Product;
 import com.prgrms.ohouse.domain.commerce.model.product.ProductRepository;
 import com.prgrms.ohouse.domain.user.model.Address;
+import com.prgrms.ohouse.web.commerce.converter.OrderConverter;
 import com.prgrms.ohouse.web.commerce.results.OrderAddResult;
 import com.prgrms.ohouse.web.commerce.results.OrderViewItemResult;
 import com.prgrms.ohouse.web.commerce.results.OrderViewProductResult;
@@ -49,16 +51,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<OrderViewItemResult> viewAllOrder(OrderViewCommand orderViewCommand) {
 		List<Order> orders = orderRepository.findByUserId(orderViewCommand.getUserId());
-		List<OrderViewItemResult> orderViewItemResults = new ArrayList<>();
-		List<OrderViewProductResult> orderViewProductResults = new ArrayList<>();
-		orders.forEach(order -> {
-				orderViewItemResults.add(
-					new OrderViewItemResult(order.getId(), order.getCreatedAt(), orderViewProductResults));
-				order.getOrderItems().forEach(orderItem -> orderViewProductResults
-					.add(new OrderViewProductResult(orderItem.getProduct().getName(), orderItem.getPrice(),
-						orderItem.getQuantity(), orderItem.getDeliveryType())));
-			}
-		);
-		return orderViewItemResults;
+		assert !orders.isEmpty() : "해당하는 주문이 없습니다.";
+		return OrderConverter.convertOrderToViewItem(orders);
 	}
 }
