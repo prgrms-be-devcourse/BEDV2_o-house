@@ -388,4 +388,39 @@ class RestHousewarmingPostControllerTest {
 
 	}
 
+	@Test
+	@DisplayName("집들이 게시물에 대한 댓글을 작성한다.")
+	void add_comment_to_housewarming_post() throws Exception {
+
+		// Given
+		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
+		fixtureProvider.insertGuestUser("guest");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(auditorAware, postAuthor, 1);
+		var payload = json.writeValueAsString(Map.of("postId", targetPost.getId(), "comment", "댓글1"));
+
+		// When
+		var result = mockMvc.perform(
+			post(HW_URL + "/comment")
+				.content(payload)
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", GUEST_TOKEN)
+		);
+
+		// Then
+		result
+			.andExpectAll(
+				status().isCreated(),
+				header().string("Location", Matchers.matchesRegex(host + "api/v0/hwpost/comment/\\d+$"))
+
+			)
+			.andDo(document("hwpost-comment-create",
+				ApiDocumentUtils.getDocumentRequest(),
+				ApiDocumentUtils.getDocumentResponse(),
+				requestFields(
+					fieldWithPath("postId").type(JsonFieldType.NUMBER).description("집들이 ID"),
+					fieldWithPath("comment").type(JsonFieldType.STRING).description("댓글 내용")
+				)
+			));
+	}
+
 }

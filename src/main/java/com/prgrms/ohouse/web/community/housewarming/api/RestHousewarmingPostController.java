@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.web.commerce.results.SliceResult;
+import com.prgrms.ohouse.web.community.requests.HousewarmingPostCommentCreateRequest;
 import com.prgrms.ohouse.web.community.requests.HousewarmingPostCreateRequest;
 import com.prgrms.ohouse.web.community.requests.HousewarmingPostUpdateRequest;
 import com.prgrms.ohouse.web.user.results.ErrorCode;
@@ -89,6 +91,14 @@ public class RestHousewarmingPostController {
 		@PageableDefault Pageable pageable) {
 		var result = postService.getPosts(pageable);
 		return ResponseEntity.ok(new SliceResult<>(result));
+	}
+
+	@PostMapping("/comment")
+	public ResponseEntity<String> handleCreateCommentRequest(
+		@Valid @RequestBody HousewarmingPostCommentCreateRequest request) {
+		Long commentId = postService.addComment(request.toCommand());
+		return ResponseEntity.created(URI.create(host + "api/v0/hwpost/comment/" + commentId)).body("create success");
+
 	}
 
 	@ExceptionHandler(UnauthorizedContentAccessException.class)
