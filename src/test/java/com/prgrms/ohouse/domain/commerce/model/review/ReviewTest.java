@@ -20,9 +20,9 @@ import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
 
 class ReviewTest {
-	@DisplayName("리뷰의 만족도가 0~5 범위를 벗어나면 IllegalArgumentException 발생")
+	@DisplayName("리뷰의 만족도가 1~5 범위를 벗어나면 IllegalArgumentException 발생")
 	@ParameterizedTest
-	@ValueSource(ints = {-1, 6})
+	@ValueSource(ints = {0, 6})
 	void testReviewPointRangeException(int reviewPoint) {
 		User user = User.builder()
 			.email("test@email.com")
