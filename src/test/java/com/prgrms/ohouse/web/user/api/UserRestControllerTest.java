@@ -26,9 +26,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -42,6 +44,7 @@ import com.prgrms.ohouse.web.user.requests.UserUpdateRequest;
 
 @ExtendWith(RestDocumentationExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@Transactional
 @AutoConfigureMockMvc
 class UserRestControllerTest {
 
@@ -162,7 +165,7 @@ class UserRestControllerTest {
 	void updateUserInformationWithImageTest() throws Exception {
 
 		UserUpdateRequest updateRequest = new UserUpdateRequest("guest", "FEMALE", "http://github.com",
-			LocalDate.now(), "--");
+			null, "--");
 		String body = objectMapper.writeValueAsString(updateRequest);
 		MockMultipartFile fileRequest = new MockMultipartFile(
 			"image", "test.png", "image/png", "<<png data>>".getBytes()
@@ -185,26 +188,25 @@ class UserRestControllerTest {
 
 		mockMvc.perform(multipart("/api/v0/user")
 				.file(fileRequest)
-				.part(jsonPart))
+			.part(jsonPart))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("Update succeed.")))
 
 			.andDo(document("update-user",
-				ApiDocumentUtils.getDocumentRequest(),
-				ApiDocumentUtils.getDocumentResponse(),
+				Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+				Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
 				requestParts(
 					partWithName("request").description("회원정보 수정"),
 					partWithName("image").description("수정할 회원 이미지").optional()
 				),
-				requestPartBody("request"),
-				// requestPartFields(
-				// 	"request",
-				// 	fieldWithPath("nickname").type(JsonFieldType.STRING).description("유저 닉네임"),
-				// 	fieldWithPath("gender").type(JsonFieldType.STRING).description("유저 성별").optional(),
-				// 	fieldWithPath("personalUrl").type(JsonFieldType.STRING).description("유저 개인 페이지").optional(),
-				// 	fieldWithPath("birth").type(JsonFieldType.STRING).description("유저 생년월일").optional(),
-				// 	fieldWithPath("introductions").type(JsonFieldType.STRING).description("유저 자기소개글").optional()
-				// ),
+				requestPartFields(
+					"request",
+					fieldWithPath("nickname").type(JsonFieldType.STRING).description("유저 닉네임"),
+					fieldWithPath("gender").type(JsonFieldType.STRING).description("유저 성별").optional(),
+					fieldWithPath("personalUrl").type(JsonFieldType.STRING).description("유저 개인 페이지").optional(),
+					fieldWithPath("birth").description("유저 생년월일").optional(),
+					fieldWithPath("introductions").type(JsonFieldType.STRING).description("유저 자기소개글").optional()
+				),
 				responseBody()
 			));
 	}
