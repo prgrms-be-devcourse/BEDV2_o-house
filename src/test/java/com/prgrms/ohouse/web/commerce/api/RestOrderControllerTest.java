@@ -1,7 +1,10 @@
 package com.prgrms.ohouse.web.commerce.api;
 
+import static com.prgrms.ohouse.web.ApiDocumentUtils.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +17,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
@@ -30,7 +32,6 @@ import com.prgrms.ohouse.domain.commerce.application.command.OrderViewCommand;
 import com.prgrms.ohouse.domain.commerce.model.order.DeliveryType;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
-import com.prgrms.ohouse.web.ApiDocumentUtils;
 import com.prgrms.ohouse.web.commerce.requests.OrderAddRequest;
 import com.prgrms.ohouse.web.commerce.requests.OrderItemAddRequest;
 import com.prgrms.ohouse.web.commerce.results.OrderAddResult;
@@ -78,30 +79,30 @@ class RestOrderControllerTest {
 
 		//then
 		result.andExpect(MockMvcResultMatchers.status().isOk())
-			.andDo(MockMvcRestDocumentation.document("order-add",
-				ApiDocumentUtils.getDocumentRequest(),
-				ApiDocumentUtils.getDocumentResponse(),
-				PayloadDocumentation.requestFields(
-					PayloadDocumentation.fieldWithPath("shipper").type(JsonFieldType.STRING).description("배송인 명"),
-					PayloadDocumentation.fieldWithPath("shippingAddress")
+			.andDo(document("order-add",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestFields(
+					fieldWithPath("shipper").type(JsonFieldType.STRING).description("배송인 명"),
+					fieldWithPath("shippingAddress")
 						.type(JsonFieldType.STRING)
 						.description("배송지 명"),
-					PayloadDocumentation.fieldWithPath("recipient").type(JsonFieldType.STRING).description("수령인"),
-					PayloadDocumentation.fieldWithPath("city").type(JsonFieldType.STRING).description("배송지 도시"),
-					PayloadDocumentation.fieldWithPath("street").type(JsonFieldType.STRING).description("배송지 지번"),
-					PayloadDocumentation.fieldWithPath("detail").type(JsonFieldType.STRING).description("상세 주소"),
-					PayloadDocumentation.fieldWithPath("zipcode").type(JsonFieldType.STRING).description("우편번호"),
-					PayloadDocumentation.fieldWithPath("lotNumberAddress").type(JsonFieldType.STRING).description("지번"),
-					PayloadDocumentation.fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-					PayloadDocumentation.fieldWithPath("orderItemAddRequests[].productId")
+					fieldWithPath("recipient").type(JsonFieldType.STRING).description("수령인"),
+					fieldWithPath("city").type(JsonFieldType.STRING).description("배송지 도시"),
+					fieldWithPath("street").type(JsonFieldType.STRING).description("배송지 지번"),
+					fieldWithPath("detail").type(JsonFieldType.STRING).description("상세 주소"),
+					fieldWithPath("zipcode").type(JsonFieldType.STRING).description("우편번호"),
+					fieldWithPath("lotNumberAddress").type(JsonFieldType.STRING).description("지번"),
+					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+					fieldWithPath("orderItemAddRequests[].productId")
 						.type(JsonFieldType.NUMBER)
 						.description("주문 상품 상품 아이디"),
-					PayloadDocumentation.fieldWithPath("orderItemAddRequests[].quantity")
+					fieldWithPath("orderItemAddRequests[].quantity")
 						.type(JsonFieldType.NUMBER)
 						.description("주문 상품 상품 개수")
 				),
 				PayloadDocumentation.responseFields(
-					PayloadDocumentation.fieldWithPath("orderId").type(JsonFieldType.NUMBER).description("등록 오더 아이디")
+					fieldWithPath("orderId").type(JsonFieldType.NUMBER).description("등록 오더 아이디")
 				)
 			));
 	}
@@ -141,26 +142,26 @@ class RestOrderControllerTest {
 				.accept(MediaType.APPLICATION_JSON));
 		//then
 		result.andExpect(MockMvcResultMatchers.status().isOk())
-			.andDo(MockMvcRestDocumentation.document("order-view",
-				ApiDocumentUtils.getDocumentRequest(),
-				ApiDocumentUtils.getDocumentResponse(),
+			.andDo(document("order-view",
+				getDocumentRequest(),
+				getDocumentResponse(),
 				PayloadDocumentation.responseFields(
-					PayloadDocumentation.fieldWithPath("[].orderId")
+					fieldWithPath("[].orderId")
 						.type(JsonFieldType.NUMBER)
 						.description("등록 주문 아이디"),
-					PayloadDocumentation.fieldWithPath("[].createdAt")
+					fieldWithPath("[].createdAt")
 						.type(JsonFieldType.STRING)
 						.description("주문 등록 시간"),
-					PayloadDocumentation.fieldWithPath("[].orderViewOrderItemResults[].productName")
+					fieldWithPath("[].orderViewOrderItemResults[].productName")
 						.type(JsonFieldType.STRING)
 						.description("주문 상품 이름"),
-					PayloadDocumentation.fieldWithPath("[].orderViewOrderItemResults[].productPrice")
+					fieldWithPath("[].orderViewOrderItemResults[].productPrice")
 						.type(JsonFieldType.NUMBER)
 						.description("주문 상품 가격"),
-					PayloadDocumentation.fieldWithPath("[].orderViewOrderItemResults[].quantity")
+					fieldWithPath("[].orderViewOrderItemResults[].quantity")
 						.type(JsonFieldType.NUMBER)
 						.description("주문 상품 수량"),
-					PayloadDocumentation.fieldWithPath("[].orderViewOrderItemResults[].deliveryType")
+					fieldWithPath("[].orderViewOrderItemResults[].deliveryType")
 						.type(JsonFieldType.STRING)
 						.description("주문 배송 현황")
 				)
