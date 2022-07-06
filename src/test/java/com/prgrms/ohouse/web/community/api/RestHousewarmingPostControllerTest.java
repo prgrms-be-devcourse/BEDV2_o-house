@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostComment;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
@@ -421,6 +422,45 @@ class RestHousewarmingPostControllerTest {
 					fieldWithPath("comment").type(JsonFieldType.STRING).description("댓글 내용")
 				)
 			));
+	}
+
+	@Test
+	@DisplayName("자신이 작성한 집들이 댓글을 수정한다.")
+	void user_update_its_comment() throws Exception {
+
+		// Given
+
+		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("guest");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(auditorAware, postAuthor, 1);
+		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
+			auditorAware,
+			commentAuthor,
+			targetPost,
+			1);
+		var payload = json.writeValueAsString(Map.of("commentId", targetComment.getId(), "comment", "updated"));
+
+		// When
+		var result = mockMvc.perform(
+			put(HW_URL + "/comment")
+				.content(payload)
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", GUEST_TOKEN)
+		);
+
+		// Then
+		result.andExpectAll(
+				status().isOk()
+			)
+			.andDo(document("hwpost-comment-update",
+				ApiDocumentUtils.getDocumentRequest(),
+				ApiDocumentUtils.getDocumentResponse(),
+				requestFields(
+					fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("수정 대상 집들이 댓글 ID"),
+					fieldWithPath("comment").type(JsonFieldType.STRING).description("수정 댓글 내용")
+				)
+			));
+
 	}
 
 }

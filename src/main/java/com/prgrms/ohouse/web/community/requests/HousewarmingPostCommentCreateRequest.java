@@ -6,8 +6,10 @@ import javax.validation.constraints.NotNull;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentCreateCommand;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class HousewarmingPostCommentCreateRequest {
 	@NotNull
 	private Long postId;
