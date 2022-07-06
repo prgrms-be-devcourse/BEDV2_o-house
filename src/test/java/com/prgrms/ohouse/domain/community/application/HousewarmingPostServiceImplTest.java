@@ -22,11 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentCreateCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentUpdateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 import com.prgrms.ohouse.domain.community.application.impl.HousewarmingPostServiceImpl;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostComment;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
@@ -232,4 +234,51 @@ class HousewarmingPostServiceImplTest {
 
 	}
 
+	@Test
+	@DisplayName("집들이 댓글의 작성자는 자신의 댓글을 수정한다. - 권한이 있어서 성공")
+	void author_of_housewarmingpost_update_its_comment() {
+
+		// Given
+		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("commentAuthor");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, postAuthor, 1);
+		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
+			userAuditorAware,
+			commentAuthor,
+			targetPost,
+			1);
+		var command = new HousewarmingPostCommentUpdateCommand(commentAuthor.getId(), targetComment.getId(), "updated");
+
+		// When
+		housewarmingPostServiceImpl.updateComment(command);
+
+		// Then
+		assertThat(targetComment.getComment()).isEqualTo("updated");
+
+	}
+
+	@Test
+	@DisplayName("집들이 댓글의 작성자가 아닌 사용자는 집들이 댓글 수정 요청을 할 수 없다.")
+	void user_get_denied_when_request_updating_unauthorized_comment() {
+
+		// Given
+		var postAuthorNotCommentAuthor = fixtureProvider.insertGuestUser("postAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("commentAuthor");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, postAuthorNotCommentAuthor,
+			1);
+		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
+			userAuditorAware,
+			commentAuthor,
+			targetPost,
+			1);
+		var command = new HousewarmingPostCommentUpdateCommand(postAuthorNotCommentAuthor.getId(),
+			targetComment.getId(),
+			"updated");
+
+		// when * then
+		assertThatThrownBy(() -> {
+			housewarmingPostServiceImpl.updateComment(command);
+		}).isInstanceOf(UnauthorizedContentAccessException.class);
+
+	}
 }

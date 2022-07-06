@@ -15,6 +15,7 @@ import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentCreateCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentUpdateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
@@ -91,6 +92,17 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 		var postComment = new HousewarmingPostComment(command.getComment(), post);
 		postComment = commentRepository.save(postComment);
 		return postComment.getId();
+	}
+
+	@Override
+	@Transactional
+	public void updateComment(HousewarmingPostCommentUpdateCommand command) {
+		var comment = commentRepository.findById(command.getCommentId()).orElseThrow();
+		if (!Objects.equals(comment.getAuthor().getId(), command.getAuthorId())) {
+			throw new UnauthorizedContentAccessException();
+		}
+		comment.updateContent(command.getComment());
+
 	}
 
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {

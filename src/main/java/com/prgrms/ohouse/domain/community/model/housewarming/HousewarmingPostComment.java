@@ -41,13 +41,14 @@ public class HousewarmingPostComment extends BaseTimeEntity {
 	private HousewarmingPost hwPost;
 
 	public HousewarmingPostComment(@Nonnull String comment, @Nonnull HousewarmingPost hwPost) {
-		assignComment(comment);
+		updateContent(comment);
 		checkNotNull(hwPost);
 		this.hwPost = hwPost;
 	}
 
-	public void assignComment(String comment) {
+	public void updateContent(String comment) {
 		checkArgument(comment.length() > 0, "댓글은 최소 1 이상의 길이를 가져야 합니다.");
 		this.comment = comment;
 	}
+
 }
