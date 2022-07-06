@@ -1,5 +1,8 @@
 package com.prgrms.ohouse.infrastructure.repository.impl;
 
+import static com.prgrms.ohouse.domain.user.model.QUser.*;
+import static com.prgrms.ohouse.domain.user.model.follow.QFollow.*;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,9 +13,11 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import com.prgrms.ohouse.domain.community.application.FollowingFeedInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.QHousewarmingPost;
+import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.infrastructure.repository.custom.QueryDSLHousewarmingPostRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -55,5 +60,31 @@ public class JpaHousewarmingPostRepositoryImpl implements QueryDSLHousewarmingPo
 			Collections.unmodifiableList(postDtos),
 			PageRequest.of(pageable.getPageNumber(), postDtos.size()),
 			hasNext);
+	}
+
+	@Override
+	public Slice<FollowingFeedInfoResult> findSliceByfollowingUser(User fromUser, Pageable pageable) {
+		var posts = queryFactory
+			.select(qHwPost)
+			.from(qHwPost, follow)
+			.where(qHwPost.user.id.eq(follow.toUser.id))
+			.innerJoin(follow.fromUser, user)
+			.on(follow.fromUser.id.eq(fromUser.getId()))
+			.orderBy(qHwPost.id.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize() + 1)
+			.fetch();
+
+		var hasNext = pageable.getPageSize() + 1 == posts.size();
+		if (hasNext) {
+			posts.remove(posts.size() - 1);
+		}
+		var postDtos = posts.stream().map(FollowingFeedInfoResult::from)
+			.toList();
+
+		return new SliceImpl<>(
+			postDtos,
+			PageRequest.of(pageable.getPageNumber(), posts.size()), hasNext
+		);
 	}
 }
