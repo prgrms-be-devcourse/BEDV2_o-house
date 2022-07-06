@@ -34,7 +34,7 @@ import com.prgrms.ohouse.domain.commerce.model.cart.Cart;
 public class User extends BaseEntity implements UserDetails, ImageAttachable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "nickname", nullable = false, unique = true, length = 10)
