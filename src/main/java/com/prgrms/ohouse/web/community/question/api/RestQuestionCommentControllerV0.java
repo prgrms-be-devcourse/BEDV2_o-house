@@ -29,18 +29,18 @@ public class RestQuestionCommentControllerV0 {
 
 	@PostMapping(value = "/api/v0/questions/{postId}/comments",
 		consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity registerNewQuestionPost(@RequestPart QuestionCommentCreateRequest request,
+	public ResponseEntity registerNewQuestionComment(@RequestPart QuestionCommentCreateRequest request,
 		@RequestPart MultipartFile file, @PathVariable("postId") Long postId) {
 		Long commentId = commentService.createQuestionComment(
 			new QuestionCommentRegisterCommand(request.getContent(), postId, file));
 		return ResponseEntity
-			.created(URI.create("/api/v0/questions/" + commentId))
+			.created(URI.create("/api/v0/questions/" + postId + "/" + commentId))
 			.build();
 	}
 
 	@PostMapping(value = "/api/v0/questions/{postId}/{commentId}",
 		consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity editQuestionPost(@RequestPart QuestionCommentCreateRequest request,
+	public ResponseEntity editQuestionComment(@RequestPart QuestionCommentCreateRequest request,
 		@RequestPart MultipartFile file, @PathVariable("postId") Long postId,
 		@PathVariable("commentId") Long commentId) {
 		commentService.editQuestionComment(
@@ -50,9 +50,8 @@ public class RestQuestionCommentControllerV0 {
 			.ok(URI.create("/api/v0/" + postId + "/" + commentId));
 	}
 
-	//TODO: 권한 추가
 	@DeleteMapping("/api/v0/questions/{postId}/{commentId}")
-	public ResponseEntity deleteQuestionPost(@PathVariable("postId") Long postId,
+	public ResponseEntity deleteQuestionComment(@PathVariable("postId") Long postId,
 		@PathVariable("commentId") Long commentId) {
 		commentService.deleteComment(commentId, authUtility.getAuthUser().getId());
 		return ResponseEntity.ok().build();

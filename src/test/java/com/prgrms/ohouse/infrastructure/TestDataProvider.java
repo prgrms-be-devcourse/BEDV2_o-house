@@ -36,6 +36,10 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRep
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
+import com.prgrms.ohouse.domain.community.model.question.QuestionComment;
+import com.prgrms.ohouse.domain.community.model.question.QuestionCommentRepository;
+import com.prgrms.ohouse.domain.community.model.question.QuestionPost;
+import com.prgrms.ohouse.domain.community.model.question.QuestionPostRepository;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
@@ -59,6 +63,10 @@ public class TestDataProvider {
 	private HousewarmingPostRepository housewarmingPostRepository;
 	@Autowired
 	private HousewarmingPostCommentRepository housewarmingPostCommentRepository;
+	@Autowired
+	private QuestionPostRepository questionPostRepository;
+	@Autowired
+	private QuestionCommentRepository questionCommentRepository;
 
 	public User insertUser() {
 		User user = User.builder()
@@ -204,6 +212,21 @@ public class TestDataProvider {
 		var savedComment = housewarmingPostCommentRepository.save(
 			new HousewarmingPostComment("comment" + index, targetPost));
 		reset(aware);
+		return savedComment;
+	}
+
+	public QuestionPost insertQuestionPostWithUser(UserAuditorAware auditor, User user, String title, String contents) {
+		when(auditor.getCurrentAuditor()).thenReturn(Optional.of(user));
+		QuestionPost savedPost = questionPostRepository.save(new QuestionPost(title, contents));
+		reset(auditor);
+		return savedPost;
+	}
+
+	public QuestionComment insertQuestionCommentWithUser(UserAuditorAware auditor, User user, QuestionPost savedPost,
+		String contents) {
+		when(auditor.getCurrentAuditor()).thenReturn(Optional.of(user));
+		QuestionComment savedComment = questionCommentRepository.save(new QuestionComment(contents, savedPost));
+		reset(auditor);
 		return savedComment;
 	}
 }
