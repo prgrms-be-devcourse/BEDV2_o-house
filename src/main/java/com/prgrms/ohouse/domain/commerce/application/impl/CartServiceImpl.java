@@ -25,9 +25,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public CartCreateResult insertCartItem(CartCreateCommand cartCreateCommand) {
 		Cart cart = cartRepository.findByUser(cartCreateCommand.getUser()).orElseThrow();
-		CartItem cartItem = CartItem.of(cart,
-			productRepository.findById(cartCreateCommand.getProductId()).orElseThrow());
-		// cartItemRepository.save(cartItem);
+		CartItem.of(cart, productRepository.findById(cartCreateCommand.getProductId()).orElseThrow());
 		return new CartCreateResult(cart.getCartItems().size());
 	}
 }
