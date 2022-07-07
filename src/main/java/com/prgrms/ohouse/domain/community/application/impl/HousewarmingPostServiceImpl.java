@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.common.file.FileManager;
+import com.prgrms.ohouse.domain.community.application.HousewarmingPostCommentInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
@@ -114,6 +115,12 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 			throw new UnauthorizedContentAccessException();
 		}
 		commentRepository.delete(comment);
+	}
+
+	@Override
+	public Slice<HousewarmingPostCommentInfoResult> getCommentsByPostId(Pageable pageRequest, Long postId) {
+		var post = housewarmingPostRepository.findById(postId).orElseThrow();
+		return commentRepository.findSliceByHwPost(pageRequest, post);
 	}
 
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {

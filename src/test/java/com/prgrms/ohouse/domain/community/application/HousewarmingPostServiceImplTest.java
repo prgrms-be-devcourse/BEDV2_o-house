@@ -330,4 +330,28 @@ class HousewarmingPostServiceImplTest {
 		assertThat(commentRepository.findById(targetComment.getId())).isNotEmpty();
 
 	}
+
+	@Test
+	@DisplayName("사용자는 특정 게시글의 댓글들을 조회한다.")
+	void query_comments_of_housewarming_post() {
+
+		// Given
+		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("comAuthor");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, postAuthor, 1);
+		for (int i = 0; i < 30; i++) {
+			fixtureProvider.insertHousewarmingPostCommentWithAuthor(userAuditorAware, commentAuthor, targetPost, i);
+		}
+
+		// When
+		var result = housewarmingPostServiceImpl
+			.getCommentsByPostId(PageRequest.of(0, 50), targetPost.getId());
+
+		// Then
+		assertThat(result).hasSize(30);
+		assertThat(result.hasNext()).isFalse();
+		assertThat(result).allMatch(a -> a.getAuthorId().equals(commentAuthor.getId()));
+
+	}
+
 }

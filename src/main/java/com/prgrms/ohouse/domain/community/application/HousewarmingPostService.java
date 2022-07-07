@@ -29,4 +29,6 @@ public interface HousewarmingPostService {
 	void updateComment(HousewarmingPostCommentUpdateCommand command);
 
 	void deleteComment(Long userId, Long commentId);
+
+	Slice<HousewarmingPostCommentInfoResult> getCommentsByPostId(Pageable pageRequest, Long postId);
 }
