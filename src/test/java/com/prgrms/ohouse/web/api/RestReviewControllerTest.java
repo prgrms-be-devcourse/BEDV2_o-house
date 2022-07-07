@@ -40,8 +40,8 @@ import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 import com.prgrms.ohouse.web.commerce.requests.ReviewCreateRequest;
+import com.prgrms.ohouse.web.commerce.requests.ReviewUpdateRequest;
 import com.prgrms.ohouse.web.commerce.results.ReviewCreateResult;
-import com.prgrms.ohouse.web.commerce.results.ReviewUpdateRequest;
 
 @SpringBootTest(properties = "spring.profiles.active:test")
 @AutoConfigureMockMvc
@@ -297,7 +297,7 @@ class RestReviewControllerTest {
 				.part(new MockPart("request", json.getBytes(StandardCharsets.UTF_8)))
 				.header(tokenHeaderName, TestDataProvider.GUEST_TOKEN))
 			.andExpect(status().isOk())
-			.andDo(document("photo-review-create",
+			.andDo(document("review-update",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				requestHeaders(

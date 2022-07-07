@@ -1,4 +1,4 @@
-package com.prgrms.ohouse.web.commerce.results;
+package com.prgrms.ohouse.web.commerce.requests;
 
 import org.springframework.web.multipart.MultipartFile;
 

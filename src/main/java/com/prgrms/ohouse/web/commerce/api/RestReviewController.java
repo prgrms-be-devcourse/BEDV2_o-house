@@ -26,10 +26,10 @@ import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewInquiryFai
 import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewRegisterFailException;
 import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewUpdateFailException;
 import com.prgrms.ohouse.web.commerce.requests.ReviewCreateRequest;
+import com.prgrms.ohouse.web.commerce.requests.ReviewUpdateRequest;
 import com.prgrms.ohouse.web.commerce.results.ErrorResult;
 import com.prgrms.ohouse.web.commerce.results.ReviewCreateResult;
 import com.prgrms.ohouse.web.commerce.results.ReviewDeleteResult;
-import com.prgrms.ohouse.web.commerce.results.ReviewUpdateRequest;
 import com.prgrms.ohouse.web.commerce.results.ReviewUpdateResult;
 
 import lombok.RequiredArgsConstructor;
