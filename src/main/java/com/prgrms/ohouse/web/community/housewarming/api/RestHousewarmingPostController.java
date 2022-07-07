@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.common.security.AuthUtility;
+import com.prgrms.ohouse.domain.community.application.HousewarmingPostCommentInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
@@ -121,6 +122,14 @@ public class RestHousewarmingPostController {
 		postService.deleteComment(userId, commentId);
 
 		return ResponseEntity.ok("delete success");
+	}
+
+	@GetMapping("/{postId}/comment")
+	public ResponseEntity<SliceResult<HousewarmingPostCommentInfoResult>> handleGetCommentsRequest(
+		@PathVariable Long postId, @PageableDefault Pageable pageable
+	) {
+		var result = postService.getCommentsByPostId(pageable, postId);
+		return ResponseEntity.ok(new SliceResult<>(result));
 	}
 
 	@ExceptionHandler(UnauthorizedContentAccessException.class)

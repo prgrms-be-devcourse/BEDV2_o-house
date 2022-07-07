@@ -262,15 +262,9 @@ class RestHousewarmingPostControllerTest {
 				jsonPath("size").value(queriedSize),
 				jsonPath("hasNext").value(true),
 				jsonPath("contents").exists()
-			).andDo(document("hwpost-singleQuery",
+			).andDo(document("hwpost-sliceQuery",
 				ApiDocumentUtils.getDocumentRequest(),
 				ApiDocumentUtils.getDocumentResponse(),
-				// responseFields(
-				// 	fieldWithPath("size").type(JsonFieldType.NUMBER).description("집들이 목록 크기"),
-				// 	fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 집들이 목록 존재 여부"),
-				// 	fieldWithPath("lastPage").type(JsonFieldType.BOOLEAN).description("마지막 페이지 확인")
-				// ),
-
 				responseFields(applyPathPrefix("contents[]", List.of(
 							fieldWithPath("postId").type(JsonFieldType.NUMBER).description("게시물 ID"),
 							fieldWithPath("userId").type(JsonFieldType.NUMBER).description("작성자 ID"),
@@ -494,6 +488,53 @@ class RestHousewarmingPostControllerTest {
 					parameterWithName("commentId").description("삭제 대상 집들이 댓글 ID")
 				)
 			));
+	}
+
+	@Test
+	@DisplayName("원하는 개수 만큼의 집들이 댓글 목록과 목록에 대한 메타 데이터를 반환한다.")
+	void query_comments_of_selected_post() throws Exception {
+
+		// Given
+		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("comAuthor");
+		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(auditorAware, postAuthor, 1);
+		for (int i = 0; i < 30; i++) {
+			fixtureProvider.insertHousewarmingPostCommentWithAuthor(auditorAware, commentAuthor, targetPost, i);
+		}
+		var pageSize = 20;
+		var pageIndex = 0;
+
+		// When
+		var result = mockMvc.perform(
+			RestDocumentationRequestBuilders.get(HW_URL + "/{postId}/comment", targetPost.getId())
+				.param("size", String.valueOf(pageSize))
+				.param("page", String.valueOf(pageIndex))
+		);
+
+		// Then
+		result.andExpectAll(
+			status().isOk(),
+			jsonPath("size").value(pageSize),
+			jsonPath("hasNext").value(true),
+			jsonPath("contents").value(Matchers.hasSize(pageSize))
+		).andDo(document("hwpost-comment-multiquery",
+			ApiDocumentUtils.getDocumentRequest(),
+			ApiDocumentUtils.getDocumentResponse(),
+			responseFields(applyPathPrefix("contents[]", List.of(
+						fieldWithPath("postId").type(JsonFieldType.NUMBER).description("집들이 게시물 ID"),
+						fieldWithPath("authorId").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
+						fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("댓글 ID"),
+						fieldWithPath("comment").type(JsonFieldType.STRING).description("댓글 내용"),
+						fieldWithPath("authorName").type(JsonFieldType.STRING).description("작성자 닉네임")
+					)
+				)
+			).and(
+				fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+				fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("페이지 이후 댓글 존재 여부"),
+				fieldWithPath("lastPage").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"))
+		));
+		;
+
 	}
 
 }

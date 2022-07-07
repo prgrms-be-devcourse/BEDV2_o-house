@@ -11,6 +11,7 @@ import lombok.Getter;
 public class HousewarmingPostCommentInfoResult {
 	private final Long postId;
 	private final Long authorId;
+	private final String authorName;
 	private final Long commentId;
 	private final String comment;
 
@@ -18,6 +19,7 @@ public class HousewarmingPostCommentInfoResult {
 		return new HousewarmingPostCommentInfoResult(
 			comment.getHwPost().getId(),
 			comment.getAuthor().getId(),
+			comment.getAuthor().getNickname(),
 			comment.getId(),
 			comment.getComment());
 	}
