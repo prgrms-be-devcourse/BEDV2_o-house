@@ -5,7 +5,8 @@ import org.springframework.data.domain.Slice;
 
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 
-public interface QueryDSLHousewarmingPostRepository {
+public interface JpaHousewarmingPostRepositoryCustom {
+
 	void incrementViewCount(Long postId);
 
 	Slice<HousewarmingPostInfoResult> findSliceBy(Pageable pageable);

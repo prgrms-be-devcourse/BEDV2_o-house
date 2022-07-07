@@ -11,12 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prgrms.ohouse.domain.common.file.FileManager;
+import com.prgrms.ohouse.domain.community.application.HousewarmingPostCommentInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostService;
 import com.prgrms.ohouse.domain.community.application.UnauthorizedContentAccessException;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentCreateCommand;
+import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCommentUpdateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostCreateCommand;
 import com.prgrms.ohouse.domain.community.application.command.HousewarmingPostUpdateCommand;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostComment;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostCommentRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 
 @Service
@@ -24,10 +29,13 @@ import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRep
 public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 
 	private final HousewarmingPostRepository housewarmingPostRepository;
+	private final HousewarmingPostCommentRepository commentRepository;
 	private final FileManager fileManager;
 
-	public HousewarmingPostServiceImpl(HousewarmingPostRepository housewarmingPostRepository, FileManager fileManager) {
+	public HousewarmingPostServiceImpl(HousewarmingPostRepository housewarmingPostRepository,
+		HousewarmingPostCommentRepository commentRepository, FileManager fileManager) {
 		this.housewarmingPostRepository = housewarmingPostRepository;
+		this.commentRepository = commentRepository;
 		this.fileManager = fileManager;
 	}
 
@@ -66,6 +74,7 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 	}
 
 	@Override
+	@Transactional
 	public void updatePost(Long postId, Long authorId, HousewarmingPostUpdateCommand command,
 		List<MultipartFile> newImages) {
 		HousewarmingPost post = getAuthorizedPost(authorId, postId);
@@ -75,6 +84,43 @@ public class HousewarmingPostServiceImpl implements HousewarmingPostService {
 			fileManager.delete(post.getImages(), post);
 			fileManager.store(newImages, post);
 		}
+	}
+
+	@Override
+	@Transactional
+	public Long addComment(HousewarmingPostCommentCreateCommand command) {
+		var post = housewarmingPostRepository.findById(command.getPostId()).orElseThrow();
+		var postComment = new HousewarmingPostComment(command.getComment(), post);
+		postComment = commentRepository.save(postComment);
+		return postComment.getId();
+	}
+
+	@Override
+	@Transactional
+	public void updateComment(HousewarmingPostCommentUpdateCommand command) {
+		var comment = commentRepository.findById(command.getCommentId()).orElseThrow();
+		if (!Objects.equals(comment.getAuthor().getId(), command.getAuthorId())) {
+			throw new UnauthorizedContentAccessException();
+		}
+		comment.updateContent(command.getComment());
+		commentRepository.save(comment);
+
+	}
+
+	@Override
+	@Transactional
+	public void deleteComment(Long userId, Long commentId) {
+		var comment = commentRepository.findById(commentId).orElseThrow();
+		if (!Objects.equals(comment.getAuthor().getId(), userId)) {
+			throw new UnauthorizedContentAccessException();
+		}
+		commentRepository.delete(comment);
+	}
+
+	@Override
+	public Slice<HousewarmingPostCommentInfoResult> getCommentsByPostId(Pageable pageRequest, Long postId) {
+		var post = housewarmingPostRepository.findById(postId).orElseThrow();
+		return commentRepository.findSliceByHwPost(pageRequest, post);
 	}
 
 	private HousewarmingPost getAuthorizedPost(Long authorId, Long postId) {
