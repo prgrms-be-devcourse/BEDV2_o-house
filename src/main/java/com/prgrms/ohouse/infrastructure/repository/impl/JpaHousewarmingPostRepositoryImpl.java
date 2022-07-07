@@ -2,10 +2,10 @@ package com.prgrms.ohouse.infrastructure.repository.impl;
 
 import static com.prgrms.ohouse.domain.user.model.QUser.*;
 import static com.prgrms.ohouse.domain.user.model.follow.QFollow.*;
+import static java.util.stream.Collectors.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -51,7 +51,7 @@ public class JpaHousewarmingPostRepositoryImpl implements QueryDSLHousewarmingPo
 
 		var postDtos = posts.stream()
 			.map(HousewarmingPostInfoResult::from)
-			.collect(Collectors.toList());
+			.collect(toList());
 		var hasNext = pageable.getPageSize() + 1 == postDtos.size();
 		if (hasNext) {
 			postDtos.remove(postDtos.size() - 1);
@@ -80,7 +80,7 @@ public class JpaHousewarmingPostRepositoryImpl implements QueryDSLHousewarmingPo
 			posts.remove(posts.size() - 1);
 		}
 		var postDtos = posts.stream().map(FollowingFeedInfoResult::from)
-			.toList();
+			.collect(toList());
 
 		return new SliceImpl<>(
 			postDtos,

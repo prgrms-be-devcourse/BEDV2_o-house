@@ -68,8 +68,8 @@ class FollowingFeedServiceImplTest {
 		//then
 		var content = result.getContent();
 		assertThat(content, is(hasSize(2)));
-		assertThat(content.get(0).getAuthor_nickname(), is(equalTo(inFeedUser.getNickname())));
-		assertThat(content.get(1).getAuthor_nickname(), is(equalTo(inFeedUser.getNickname())));
+		assertThat(content.get(0).getAuthorNickname(), is(equalTo(inFeedUser.getNickname())));
+		assertThat(content.get(1).getAuthorNickname(), is(equalTo(inFeedUser.getNickname())));
 	}
 
 }

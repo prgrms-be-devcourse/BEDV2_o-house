@@ -5,20 +5,22 @@ import java.util.stream.Collectors;
 
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class FollowingFeedInfoResult {
 
-	private Long post_id;
+	private Long postId;
 
 	private PostCategory category;
 
-	private Long author_id;
+	private Long authorId;
 
-	private String author_nickname;
+	private String authorNickname;
 
 	private String title;
 
@@ -30,10 +32,10 @@ public class FollowingFeedInfoResult {
 
 	public static FollowingFeedInfoResult from(HousewarmingPost post) {
 		var result = new FollowingFeedInfoResult();
-		result.post_id = post.getId();
+		result.postId = post.getId();
 		result.category = PostCategory.HousewarmingPost;
-		result.author_id = post.getUser().getId();
-		result.author_nickname = post.getUser().getNickname();
+		result.authorId = post.getUser().getId();
+		result.authorNickname = post.getUser().getNickname();
 		result.title = post.getTitle();
 		result.content = post.getContent();
 		result.visitCount = post.getVisitCount();
