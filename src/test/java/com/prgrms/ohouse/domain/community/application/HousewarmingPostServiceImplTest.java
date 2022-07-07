@@ -39,7 +39,6 @@ import com.prgrms.ohouse.infrastructure.TestDataProvider;
 
 @SpringBootTest
 @Transactional
-@DisplayName("HousewarmingPostService는")
 class HousewarmingPostServiceImplTest {
 
 	@Autowired
@@ -244,7 +243,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
-		var commentAuthor = fixtureProvider.insertGuestUser("commentAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("comAuthor");
 		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, postAuthor, 1);
 		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
 			userAuditorAware,
@@ -268,7 +267,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var postAuthorNotCommentAuthor = fixtureProvider.insertGuestUser("postAuthor");
-		var commentAuthor = fixtureProvider.insertGuestUser("commentAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("comAuthor");
 		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, postAuthorNotCommentAuthor,
 			1);
 		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
@@ -293,7 +292,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
-		var commentAuthor = fixtureProvider.insertGuestUser("commentAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("comAuthor");
 		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, postAuthor, 1);
 		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
 			userAuditorAware,
@@ -314,7 +313,7 @@ class HousewarmingPostServiceImplTest {
 
 		// Given
 		var postAuthor = fixtureProvider.insertGuestUser("postAuthor");
-		var commentAuthor = fixtureProvider.insertGuestUser("commentAuthor");
+		var commentAuthor = fixtureProvider.insertGuestUser("comAuthor");
 		var targetPost = fixtureProvider.insertHousewarmingPostWithAuthor(userAuditorAware, postAuthor, 1);
 		HousewarmingPostComment targetComment = fixtureProvider.insertHousewarmingPostCommentWithAuthor(
 			userAuditorAware,
