@@ -1,10 +1,10 @@
 package com.prgrms.ohouse.infrastructure;
 
+import static org.mockito.Mockito.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import static org.mockito.Mockito.*;
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +30,16 @@ import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.Budget;
 import com.prgrms.ohouse.domain.community.model.housewarming.Family;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostComment;
+import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostCommentRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPostRepository;
 import com.prgrms.ohouse.domain.community.model.housewarming.HousingType;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkMetadata;
 import com.prgrms.ohouse.domain.community.model.housewarming.WorkerType;
+import com.prgrms.ohouse.domain.community.model.question.QuestionComment;
+import com.prgrms.ohouse.domain.community.model.question.QuestionCommentRepository;
+import com.prgrms.ohouse.domain.community.model.question.QuestionPost;
+import com.prgrms.ohouse.domain.community.model.question.QuestionPostRepository;
 import com.prgrms.ohouse.domain.user.model.Address;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.domain.user.model.UserAuditorAware;
@@ -55,6 +61,12 @@ public class TestDataProvider {
 	private AttributeRepository attributeRepository;
 	@Autowired
 	private HousewarmingPostRepository housewarmingPostRepository;
+	@Autowired
+	private HousewarmingPostCommentRepository housewarmingPostCommentRepository;
+	@Autowired
+	private QuestionPostRepository questionPostRepository;
+	@Autowired
+	private QuestionCommentRepository questionCommentRepository;
 
 	public User insertUser() {
 		User user = User.builder()
@@ -131,7 +143,7 @@ public class TestDataProvider {
 				i + "content content content content content content");
 			Review entity = reviewRepository.save(review);
 			ReviewImage reviewImage = new ReviewImage("testFile", "testUrl", entity);
-			entity.attach("reviewImage","src/test/resources/static/");
+			entity.attach("reviewImage", "src/test/resources/static/");
 			result.add(entity);
 		}
 		return result;
@@ -192,6 +204,30 @@ public class TestDataProvider {
 				.build());
 		reset(aware);
 		return savedPost;
+	}
+
+	public HousewarmingPostComment insertHousewarmingPostCommentWithAuthor(UserAuditorAware aware, User commentAuthor,
+		HousewarmingPost targetPost, int index) {
+		when(aware.getCurrentAuditor()).thenReturn(Optional.of(commentAuthor));
+		var savedComment = housewarmingPostCommentRepository.save(
+			new HousewarmingPostComment("comment" + index, targetPost));
+		reset(aware);
+		return savedComment;
+	}
+
+	public QuestionPost insertQuestionPostWithUser(UserAuditorAware auditor, User user, String title, String contents) {
+		when(auditor.getCurrentAuditor()).thenReturn(Optional.of(user));
+		QuestionPost savedPost = questionPostRepository.save(new QuestionPost(title, contents));
+		reset(auditor);
+		return savedPost;
+	}
+
+	public QuestionComment insertQuestionCommentWithUser(UserAuditorAware auditor, User user, QuestionPost savedPost,
+		String contents) {
+		when(auditor.getCurrentAuditor()).thenReturn(Optional.of(user));
+		QuestionComment savedComment = questionCommentRepository.save(new QuestionComment(contents, savedPost));
+		reset(auditor);
+		return savedComment;
 	}
 }
 

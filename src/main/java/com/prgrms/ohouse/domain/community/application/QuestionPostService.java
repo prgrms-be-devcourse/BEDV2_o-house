@@ -6,12 +6,9 @@ import com.prgrms.ohouse.domain.community.application.command.QuestionPostRegist
 import com.prgrms.ohouse.domain.community.application.command.QuestionPostUpdateCommand;
 
 public interface QuestionPostService {
-	@Transactional
 	Long createQuestionPost(QuestionPostRegisterCommand command);
 
-	@Transactional
-	Long editQuestionPost(QuestionPostUpdateCommand command);
+	Long editQuestionPost(QuestionPostUpdateCommand command, Long userId);
 
-	@Transactional
-	void deletePost(Long id);
+	void deletePost(Long postId, Long userId);
 }

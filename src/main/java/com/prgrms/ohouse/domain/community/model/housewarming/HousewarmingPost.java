@@ -1,5 +1,7 @@
 package com.prgrms.ohouse.domain.community.model.housewarming;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -101,21 +103,49 @@ public class HousewarmingPost extends BaseTimeEntity implements ImageAttachable 
 	public HousewarmingPost(String title, String content, HousingType housingType, String housingDescription,
 		Long area, Budget budget, Family family, String company, WorkMetadata workMetadata, String copyrightHolder,
 		List<Link> links, District district) {
-		this.title = title;
-		this.content = content;
-		this.housingType = housingType;
-		this.housingDescription = housingDescription;
-		this.area = area;
-		this.budget = budget;
-		this.family = family;
-		this.company = company;
-		this.workMetadata = workMetadata;
-		this.copyrightHolder = copyrightHolder;
-		this.district = district;
+		assignMainContent(title, content);
+		assignExtraData(housingType, housingDescription, area, budget, family, company, workMetadata, copyrightHolder,
+			links,
+			district);
+	}
+
+	private void assignExtraData(HousingType housingType, String housingDescription, Long area, Budget budget,
+		Family family,
+		String company, WorkMetadata workMetadata, String copyrightHolder, List<Link> links, District district) {
+		setHousingType(housingType);
+		setHousingDescription(housingDescription);
+		setArea(area);
+		setBudget(budget);
+		setFamily(family);
+		setCompany(company);
+		setWorkMetadata(workMetadata);
+		setCopyrightHolder(copyrightHolder);
+		setDistrict(district);
+		assignLinks(links);
+	}
+
+	private void assignLinks(List<Link> links) {
 		for (Link link : links) {
 			link.assignPost(this);
 		}
 		this.links = links;
+	}
+
+	private void setCopyrightHolder(String copyrightHolder) {
+		this.copyrightHolder = copyrightHolder;
+	}
+
+	private void setDistrict(District district) {
+		this.district = district;
+	}
+
+	private void setHousingDescription(String housingDescription) {
+		this.housingDescription = housingDescription;
+	}
+
+	private void setHousingType(HousingType housingType) {
+		checkNotNull(housingType);
+		this.housingType = housingType;
 	}
 
 	public void validateImagesInContent(int imageCount) {
@@ -141,14 +171,42 @@ public class HousewarmingPost extends BaseTimeEntity implements ImageAttachable 
 		this.images.clear();
 	}
 
-	public void updateMainContent(String title, String content) {
+	public void assignMainContent(String title, String content) {
+		checkArgument(title.length() > 0);
+		checkArgument(content.length() > 0);
 		this.title = title;
 		this.content = content;
 	}
 
-	public void updateExtraDescription(HousingType housingType, String housingDescription, Long area, Budget budget,
+	private void setBudget(Budget budget) {
+		checkNotNull(budget);
+		this.budget = budget;
+	}
+
+	private void setArea(Long area) {
+		checkArgument(area > 0, "area는 0보다 커야 합니다.");
+		this.area = area;
+	}
+
+	private void setFamily(Family family) {
+		checkNotNull(family);
+		this.family = family;
+	}
+
+	private void setCompany(String company) {
+		this.company = company;
+	}
+
+	private void setWorkMetadata(WorkMetadata workMetadata) {
+		checkNotNull(workMetadata);
+		this.workMetadata = workMetadata;
+	}
+
+	public void assignExtraDescription(HousingType housingType, String housingDescription, Long area, Budget budget,
 		Family family, String company, WorkMetadata workMetadata, String copyrightHolder, List<Link> links,
 		District district) {
+		assignExtraData(housingType, housingDescription, area, budget, family, company, workMetadata, copyrightHolder,
+			links, district);
 	}
 }
 

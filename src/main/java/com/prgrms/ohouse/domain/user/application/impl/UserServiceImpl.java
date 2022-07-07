@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final FileManager fileManager;
 
+	@Transactional
 	public void signUp(UserCreateCommand command) {
 
 		if (userRepository.findByEmail(command.getEmail()).isPresent()) {

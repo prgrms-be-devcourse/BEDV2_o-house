@@ -19,4 +19,11 @@ public class SliceResult<T> {
 		this.isLastPage = slice.isLast();
 		this.hasNext = slice.hasNext();
 	}
+
+	public SliceResult(Slice<?> slice, List<T> contents) {
+		this.contents = contents;
+		this.size = slice.getSize();
+		this.isLastPage = slice.isLast();
+		this.hasNext = slice.hasNext();
+	}
 }
