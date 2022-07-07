@@ -28,6 +28,11 @@ spring:
       settings:
         web-allow-others: true
 
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+
 jwt:
   headerName: Authorization
   secretKey: ohouseTokenvalidate

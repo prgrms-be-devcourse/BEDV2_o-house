@@ -20,4 +20,9 @@ public interface ReviewService {
 	void updateReview(ReviewUpdateCommand command);
 
 	PagedReviewInformation loadMyAllReviews(Pageable pageable);
+
+	void publishHelpPointIncreasingEvent(Long reviewId);
+
+	void increaseHelpPoint(Long reviewId, int increaseValue);
+
 }

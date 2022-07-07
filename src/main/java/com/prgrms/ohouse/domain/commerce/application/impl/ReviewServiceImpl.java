@@ -17,10 +17,13 @@ import com.prgrms.ohouse.domain.commerce.model.review.PagedReviewInformation;
 import com.prgrms.ohouse.domain.commerce.model.review.Review;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewRepository;
 import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
+import com.prgrms.ohouse.domain.commerce.model.review.event.HelpPointIncreaseEvent;
 import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewDeleteFailException;
 import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewInquiryFailException;
+import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewNotFoundException;
 import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewRegisterFailException;
 import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewUpdateFailException;
+import com.prgrms.ohouse.domain.common.event.DomainEventPublisher;
 import com.prgrms.ohouse.domain.common.file.FileIOException;
 import com.prgrms.ohouse.domain.common.file.FileManager;
 import com.prgrms.ohouse.domain.common.security.AuthUtility;
@@ -41,6 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
 	private final UserRepository userRepository;
 	private final FileManager fileManager;
 	private final AuthUtility authUtility;
+	private final DomainEventPublisher eventPublisher;
 
 	@Transactional
 	@Override
@@ -117,6 +121,18 @@ public class ReviewServiceImpl implements ReviewService {
 	private void checkAuthor(User target, User author) {
 		if (target != author)
 			throw new AccessDeniedException("access denied");
+	}
+
+	@Override
+	public void publishHelpPointIncreasingEvent(Long reviewId) {
+		eventPublisher.publish(new HelpPointIncreaseEvent(reviewId));
+	}
+
+	@Transactional
+	@Override
+	public void increaseHelpPoint(Long reviewId, int increaseValue) {
+		Review review = reviewRepository.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+		review.increaseHelpPoint(increaseValue);
 	}
 
 }
