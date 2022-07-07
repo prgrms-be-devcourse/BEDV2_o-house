@@ -7,7 +7,8 @@ import com.prgrms.ohouse.domain.community.application.FollowingFeedInfoResult;
 import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult;
 import com.prgrms.ohouse.domain.user.model.User;
 
-public interface QueryDSLHousewarmingPostRepository {
+public interface JpaHousewarmingPostRepositoryCustom {
+
 	void incrementViewCount(Long postId);
 
 	Slice<HousewarmingPostInfoResult> findSliceBy(Pageable pageable);

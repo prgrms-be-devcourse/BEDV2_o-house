@@ -13,12 +13,14 @@ import lombok.Getter;
 public final class QuestionPostUpdateCommand {
 
 	private final Long id;
+	private final String title;
 	private final String contents;
 	private final List<MultipartFile> multipartFiles;
 
-	public QuestionPostUpdateCommand(Long id, String contents,
+	public QuestionPostUpdateCommand(Long id, String title, String contents,
 		List<MultipartFile> multipartFiles) {
 		this.id = id;
+		this.title = title;
 		this.contents = contents;
 		this.multipartFiles = multipartFiles;
 	}

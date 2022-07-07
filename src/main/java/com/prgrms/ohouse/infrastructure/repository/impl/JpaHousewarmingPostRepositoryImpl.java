@@ -2,15 +2,11 @@ package com.prgrms.ohouse.infrastructure.repository.impl;
 
 import static com.prgrms.ohouse.domain.user.model.QUser.*;
 import static com.prgrms.ohouse.domain.user.model.follow.QFollow.*;
-import static java.util.stream.Collectors.*;
 
-import java.util.Collections;
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import com.prgrms.ohouse.domain.community.application.FollowingFeedInfoResult;
@@ -18,11 +14,12 @@ import com.prgrms.ohouse.domain.community.application.HousewarmingPostInfoResult
 import com.prgrms.ohouse.domain.community.model.housewarming.HousewarmingPost;
 import com.prgrms.ohouse.domain.community.model.housewarming.QHousewarmingPost;
 import com.prgrms.ohouse.domain.user.model.User;
-import com.prgrms.ohouse.infrastructure.repository.custom.QueryDSLHousewarmingPostRepository;
+
+import com.prgrms.ohouse.infrastructure.repository.custom.JpaHousewarmingPostRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
-public class JpaHousewarmingPostRepositoryImpl implements QueryDSLHousewarmingPostRepository {
+public class JpaHousewarmingPostRepositoryImpl implements JpaHousewarmingPostRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 	private final QHousewarmingPost qHwPost;
 
@@ -49,17 +46,7 @@ public class JpaHousewarmingPostRepositoryImpl implements QueryDSLHousewarmingPo
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
-		var postDtos = posts.stream()
-			.map(HousewarmingPostInfoResult::from)
-			.collect(toList());
-		var hasNext = pageable.getPageSize() + 1 == postDtos.size();
-		if (hasNext) {
-			postDtos.remove(postDtos.size() - 1);
-		}
-		return new SliceImpl<>(
-			Collections.unmodifiableList(postDtos),
-			PageRequest.of(pageable.getPageNumber(), postDtos.size()),
-			hasNext);
+		return ListDecorator.decorateToSlice(posts, HousewarmingPostInfoResult::from, pageable);
 	}
 
 	@Override
@@ -75,16 +62,6 @@ public class JpaHousewarmingPostRepositoryImpl implements QueryDSLHousewarmingPo
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
-		var hasNext = pageable.getPageSize() + 1 == posts.size();
-		if (hasNext) {
-			posts.remove(posts.size() - 1);
-		}
-		var postDtos = posts.stream().map(FollowingFeedInfoResult::from)
-			.collect(toList());
-
-		return new SliceImpl<>(
-			postDtos,
-			PageRequest.of(pageable.getPageNumber(), posts.size()), hasNext
-		);
+		return ListDecorator.decorateToSlice(posts, FollowingFeedInfoResult::from, pageable);
 	}
 }

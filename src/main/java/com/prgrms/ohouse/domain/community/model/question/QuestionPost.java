@@ -1,9 +1,12 @@
 package com.prgrms.ohouse.domain.community.model.question;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -31,25 +34,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 
-	public QuestionPost(String content) {
-		this.content = content;
+	public QuestionPost(String title, String contents) {
+		isValidTitle(title);
+		this.title = title;
+		this.contents = contents;
 	}
 
-	public QuestionPost(String content, List<QuestionPostImage> questionImages) {
-		this.content = content;
-		this.questionImages = questionImages;
-	}
-
-	public QuestionPost(Long id, String content,
-		List<QuestionPostImage> questionImages) {
-		this.id = id;
-		this.content = content;
-		this.questionImages = questionImages;
-	}
-
-	public QuestionPost(String content,
-		List<QuestionPostImage> questionImages, User author) {
-		this.content = content;
+	public QuestionPost(String title, String contents, List<QuestionPostImage> questionImages, User author) {
+		isValidTitle(title);
+		this.title = title;
+		this.contents = contents;
 		this.questionImages = questionImages;
 		this.author = author;
 	}
@@ -58,8 +52,10 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 	@GeneratedValue
 	private Long id;
 
-	//TODO: 검증
-	private String content;
+	@Column(nullable = false, length = 50)
+	private String title;
+	@Column(nullable = false)
+	private String contents;
 
 	//TODO: 컬렉션 getter로 인한 불변성 붕괴 문제 수정
 	@OneToMany(mappedBy = "questionPost", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,7 +63,7 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 
 	@CreatedBy
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "author_id")
+	@JoinColumn(name = "author_id", nullable = false)
 	private User author;
 
 	@Override
@@ -82,8 +78,14 @@ public class QuestionPost extends BaseTimeEntity implements ImageAttachable {
 		this.questionImages.clear();
 	}
 
-	public QuestionPost apply(String content) {
-		this.content = content;
+	public QuestionPost apply(String title, String contents) {
+		isValidTitle(title);
+		this.title = title;
+		this.contents = contents;
 		return this;
+	}
+
+	private void isValidTitle(String title) {
+		checkArgument(title.length() >= 1 && title.length() < 30, "제목은 1 ~ 50자 범위여야 합니다.");
 	}
 }
