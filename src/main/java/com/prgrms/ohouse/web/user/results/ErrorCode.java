@@ -12,7 +12,8 @@ public enum ErrorCode {
 	UNAUTHORIZED_REQUEST(401, "Unauthorized Request"),
 	INTERNAL_ERROR(500,"Internal Server Error."),
 	FAILED_FOLLOW(409, "Cannot follow this user."),
-	FAILED_UNFOLLOW(409, "Cannot unfollow this user.")
+	FAILED_UNFOLLOW(409, "Cannot unfollow this user."),
+	ACCESS_DENIED(403, "Access Denied.")
 	;
 
 	private final int code;
