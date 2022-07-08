@@ -124,6 +124,12 @@
     - Service 클래스에서 사용자 정보를 받기 위해 Spring Security에 직접 의존하는 것이 헥사고날 아키텍처에 맞지 않는다고 판단해서, Security 에 의존하는 코드를 Controller로 옮기고, 서비스에서는 사용자 식별자만 받도록 리팩터링 했습니다.
         - 리팩터링으로 인해 서비스 코드의 테스트에서 security 관련 설정을 제거하게 되어 테스트 코드가 간결해지는 효과를 얻었습니다.
 
+---
 
+### ERD
 
+![ers](https://user-images.githubusercontent.com/65841596/178052360-6c060adc-14dc-4708-a221-046fafd87d84.png)
+
+### API docs
+https://blessing333.github.io/
 
