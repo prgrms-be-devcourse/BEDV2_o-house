@@ -7,8 +7,8 @@ buildscript {
 plugins {
     id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" // querydsl 추가
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
     id 'java'
 }
 
@@ -17,6 +17,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
+    querydsl.extendsFrom compileClasspath
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -24,10 +25,6 @@ configurations {
 
 repositories {
     mavenCentral()
-}
-
-ext {
-    set('snippetsDir', file("build/generated-snippets"))
 }
 
 dependencies {
@@ -52,20 +49,32 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.6.RELEASE'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
 }
 
-tasks.named('test') {
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
     outputs.dir snippetsDir
     useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
+asciidoctor {
     inputs.dir snippetsDir
     dependsOn test
 }
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
 
 //querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
@@ -77,9 +86,7 @@ querydsl {
 sourceSets {
     main.java.srcDir querydslDir
 }
-configurations {
-    querydsl.extendsFrom compileClasspath
-}
+
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }

@@ -1,0 +1,474 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../..//build/generated-snippets
+endif::[]
+= Spring Board REST Docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[resources-user]]
+== 회원
+
+[[resources-user-login]]
+=== 로그인
+
+==== HTTP 요청
+
+include::{snippets}/login/http-request.adoc[]
+
+==== 로그인 파라미터
+
+include::{snippets}/login/request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/login/http-response.adoc[]
+
+[[resources-user-info]]
+=== 전체 회원 조회
+
+==== HTTP 요청
+
+include::{snippets}/get-user-info/http-request.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/get-user-info/http-response.adoc[]
+include::{snippets}/get-user-info/response-fields.adoc[]
+
+[[resources-user-signup-user]]
+=== 회원가입
+
+==== HTTP 요청
+
+include::{snippets}/signup-user/http-request.adoc[]
+
+==== 회원가입 파라미터
+
+include::{snippets}/signup-user/request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/signup-user/http-response.adoc[]
+
+[[resources-user-info-update]]
+=== 회원정보 수정
+
+==== HTTP 요청
+
+include::{snippets}/update-user/http-request.adoc[]
+
+==== 회원정보 수정
+
+include::{snippets}/update-user/request-parts.adoc[]
+
+include::{snippets}/update-user/request-part-request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/signup-user/http-response.adoc[]
+
+[[resources-user-following]]
+=== 유저 언팔로잉
+
+==== HTTP 요청
+
+include::{snippets}/unfollow-user/http-request.adoc[]
+
+==== 유저 언팔로잉 파라미터
+
+include::{snippets}/unfollow-user/path-parameters.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/unfollow-user/http-response.adoc[]
+
+[[resources-user-followingPost]]
+=== 게시글 팔로잉
+
+==== HTTP 요청
+
+include::{snippets}/following-feed/http-request.adoc[]
+
+==== 게시글 팔로잉 파라미터
+
+include::{snippets}/following-feed/request-parameters.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/following-feed/http-response.adoc[]
+include::{snippets}/following-feed/response-fields.adoc[]
+
+[[resources-hwpost]]
+== 집들이 게시글
+
+=== 집들이 게시글 생성
+
+==== HTTP 요청
+
+include::{snippets}/hwpost-create/http-request.adoc[]
+
+==== 집들이 게시글 생성 파라미터
+
+include::{snippets}/hwpost-create/request-parts.adoc[]
+include::{snippets}/hwpost-create/request-part-payload-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/hwpost-create/http-response.adoc[]
+
+=== 집들이 게시글 단건 조회
+
+==== HTTP 요청
+
+include::{snippets}/hwpost-singleQuery/http-request.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/hwpost-singleQuery/http-response.adoc[]
+include::{snippets}/hwpost-singleQuery/response-fields.adoc[]
+
+=== 집들이 게시글 페이징 조회
+
+==== HTTP 요청
+
+include::{snippets}/hwpost-sliceQuery/http-request.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/hwpost-sliceQuery/http-response.adoc[]
+include::{snippets}/hwpost-sliceQuery/response-fields.adoc[]
+
+=== 집들이 게시글 수정
+
+==== HTTP 요청
+
+include::{snippets}/hwpost-update/http-request.adoc[]
+include::{snippets}/hwpost-update/request-parts.adoc[]
+include::{snippets}/hwpost-update/request-part-payload-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/hwpost-update/http-response.adoc[]
+
+=== 집들이 게시글 삭제
+
+==== HTTP 요청
+
+include::{snippets}/hwpost-delete-success/http-request.adoc[]
+
+==== HTTP 응답(성공)
+
+include::{snippets}/hwpost-delete-success/http-response.adoc[]
+
+==== HTTP 응답(실패)
+
+include::{snippets}/hwpost-delete-failure/http-response.adoc[]
+
+[[resources-hwcomment]]
+== 집들이 게시글 댓글
+
+=== 집들이 게시글 댓글 생성
+
+==== HTTP 요청
+
+include::{snippets}/hwpost-comment-create/http-request.adoc[]
+
+==== 집들이 게시글 댓글 생성 파라미터
+
+include::{snippets}/hwpost-comment-create/request-fields.adoc
+
+==== HTTP 응답
+
+include::{snippets}/hwpost-comment-create/http-response.adoc[]
+
+=== 집들이 게시글 댓글 조회
+
+==== HTTP 요청
+
+include::{snippets}/hwpost-comment-multiquery/http-request.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/hwpost-comment-multiquery/http-response.adoc[]
+include::{snippets}/hwpost-comment-multiquery/response-fields.adoc[]
+
+=== 집들이 게시글 댓글 수정
+
+==== HTTP 요청
+
+include::{snippets}/hwpost-comment-update/http-request.adoc[]
+
+==== 집들이 게시글 댓글 수정 파라미터
+
+include::{snippets}/hwpost-comment-update/request-fields.adoc
+
+==== HTTP 응답
+
+include::{snippets}/hwpost-comment-update/http-response.adoc[]
+
+=== 집들이 게시글 댓글 삭제
+
+==== HTTP 요청
+
+include::{snippets}/hwpost-comment-delete/http-request.adoc[]
+
+==== 집들이 게시글 댓글 삭제 파라미터
+
+include::{snippets}/hwpost-comment-delete/path-parameters.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/hwpost-comment-delete/http-response.adoc[]
+
+[[resources-question-post]]
+== 질문 게시글
+
+=== 질문 게시글 생성
+
+==== HTTP 요청
+
+include::{snippets}/registerNewQuestionPost/http-request.adoc[]
+
+==== 질문게시글 생성 파라미터
+
+include::{snippets}/registerNewQuestionPost/request-part-request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/registerNewQuestionPost/http-response.adoc[]
+
+=== 질문 게시글 수정
+
+==== HTTP 요청
+
+include::{snippets}/editQuestionPost/http-request.adoc[]
+
+==== 질문게시글 수정 파라미터
+
+include::{snippets}/editQuestionPost/request-part-request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/registerNewQuestionPost/http-response.adoc[]
+
+[[resources-question-post-comment]]
+== 질문 게시글 댓글
+
+=== 질문 게시글 댓글 생성
+
+==== HTTP 요청
+
+include::{snippets}/registerNewQuestionComment/http-request.adoc[]
+
+==== 질문 게시글 댓글 생성 파라미터
+
+include::{snippets}/registerNewQuestionComment/request-part-request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/registerNewQuestionComment/http-response.adoc[]
+
+=== 질문 게시글 댓글 수정
+
+==== HTTP 요청
+
+include::{snippets}/editQuestionComment/http-request.adoc[]
+
+==== 질문 게시글 댓글 수정 파라미터
+
+include::{snippets}/editQuestionComment/request-part-request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/editQuestionComment/http-response.adoc[]
+
+[[resources-order]]
+== 주문
+
+=== 주문 생성
+
+==== HTTP 요청
+
+include::{snippets}/order-add/http-request.adoc[]
+
+==== 주문 생성 파라미터
+
+include::{snippets}/order-add/request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/order-add/http-response.adoc[]
+include::{snippets}/order-add/response-fields.adoc[]
+
+=== 주문 조회
+
+==== HTTP 요청
+
+include::{snippets}/order-view/http-request.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/order-view/http-response.adoc[]
+include::{snippets}/order-view/response-fields.adoc[]
+
+[[resources-cart]]
+== 장바구니
+
+=== 장바구니 생성
+
+==== HTTP 요청
+
+include::{snippets}/cart-create/http-request.adoc[]
+
+==== 장바구니 생성 파라미터
+
+include::{snippets}/cart-create/request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/cart-create/http-response.adoc[]
+include::{snippets}/cart-create/response-fields.adoc[]
+
+[[resources-product]]
+== 상품
+
+=== 상품 조회
+
+==== HTTP 요청
+
+include::{snippets}/product-view/http-request.adoc[]
+
+==== 상품 조회 파라미터
+
+include::{snippets}/product-view/request-parameters.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/product-view/http-response.adoc[]
+include::{snippets}/product-view/response-fields.adoc[]
+
+[[resources-review]]
+== 상품 리뷰
+
+[[resources-review-create]]
+=== 상품 리뷰 생성
+
+==== HTTP 요청
+
+include::{snippets}/review-create/http-request.adoc[]
+
+==== 요청 헤더
+
+include::{snippets}/review-create/request-headers.adoc[]
+
+==== 상품 리뷰 생성 파라미터
+
+include::{snippets}/review-create/request-part-request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/review-create/http-response.adoc[]
+include::{snippets}/review-create/response-fields.adoc[]
+
+=== 상품 사진 리뷰 생성
+
+==== HTTP 요청
+
+include::{snippets}/photo-review-create/http-request.adoc[]
+
+==== 요청 헤더
+
+include::{snippets}/photo-review-create/request-headers.adoc[]
+
+==== 사진 리뷰 생성 Part
+
+include::{snippets}/photo-review-create/request-parts.adoc[]
+
+==== 사진 리뷰 생성 파라미터
+
+include::{snippets}/photo-review-create/request-part-request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/photo-review-create/http-response.adoc[]
+include::{snippets}/photo-review-create/response-fields.adoc[]
+
+[[resources-review-inquiry]]
+=== 상품 리뷰 조회
+
+==== HTTP 요청
+
+include::{snippets}/review-inquiry/http-request.adoc[]
+
+==== 상품 리뷰 조회 파라미터
+
+include::{snippets}/review-inquiry/request-parameters.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/review-inquiry/http-response.adoc[]
+include::{snippets}/review-inquiry/response-fields.adoc[]
+
+=== 상품 사진 리뷰 조회
+
+==== HTTP 요청
+
+include::{snippets}/photo-review-inquiry/http-request.adoc[]
+
+==== 상품 사진 리뷰 조회 파라미터
+
+include::{snippets}/photo-review-inquiry/request-parameters.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/photo-review-inquiry/http-response.adoc[]
+include::{snippets}/photo-review-inquiry/response-fields.adoc[]
+
+[[resources-review-update]]
+=== 상품 리뷰 수정
+
+==== HTTP 요청
+
+include::{snippets}/review-update/http-request.adoc[]
+
+==== 요청 헤더
+
+include::{snippets}/review-update/request-headers.adoc[]
+
+==== 상품 리뷰 수정 파트
+
+include::{snippets}/review-update/request-parts.adoc[]
+
+==== 상품 리뷰 수정 파라미터
+
+include::{snippets}/review-update/request-part-request-fields.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/review-update/http-response.adoc[]
+include::{snippets}/review-update/response-fields.adoc[]
+
+[[resources-review-delete]]
+=== 상품 리뷰 삭제
+
+==== HTTP 요청
+
+include::{snippets}/review-delete/http-request.adoc[]
+
+==== 요청 헤더
+
+include::{snippets}/review-delete/request-headers.adoc[]
+
+include::{snippets}/review-delete/request-body.adoc[]
+
+==== HTTP 응답
+
+include::{snippets}/review-delete/http-response.adoc[]
+
+include::{snippets}/review-delete/response-fields.adoc[]
+
