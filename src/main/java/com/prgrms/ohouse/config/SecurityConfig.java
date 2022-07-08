@@ -1,6 +1,7 @@
 package com.prgrms.ohouse.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -46,8 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.authorizeRequests()
 			.antMatchers("/h2-console/**").permitAll()
-			.antMatchers("/api/v0/user").hasRole("USER")
-			.anyRequest().permitAll()
+			.antMatchers("/api/v0/login", "/api/v0/signup").permitAll()
+			.antMatchers(HttpMethod.GET, "/api/v0/products/**","/api/v0/hwpost/**", "/api/v0/reviews/**").permitAll()
+			.antMatchers(HttpMethod.PUT, "/api/v0/reviews/**").permitAll()
+			.anyRequest().hasRole("USER")
 			.and()
 			.addFilterAt(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
