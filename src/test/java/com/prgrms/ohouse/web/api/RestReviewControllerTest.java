@@ -40,8 +40,8 @@ import com.prgrms.ohouse.domain.commerce.model.review.ReviewType;
 import com.prgrms.ohouse.domain.user.model.User;
 import com.prgrms.ohouse.infrastructure.TestDataProvider;
 import com.prgrms.ohouse.web.commerce.requests.ReviewCreateRequest;
+import com.prgrms.ohouse.web.commerce.requests.ReviewUpdateRequest;
 import com.prgrms.ohouse.web.commerce.results.ReviewCreateResult;
-import com.prgrms.ohouse.web.commerce.results.ReviewUpdateRequest;
 
 @SpringBootTest(properties = "spring.profiles.active:test")
 @AutoConfigureMockMvc
@@ -66,16 +66,20 @@ class RestReviewControllerTest {
 	@Test
 	void testNormalReviewRegister() throws Exception {
 		Product product = dataProvider.insertProduct();
-		User user = dataProvider.insertUser();
+		User user = dataProvider.insertGuestUser("guest");
 		String reviewContent = "후기 후기 후기 후기 후기 후기 후기 후기 후기 후기 후기 후기 후기 후기 후기";
 		ReviewCreateRequest request = new ReviewCreateRequest(product.getId(), user.getId(), 3, reviewContent);
 		String json = mapper.writeValueAsString(request);
 
 		MvcResult mvcResult = mockMvc.perform(multipart("/api/v0/reviews")
-				.part(new MockPart("request", json.getBytes(StandardCharsets.UTF_8))))
+				.part(new MockPart("request", json.getBytes(StandardCharsets.UTF_8)))
+				.header(tokenHeaderName, TestDataProvider.GUEST_TOKEN))
 			.andExpect(status().isCreated())
 			.andDo(document("review-create", preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
+				requestHeaders(
+					headerWithName(tokenHeaderName).description("JWT 토큰")
+				),
 				requestPartFields("request",
 					fieldWithPath("userId").type(JsonFieldType.NUMBER).description("회원 번호"),
 					fieldWithPath("productId").type(JsonFieldType.NUMBER).description("상품 번호"),
@@ -103,7 +107,7 @@ class RestReviewControllerTest {
 	@Test
 	void testPhotoReviewRegister() throws Exception {
 		Product product = dataProvider.insertProduct();
-		User user = dataProvider.insertUser();
+		User user = dataProvider.insertGuestUser("guest");
 		MockMultipartFile image = new MockMultipartFile(
 			"review-image",
 			"test.png",
@@ -115,11 +119,15 @@ class RestReviewControllerTest {
 
 		MvcResult mvcResult = mockMvc.perform(multipart("/api/v0/reviews")
 				.file(image)
-				.part(new MockPart("request", json.getBytes(StandardCharsets.UTF_8))))
+				.part(new MockPart("request", json.getBytes(StandardCharsets.UTF_8)))
+				.header(tokenHeaderName, TestDataProvider.GUEST_TOKEN))
 			.andExpect(status().isCreated())
 			.andDo(document("photo-review-create",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
+				requestHeaders(
+					headerWithName(tokenHeaderName).description("JWT 토큰")
+				),
 				requestParts(
 					partWithName("review-image").optional().description("리뷰 이미지 파일"),
 					partWithName("request").description("생성할 리뷰 정보")
@@ -297,7 +305,7 @@ class RestReviewControllerTest {
 				.part(new MockPart("request", json.getBytes(StandardCharsets.UTF_8)))
 				.header(tokenHeaderName, TestDataProvider.GUEST_TOKEN))
 			.andExpect(status().isOk())
-			.andDo(document("photo-review-create",
+			.andDo(document("review-update",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				requestHeaders(

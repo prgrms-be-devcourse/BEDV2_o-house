@@ -82,7 +82,7 @@ class UserRestControllerTest {
 			.build();
 
 		when(authUtility.getAuthUser()).thenReturn(user);
-		when(user.getId()).thenReturn(Long.valueOf(authUserId));
+		when(user.getId()).thenReturn(authUserId);
 	}
 
 	@Test
@@ -188,7 +188,7 @@ class UserRestControllerTest {
 
 		mockMvc.perform(multipart("/api/v0/user")
 				.file(fileRequest)
-			.part(jsonPart))
+				.part(jsonPart))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("Update succeed.")))
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,10 +26,10 @@ import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewInquiryFai
 import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewRegisterFailException;
 import com.prgrms.ohouse.domain.commerce.model.review.exception.ReviewUpdateFailException;
 import com.prgrms.ohouse.web.commerce.requests.ReviewCreateRequest;
+import com.prgrms.ohouse.web.commerce.requests.ReviewUpdateRequest;
 import com.prgrms.ohouse.web.commerce.results.ErrorResult;
 import com.prgrms.ohouse.web.commerce.results.ReviewCreateResult;
 import com.prgrms.ohouse.web.commerce.results.ReviewDeleteResult;
-import com.prgrms.ohouse.web.commerce.results.ReviewUpdateRequest;
 import com.prgrms.ohouse.web.commerce.results.ReviewUpdateResult;
 
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,12 @@ public class RestReviewController {
 		} else {
 			return ResponseEntity.ok(reviewService.loadAllProductReviews(pageable, productId));
 		}
+	}
+
+	@PutMapping("/api/v0/reviews/{reviewId}/helpPoint")
+	public ResponseEntity<String> increaseHelpPoint(@PathVariable Long reviewId) {
+		reviewService.publishHelpPointIncreasingEvent(reviewId);
+		return ResponseEntity.ok().body("request accepted successful");
 	}
 
 	@PostMapping(value = "/api/v0/reviews", consumes = {MediaType.APPLICATION_JSON_VALUE,

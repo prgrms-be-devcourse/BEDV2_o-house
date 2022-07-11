@@ -1,13 +1,16 @@
 package com.prgrms.ohouse.domain.user.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
 
 @MappedSuperclass
+@Getter
 public abstract class BaseEntity {
 
 	@Column(updatable = false)

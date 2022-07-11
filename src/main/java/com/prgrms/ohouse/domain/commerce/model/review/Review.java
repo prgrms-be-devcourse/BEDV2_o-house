@@ -2,8 +2,6 @@ package com.prgrms.ohouse.domain.commerce.model.review;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,14 +37,13 @@ public class Review extends BaseEntity implements ImageAttachable {
 	private Product product;
 	@CreatedBy
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 	private int reviewPoint = 0;
 	private String contents;
 	private int helpPoint = 0;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "review", fetch = FetchType.LAZY)
 	private ReviewImage reviewImage;
-	private LocalDateTime createdAt;
 	private ReviewType reviewType = ReviewType.NORMAL;
 
 	public static Review createReview(Product product, User user, int reviewPoint, String contents) {
@@ -54,7 +51,6 @@ public class Review extends BaseEntity implements ImageAttachable {
 		instance.setProduct(product);
 		instance.setReviewPoint(reviewPoint);
 		instance.setContents(contents);
-		instance.setCreatedAt(LocalDateTime.now());
 		instance.setUser(user);
 		return instance;
 	}
@@ -88,14 +84,15 @@ public class Review extends BaseEntity implements ImageAttachable {
 
 	@Override
 	public StoredFile attach(String fileName, String fileUrl) {
-		ReviewImage reviewImage = new ReviewImage(fileName, fileUrl, this);
+		ReviewImage image = new ReviewImage(fileName, fileUrl, this);
 		setReviewType(ReviewType.PHOTO);
-		this.reviewImage = reviewImage;
-		return reviewImage;
+		this.reviewImage = image;
+		return image;
 	}
 
 	@Override
 	public void removeCurrentImage() {
-		this.reviewImage = null;
+		setReviewType(ReviewType.NORMAL);
 	}
+
 }

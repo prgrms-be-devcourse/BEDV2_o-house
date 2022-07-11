@@ -1,7 +1,7 @@
 package com.prgrms.ohouse.domain.commerce.model.review.exception;
 
 public class ReviewDeleteFailException extends RuntimeException {
-	public ReviewDeleteFailException(String message) {
-		super(message);
+	public ReviewDeleteFailException(Throwable cause) {
+		super(cause);
 	}
 }
